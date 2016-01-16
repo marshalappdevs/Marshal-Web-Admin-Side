@@ -1,0 +1,14 @@
+{
+  "name": "Bsmh-Marshal",
+  "version": "0.0.0",
+  "description": "Web-side to Bsmh's Marshal android application, administrative side where you can put Marshal's new courses to the android app to show",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tom Langer",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "express": "~4.13.3"
+  }
+}
