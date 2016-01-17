@@ -5,12 +5,12 @@ block content
   p Welcome to #{title}
   table.table.table-striped(ng-controller='coursesCtrl')
     thead
-        tr
-            th Name
-            th Description
-            th Price
+      tr
+        th Name
+        th Description
+        th Price
     tbody(ng-repeat='course in courses')
-        tr
-            th {{ course.name }}
-            th {{ course.desc }}
-            th {{ course.price }}
+      tr
+        th.col-md-2 {{ course.name }}
+        th.col-md-4 {{ course.desc }}
+        th.col-md-2 {{ course.price }}
