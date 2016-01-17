@@ -14,3 +14,10 @@ a {
     margin-right: auto;
     margin-left: auto;
 }
+
+#courseTable {
+    width: 60%;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
