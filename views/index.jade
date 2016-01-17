@@ -3,3 +3,14 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  table.table.table-striped(ng-controller='coursesCtrl')
+    thead
+        tr
+            th Name
+            th Description
+            th Price
+    tbody(ng-repeat='course in courses')
+        tr
+            th {{ course.name }}
+            th {{ course.desc }}
+            th {{ course.price }}
