@@ -17,3 +17,7 @@ var tempJson = [
 ]
 
 var marshalApp = angular.module('marshalApp', []);
+
+marshalApp.controller('coursesCtrl', function($scope) {
+   $scope.courses = tempJson; 
+});
