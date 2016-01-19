@@ -15,8 +15,20 @@ a {
     margin-left: auto;
 }
 
-#courseTable {
-    width: 60%;
+#loginDiv {
+    width: 30%;
+    display: block;
+    margin-top: 2%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.loginInput {
+    margin: 2%;
+}
+
+.loginButton {
+    width: 50%;
     display: block;
     margin-right: auto;
     margin-left: auto;
