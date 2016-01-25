@@ -1,0 +1,14 @@
+#courseTableDiv.panel.panel-primary
+    .panelHeading.panel-heading קורסים פתוחים
+    table.table.table-hover.table-bordered(ng-controller='coursesCtrl', dir="rtl")
+        thead
+            tr.coursesTableHead.courseRow.info
+                td שם הקורס
+                td תיאור
+                td מחיר
+        tbody#coursesTableBody
+            tr.courseRow(ng-repeat='course in courses', ng-click='open(course)', style="cursor: pointer; cursor: hand;")
+                td {{ course.name }}
+                td {{ course.desc }}
+                td {{ course.price }}
+    

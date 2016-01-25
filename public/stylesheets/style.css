@@ -1,7 +1,7 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: #adedff;
+  background-color: #efefef
 }
 
 a {
@@ -15,21 +15,26 @@ a {
     margin-left: auto;
 }
 
-#loginDiv {
-    width: 30%;
-    display: block;
-    margin-top: 2%;
+#courseTableDiv {
+    margin: 20px;
     margin-right: auto;
     margin-left: auto;
+    width: 70%;
+    /*background-color: white;*/
 }
 
-.loginInput {
-    margin: 2%;
+.courseRow {
+    background-color: white;
 }
 
-.loginButton {
-    width: 50%;
-    display: block;
-    margin-right: auto;
-    margin-left: auto;
+.panelHeading {
+    text-align: center; 
+}
+
+.coursesTableHead {
+    font-weight: bold;
+}
+
+#courseViewPanel {
+    margin: 0;
 }

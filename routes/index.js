@@ -6,8 +6,12 @@ router.get('/', function(req, res, next) {
   res.render('layout', { title: 'Marshal' });
 });
 
-router.get('/login', function(req, res, next) {
-    res.render('login');
+router.get('/index', function(req, res, next) {
+    res.render('pages/index');
+});
+
+router.get('/courseDialog', function(req, res, next) {
+    res.render('modals/courseModal');
 });
 
 module.exports = router;
