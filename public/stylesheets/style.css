@@ -29,6 +29,9 @@ a {
 
 .panelHeading {
     text-align: center; 
+    position: relative;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
 .coursesTableHead {
@@ -37,4 +40,10 @@ a {
 
 #courseViewPanel {
     margin: 0;
+}
+
+#addCourseButton {
+    position: absolute;
+    left: 1%;
+    top: 12%;
 }

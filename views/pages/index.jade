@@ -1,5 +1,7 @@
 #courseTableDiv.panel.panel-primary
-    .panelHeading.panel-heading קורסים פתוחים
+    .panelHeading.panel-heading
+        button#addCourseButton.btn.btn-success(tooltip-placement='top-left', uib-tooltip='הוסף קורס חדש') +
+        span קורסים פתוחים
     table.table.table-hover.table-bordered(ng-controller='coursesCtrl', dir="rtl")
         thead
             tr.coursesTableHead.courseRow.info
