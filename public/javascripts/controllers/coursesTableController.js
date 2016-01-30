@@ -59,7 +59,7 @@ angular.module('marshalApp')
             $uibModal.open(
                 {
                     animation: true,
-                    templateUrl: 'courseDialog',
+                    templateUrl: 'courseModal',
                     controller: 'courseModalCtrl',
                 }
             );

@@ -10,7 +10,7 @@ router.get('/index', function(req, res, next) {
     res.render('pages/index');
 });
 
-router.get('/courseDialog', function(req, res, next) {
+router.get('/courseModal', function(req, res, next) {
     res.render('modals/courseModal');
 });
 
