@@ -60,7 +60,17 @@ angular.module('marshalApp')
                 {
                     animation: true,
                     templateUrl: 'courseModal',
-                    controller: 'courseModalCtrl',
+                    controller: 'courseModalCtrl'
+                }
+            );
+        };
+        
+        $scope.add = function() {
+            $uibModal.open(
+                {
+                    animation: true,
+                    templateUrl: 'addCourseModal',
+                    controller: 'addCourseModalCtrl'
                 }
             );
         };

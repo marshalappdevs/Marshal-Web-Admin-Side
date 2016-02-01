@@ -14,4 +14,8 @@ router.get('/courseModal', function(req, res, next) {
     res.render('modals/courseModal');
 });
 
+router.get('/addCourseModal', function(req, res, next) {
+    res.render('modals/addCourseModal');
+});
+
 module.exports = router;

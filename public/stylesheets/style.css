@@ -47,3 +47,25 @@ a {
     left: 1%;
     top: 12%;
 }
+
+input[type="text"] {
+  border: none;
+  border-bottom: solid 2px #c9c9c9;
+  -webkit-transition: border 0.3s;
+  -moz-transition: border 0.3s;
+  -o-transition: border 0.3s;
+  transition: border 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="text"].focus {
+  border: none;
+  border-bottom: solid 2px #969696;
+}
+
+#addButton {
+    display: block;
+    margin-top: 2%;
+    margin-right: auto;
+    margin-left: auto;
+}

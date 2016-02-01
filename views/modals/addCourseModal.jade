@@ -1,0 +1,8 @@
+div(dir='rtl')#courseViewPanel.panel.panel-primary
+    .panelHeading.panel-heading הוספת קורס חדש
+    table.table(dir='rtl')
+        tr.row(ng-repeat="prop in columns")
+            td.coursesTableHead.col-md-3 {{ prop.hebName }}
+            td.row.col-md-9
+                input.col-md-12(type='text')
+    button.btn.btn-success#addButton הוסף קורס
