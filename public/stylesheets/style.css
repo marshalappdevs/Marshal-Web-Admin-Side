@@ -66,6 +66,15 @@ input[type="text"].focus {
 #addButton {
     display: block;
     margin-top: 2%;
+    margin-bottom: 2%;
     margin-right: auto;
     margin-left: auto;
+}
+
+.borderless td, .borderless th {
+    border: none !important;
+}
+
+.modalTable {
+    margin-top: 1%;
 }
