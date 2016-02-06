@@ -1,6 +1,7 @@
 angular.module('marshalApp')
     .controller('coursesCtrl', ['$scope', '$uibModal', 'selectedCourse', 'courseHandler', function($scope, $uibModal, selectedCourse, courseHandler) {
         $scope.courses = courseHandler.getCourses();
+        
         $scope.buildCourseObj = function(name, desc, price) {
             return { name: name, desc: desc, price: price };
         };

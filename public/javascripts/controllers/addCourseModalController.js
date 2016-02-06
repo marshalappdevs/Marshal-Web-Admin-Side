@@ -1,6 +1,7 @@
 angular.module('marshalApp')
     .controller('addCourseModalCtrl', ['$scope', '$uibModalInstance', 'propGetter', 'courseHandler', function($scope, $uibModalInstance, propGetter, courseHandler) {
         $scope.columns = propGetter.getPropNames();
+        
         $scope.addCourse = function(event) {
             if (event && (event.keyCode === 13 || event.target.id === 'addButton')) {
                 // Getting new course template from service
