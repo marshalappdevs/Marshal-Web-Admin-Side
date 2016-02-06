@@ -13,6 +13,7 @@ angular.module('marshalApp')
                 courseHandler.addCourse(newCourse);
                 $uibModalInstance.close();
                 
+                // Clears al input values
                 $scope.clearInputValues();
             }
         }
