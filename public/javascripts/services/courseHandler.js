@@ -52,6 +52,16 @@ function CourseHandler() {
         courses.push(course);
     };
     
+    this.deleteCourse = function(id) {
+        courses.forEach(function(course, index) {
+            if (course.id === id) {
+                courses.splice(index, 1);
+                
+                return;
+            }
+        });
+    }
+    
     this.getCourseTemplate = function() {
         return {
             name: "",
