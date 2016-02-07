@@ -5,12 +5,15 @@
     table.table.table-hover.table-bordered(dir="rtl")
         thead
             tr.coursesTableHead.courseRow.info
+                td
                 td שם הקורס
                 td תיאור
                 td מחיר
         tbody#coursesTableBody
-            tr.courseRow(ng-repeat='course in courses', ng-click='open(course)', style="cursor: pointer; cursor: hand;")
-                td {{ course.name }}
-                td {{ course.desc }}
-                td {{ course.price }}
+            tr.courseRow(ng-repeat='course in courses', style="cursor: pointer; cursor: hand;")
+                td.centerAligned
+                    button#deleteButton.btn.btn-danger(ng-click='delete(course.id)') -
+                td(ng-click='open(course)') {{ course.name }}
+                td(ng-click='open(course)') {{ course.desc }}
+                td(ng-click='open(course)') {{ course.price }}
     

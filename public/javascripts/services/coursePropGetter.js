@@ -5,6 +5,10 @@ function PropGetter() {
     var tempProps = 
         [
             {
+                realName: 'id',
+                hebName: 'מס סידורי'
+            },
+            {
                 realName: 'name',
                 hebName: 'שם הקורס'
             },

@@ -4,6 +4,7 @@ angular.module('marshalApp')
 function CourseHandler() {
     var courses = [
         {
+            id: 1,
             name: "Design Patterns",
             symbol: "6813",
             desc: "ההשתלמות מלמדת טכניקות Design ע\"פ תבניות קבועות ידועות מראש, כולל דרכי השימוש בהם בקוד והרצאת העשרה בנושא REST.",
@@ -16,6 +17,7 @@ function CourseHandler() {
             notes: "יש לבצע מבחן כניסה להשתלמות"
         },
         {
+            id: 2,
             name: "פיתוח Front End",
             symbol: "2633",
             desc: "עקרונות בניית אפליקציות WEB דינאמיות תוך שימוש ביכולות השונות של השפות HTML וJavascript וספריות JQuery וBootstrap.",
@@ -28,6 +30,7 @@ function CourseHandler() {
             notes: ""
         },
         {
+            id: 3,
             name: "Design Patterns",
             symbol: "6813",
             desc: "ההשתלמות מלמדת טכניקות Design ע\"פ תבניות קבועות ידועות מראש, כולל דרכי השימוש בהם בקוד והרצאת העשרה בנושא REST.",

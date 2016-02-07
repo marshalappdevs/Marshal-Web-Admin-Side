@@ -35,4 +35,8 @@ angular.module('marshalApp')
                 }
             );
         };
+        
+        $scope.delete = function(id) {
+            $scope.courses = $scope.courses.filter(x => x.id !== id);
+        };
     }]);
