@@ -90,4 +90,5 @@ input[type="text"].focus {
 
 .centerAligned {
     vertical-align: middle !important;
+    text-align: center;
 }
