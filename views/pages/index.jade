@@ -10,9 +10,9 @@
                 td תיאור
                 td מחיר
         tbody#coursesTableBody
-            tr.courseRow(ng-repeat='course in courses', style="cursor: pointer; cursor: hand;")
+            tr.courseRow(ng-repeat='course in courses', ng-mouseover='isOver = true', ng-mouseleave='isOver = false', style="cursor: pointer; cursor: hand;")
                 td.centerAligned
-                    button#deleteButton.btn.btn-danger(ng-click='delete(course.id)') -
+                    button#deleteButton.btn.btn-danger(ng-click='delete(course.id)', ng-show='isOver') -
                 td(ng-click='open(course)') {{ course.name }}
                 td(ng-click='open(course)') {{ course.desc }}
                 td(ng-click='open(course)') {{ course.price }}
