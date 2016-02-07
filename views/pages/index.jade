@@ -5,10 +5,10 @@
     table.table.table-hover.table-bordered(dir="rtl")
         thead
             tr.coursesTableHead.courseRow.info
-                td
-                td שם הקורס
-                td תיאור
-                td מחיר
+                td.col-md-1
+                td.col-md-2 שם הקורס
+                td.col-md-8 תיאור
+                td.col-md-1 מחיר
         tbody#coursesTableBody
             tr.courseRow(ng-repeat='course in courses', ng-mouseover='isOver = true', ng-mouseleave='isOver = false', style="cursor: pointer; cursor: hand;")
                 td.centerAligned.col-md-1
