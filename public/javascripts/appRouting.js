@@ -3,5 +3,8 @@ angular.module('marshalApp')
         $routeProvider
             .when('/', {
                 templateUrl : 'index'
+            })
+            .when('/courseField', {
+                templateUrl : 'courseField'
             });
     });
