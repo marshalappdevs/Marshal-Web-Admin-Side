@@ -1,5 +1,5 @@
 angular.module('marshalApp')
-    .directive('courseFiled', function() {
+    .directive('courseField', function() {
         return {
             restrict: 'E',
             scope: {
