@@ -6,6 +6,6 @@ angular.module('marshalApp')
                 filedName: '@name',
                 content: '=?'
             },
-            templateUrl: "courseField.jade"
+            templateUrl: "courseField"
         };
     });
