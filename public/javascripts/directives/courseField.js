@@ -6,6 +6,6 @@ angular.module('marshalApp')
                 filedName: '@name',
                 content: '=?'
             },
-            templateUrl: "" // TODO: put matching jade file here
+            templateUrl: "courseField.jade"
         };
     });
