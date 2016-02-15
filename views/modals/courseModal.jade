@@ -1,7 +1,8 @@
 div(dir='rtl')#courseViewPanel.panel.panel-primary
     .panelHeading.panel-heading {{ toDisplay.name }}
     table.table.modalTable(dir='rtl')
-        tr.row(ng-repeat="prop in columns", ng-if="prop.realName !== 'name'")
-            course-field(name="prop.hebName", content="trustAsHtml(toDisplay[prop.realName].toString())")
+        course-field(ng-repeat="prop in columns", ng-if="prop.realName !== 'name'", name="prop.hebName", content="trustAsHtml(toDisplay[prop.realName].toString())")
+        // tr.row(ng-repeat="prop in columns", ng-if="prop.realName !== 'name'")
+        //     course-field(name="prop.hebName", content="trustAsHtml(toDisplay[prop.realName].toString())")
             // td.coursesTableHead.col-md-3 {{ prop.hebName }}
             // td.col-md-9(ng-bind-html="trustAsHtml(toDisplay[prop.realName].toString())")
