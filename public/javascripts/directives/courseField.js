@@ -3,7 +3,7 @@ angular.module('marshalApp')
         return {
             restrict: 'E',
             scope: {
-                filedName: '@name',
+                fieldName: '@name',
                 content: '=?'
             },
             templateUrl: "courseField"
