@@ -4,6 +4,8 @@ angular.module
     [
         'ngRoute',
         'ngAnimate',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'ngSanitize'
+
     ]
 );

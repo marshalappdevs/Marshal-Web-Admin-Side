@@ -1,5 +1,5 @@
 angular.module('marshalApp')
-    .service('courseHandler', [CourseHandler])
+    .service('courseHandler', [CourseHandler]);
 
 function CourseHandler() {
     var courses = [

@@ -4,7 +4,7 @@ angular.module('marshalApp')
         
         $scope.columns = propGetter.getPropNames();
         
-        $scope.trustAsHtml = function(htmlStr) {
-            return $sce.trustAsHtml(htmlStr);
-        }
+        // $scope.trustAsHtml = function(htmlStr) {
+        //     return $sce.trustAsHtml(htmlStr);
+        // }
     }]);
