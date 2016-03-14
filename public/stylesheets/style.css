@@ -91,3 +91,7 @@ input[type="text"].focus {
     vertical-align: middle !important;
     text-align: center;
 }
+
+.field {
+    padding: 1.5%;
+}
