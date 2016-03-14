@@ -51,7 +51,7 @@ function CourseHandler() {
     
     this.deleteCourse = function(id) {
         courses.forEach(function(course, index) {
-            if (course.id === id) {
+            if (course.ID === id) {
                 courses.splice(index, 1);
                 
                 return;

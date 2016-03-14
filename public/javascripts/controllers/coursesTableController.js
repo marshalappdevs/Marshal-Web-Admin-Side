@@ -40,7 +40,7 @@ angular.module('marshalApp')
             courseHandler.deleteCourse(id);
         };
         
-        var dragDropDiv = document.getElementById('courseTableDiv');
+        var dragDropDiv = document.getElementById('mainBody');
         dragDropDiv.addEventListener('dragenter', dragDrop.dragEnter);
         dragDropDiv.addEventListener('dragover', dragDrop.allowDrop);
         dragDropDiv.addEventListener('drop', dragDrop.drop);

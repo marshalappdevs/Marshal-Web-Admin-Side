@@ -1,7 +1,7 @@
 angular.module('marshalApp')
-    .service('dragDrop', [DragDrop]);
+    .service('dragDrop', ['courseHandler', DragDrop]);
     
-function DragDrop() {
+function DragDrop(courseHandler) {
     var showSplash = { show: false };
     
     this.dragEnter = function dragEnter(ev) {
@@ -23,6 +23,7 @@ function DragDrop() {
             }
             
             console.log(data);
+            courseHandler.addCourse(data)
         };
         
         reader.readAsText(event.dataTransfer.files[0]);
