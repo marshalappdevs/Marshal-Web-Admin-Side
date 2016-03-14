@@ -5,16 +5,15 @@ function allowDrop(ev) {
 function drop(ev) {
     var reader = new FileReader();
     reader.onloadend = function() {
-        var data = JSON.parse(this.result);
+        try {
+            var data = JSON.parse(this.result);
+        } catch (e) {
+            alert("Bad file");
+        }
+        
         console.log(data);
     };
-
-    // Checks if file is JSON
-    if (!event.dataTransfer.files[0].type.match('application/json')) {
-        alert("Bad file");
-    } else {
-        reader.readAsText(event.dataTransfer.files[0]);
-    }
     
+    reader.readAsText(event.dataTransfer.files[0]);
     event.preventDefault();
 }
