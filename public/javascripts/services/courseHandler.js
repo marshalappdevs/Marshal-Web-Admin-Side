@@ -18,7 +18,7 @@ function CourseHandler() {
         {
             ID: 2,
             Name: "פיתוח Front End",
-            symbol: "2633",
+            CourseCode: "2633",
             Description: "עקרונות בניית אפליקציות WEB דינאמיות תוך שימוש ביכולות השונות של השפות HTML וJavascript וספריות JQuery וBootstrap.",
             Syllabus: "מבוא ל-HTML<br>Forms<br>HTML5 Forms<br>מבוא ל-Javascript<br>ECMAScript6",
             DurationInDays: "5 ימים",
@@ -30,7 +30,7 @@ function CourseHandler() {
         {
             ID: 3,
             Name: "Design Patterns",
-            symbol: "6813",
+            CourseCode: "6813",
             Description: "ההשתלמות מלמדת טכניקות Design ע\"פ תבניות קבועות ידועות מראש, כולל דרכי השימוש בהם בקוד והרצאת העשרה בנושא REST.",
             Syllabus: "מבוא ל-Design Patterns<br>Singleton<br>Iterator<br>Framework<br>Factory<br>Template<br>MVC<br>Observer<br>Decorator",
             DurationInDays: "5 ימים",
