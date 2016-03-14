@@ -1,5 +1,5 @@
 angular.module('marshalApp')
-    .controller('coursesCtrl', ['$scope', '$uibModal', 'selectedCourse', 'courseHandler', function($scope, $uibModal, selectedCourse, courseHandler) {
+    .controller('coursesCtrl', ['$scope', '$uibModal', 'selectedCourse', 'courseHandler', 'dragDrop', function($scope, $uibModal, selectedCourse, courseHandler, dragDrop) {
         $scope.courses = courseHandler.getCourses();
         
         $scope.buildCourseObj = function(name, desc, price) {
@@ -39,4 +39,9 @@ angular.module('marshalApp')
         $scope.delete = function(id) {
             courseHandler.deleteCourse(id);
         };
+        
+        var dragDropDiv = document.getElementById('courseTableDiv');
+        dragDropDiv.addEventListener('dragenter', dragDrop.allowDrop);
+        dragDropDiv.addEventListener('dragover', dragDrop.allowDrop);
+        dragDropDiv.addEventListener('drop', dragDrop.drop);
     }]);
