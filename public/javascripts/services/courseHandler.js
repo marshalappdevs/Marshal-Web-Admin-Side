@@ -4,43 +4,40 @@ angular.module('marshalApp')
 function CourseHandler() {
     var courses = [
         {
-            id: 1,
-            name: "Design Patterns",
-            symbol: "6813",
-            desc: "ההשתלמות מלמדת טכניקות Design ע\"פ תבניות קבועות ידועות מראש, כולל דרכי השימוש בהם בקוד והרצאת העשרה בנושא REST.",
-            syl: "מבוא ל-Design Patterns<br>Singleton<br>Iterator<br>Framework<br>Factory<br>Template<br>MVC<br>Observer<br>Decorator",
-            duration: "5 ימים",
-            reqs: "לחייל יש מקצוע תכניתן או השכלת אקדמאי מוסמך וגם בעל סיווג שמור, בעל פז\"מ שנה, יתרת שירות חצי שנה ועשה מבחן כניסה על OOP.",
-            destPop: "תכניתנים ואקדמאים בוגרי מדעי המחשב/הנדסת תכונה/הנדסת מערכות מידע",
-            dep: "עוצמה",
-            price: 1455,
-            notes: "יש לבצע מבחן כניסה להשתלמות"
+            ID: 1,
+            Name: "Design Patterns",
+            CourseCode: "6813",
+            Description: "ההשתלמות מלמדת טכניקות Design ע\"פ תבניות קבועות ידועות מראש, כולל דרכי השימוש בהם בקוד והרצאת העשרה בנושא REST.",
+            Syllabus: "מבוא ל-Design Patterns<br>Singleton<br>Iterator<br>Framework<br>Factory<br>Template<br>MVC<br>Observer<br>Decorator",
+            DurationInDays: "5 ימים",
+            TargetPopulation: "תכניתנים ואקדמאים בוגרי מדעי המחשב/הנדסת תכונה/הנדסת מערכות מידע",
+            ProfessionalDomain: "עוצמה",
+            Price: 1455,
+            Comments: "יש לבצע מבחן כניסה להשתלמות"
         },
         {
-            id: 2,
-            name: "פיתוח Front End",
+            ID: 2,
+            Name: "פיתוח Front End",
             symbol: "2633",
-            desc: "עקרונות בניית אפליקציות WEB דינאמיות תוך שימוש ביכולות השונות של השפות HTML וJavascript וספריות JQuery וBootstrap.",
-            syl: "מבוא ל-HTML<br>Forms<br>HTML5 Forms<br>מבוא ל-Javascript<br>ECMAScript6",
-            duration: "5 ימים",
-            reqs: "לחייל יש מקצוע כותב לומדה, נתמ\"מ, מגן בסייבר או תכניתן",
-            destPop: "תכניתנים, מגן בסייבר, כותב לומדה, נתמ\"מ",
-            dep: "היל\"ה",
-            price: 993,
-            notes: ""
+            Description: "עקרונות בניית אפליקציות WEB דינאמיות תוך שימוש ביכולות השונות של השפות HTML וJavascript וספריות JQuery וBootstrap.",
+            Syllabus: "מבוא ל-HTML<br>Forms<br>HTML5 Forms<br>מבוא ל-Javascript<br>ECMAScript6",
+            DurationInDays: "5 ימים",
+            TargetPopulation: "תכניתנים, מגן בסייבר, כותב לומדה, נתמ\"מ",
+            ProfessionalDomain: "היל\"ה",
+            Price: 993,
+            Comments: ""
         },
         {
-            id: 3,
-            name: "Design Patterns",
+            ID: 3,
+            Name: "Design Patterns",
             symbol: "6813",
-            desc: "ההשתלמות מלמדת טכניקות Design ע\"פ תבניות קבועות ידועות מראש, כולל דרכי השימוש בהם בקוד והרצאת העשרה בנושא REST.",
-            syl: "מבוא ל-Design Patterns<br>Singleton<br>Iterator<br>Framework<br>Factory<br>Template<br>MVC<br>Observer<br>Decorator",
-            duration: "5 ימים",
-            reqs: "לחייל יש מקצוע תכניתן או השכלת אקדמאי מוסמך וגם בעל סיווג שמור, בעל פז\"מ שנה, יתרת שירות חצי שנה ועשה מבחן כניסה על OOP.",
-            destPop: "תכניתנים ואקדמאים בוגרי מדעי המחשב/הנדסת תכונה/הנדסת מערכות מידע",
-            dep: "עוצמה",
-            price: 1455,
-            notes: "יש לבצע מבחן כניסה להשתלמות"
+            Description: "ההשתלמות מלמדת טכניקות Design ע\"פ תבניות קבועות ידועות מראש, כולל דרכי השימוש בהם בקוד והרצאת העשרה בנושא REST.",
+            Syllabus: "מבוא ל-Design Patterns<br>Singleton<br>Iterator<br>Framework<br>Factory<br>Template<br>MVC<br>Observer<br>Decorator",
+            DurationInDays: "5 ימים",
+            TargetPopulation: "תכניתנים ואקדמאים בוגרי מדעי המחשב/הנדסת תכונה/הנדסת מערכות מידע",
+            ProfessionalDomain: "עוצמה",
+            Price: 1455,
+            Comments: "יש לבצע מבחן כניסה להשתלמות"
         }
     ];
     
@@ -64,16 +61,15 @@ function CourseHandler() {
     
     this.getCourseTemplate = function() {
         return {
-            name: "",
+            Name: "",
             symbol: "",
-            desc: "",
-            syl: "",
-            duration: "",
-            reqs: "",
-            destPop: "",
-            dep: "",
-            price: 0,
-            notes: ""
+            Description: "",
+            Syllabus: "",
+            DurationInDays: "",
+            TargetPopulation: "",
+            ProfessionalDomain: "",
+            Price: 0,
+            Comments: ""
         }
     };
 }

@@ -5,47 +5,43 @@ function PropGetter() {
     var tempProps = 
         [
             {
-                realName: 'id',
+                realName: 'ID',
                 hebName: 'מס סידורי'
             },
             {
-                realName: 'name',
+                realName: 'Name',
                 hebName: 'שם הקורס'
             },
             {
-                realName: 'symbol',
+                realName: 'CourseCode',
                 hebName: 'סימול קורס'
             },
             {
-                realName: 'desc',
+                realName: 'Description',
                 hebName: 'תיאור הקורס'
             },
             {
-                realName: 'syl',
+                realName: 'Syllabus',
                 hebName: 'סילבוס'
             },
             {
-                realName: 'duration',
-                hebName: 'אורך הקורס'
+                realName: 'DurationInDays',
+                hebName: 'אורך הקורס (ימים)'
             },
             {
-                realName: 'reqs',
-                hebName: 'דרישות מקדימות'
-            },
-            {
-                realName: 'destPop',
+                realName: 'TargetPopulation',
                 hebName: 'אוכלוסיית יעד'
             },
             {
-                realName: 'dep',
+                realName: 'ProfessionalDomain',
                 hebName: 'מדור'
             },
             {
-                realName: 'price',
+                realName: 'Price',
                 hebName: 'מחיר'
             },
             {
-                realName: 'notes',
+                realName: 'Comments',
                 hebName: 'הערות'
             },
         ];

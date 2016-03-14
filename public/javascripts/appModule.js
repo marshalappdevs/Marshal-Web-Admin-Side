@@ -6,6 +6,5 @@ angular.module
         'ngAnimate',
         'ui.bootstrap',
         'ngSanitize'
-
     ]
 );
