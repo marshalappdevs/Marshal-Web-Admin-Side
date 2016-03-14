@@ -26,6 +26,13 @@ function DragDrop(courseHandler) {
             courseHandler.addCourse(data)
         };
         
+        reader.onprogress = function(event) {
+            if (event.lengthComputable) {
+                // progressNode.max = event.total;
+                // progressNode.value = event.loaded;
+            }
+        };
+        
         reader.readAsText(event.dataTransfer.files[0]);
         event.preventDefault();
         
