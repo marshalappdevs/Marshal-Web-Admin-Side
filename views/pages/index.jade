@@ -1,4 +1,4 @@
-#courseTableDiv.panel.panel-primary(ng-controller='coursesCtrl')
+#courseTableDiv.panel.panel-primary(ng-controller='coursesCtrl', ondrop='drop(event)', ondragover='allowDrop(event)', ondragenter='allowDrop(event)')
     .panelHeading.panel-heading
         button#addCourseButton.btn.btn-success(ng-click='add()', tooltip-placement='top-left', uib-tooltip='הוסף קורס חדש') +
         span קורסים פתוחים
