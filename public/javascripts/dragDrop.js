@@ -9,6 +9,12 @@ function drop(ev) {
         console.log(data);
     };
 
-    reader.readAsText(event.dataTransfer.files[0]);    
+    // Checks if file is JSON
+    if (!event.dataTransfer.files[0].type.match('application/json')) {
+        alert("Bad file");
+    } else {
+        reader.readAsText(event.dataTransfer.files[0]);
+    }
+    
     event.preventDefault();
 }
