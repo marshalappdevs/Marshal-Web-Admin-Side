@@ -1,7 +1,14 @@
 angular.module('marshalApp')
-    .service('dragDrop', [DargDrop]);
+    .service('dragDrop', [DragDrop]);
     
-function DargDrop() {
+function DragDrop() {
+    var showSplash = { show: false };
+    
+    this.dragEnter = function dragEnter(ev) {
+        ev.preventDefault();
+        showSplash.show = true;
+    }
+    
     this.allowDrop = function allowDrop(ev) {
         ev.preventDefault();
     }
@@ -20,5 +27,11 @@ function DargDrop() {
         
         reader.readAsText(event.dataTransfer.files[0]);
         event.preventDefault();
+        
+        showSplash.show = false;
+    }
+    
+    this.showSplash = function() {
+        return showSplash;
     }
 }

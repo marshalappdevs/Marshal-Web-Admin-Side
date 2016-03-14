@@ -41,7 +41,9 @@ angular.module('marshalApp')
         };
         
         var dragDropDiv = document.getElementById('courseTableDiv');
-        dragDropDiv.addEventListener('dragenter', dragDrop.allowDrop);
+        dragDropDiv.addEventListener('dragenter', dragDrop.dragEnter);
         dragDropDiv.addEventListener('dragover', dragDrop.allowDrop);
         dragDropDiv.addEventListener('drop', dragDrop.drop);
+        
+        $scope.showSplash = dragDrop.showSplash();
     }]);
