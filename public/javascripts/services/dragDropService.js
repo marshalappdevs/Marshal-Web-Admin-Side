@@ -2,11 +2,8 @@ angular.module('marshalApp')
     .service('dragDrop', ['courseHandler', DragDrop]);
     
 function DragDrop(courseHandler) {
-    var showSplash = { show: false };
-    
     this.dragEnter = function dragEnter(ev) {
         ev.preventDefault();
-        showSplash.show = true;
     }
     
     this.allowDrop = function allowDrop(ev) {
@@ -18,12 +15,12 @@ function DragDrop(courseHandler) {
         reader.onloadend = function() {
             try {
                 var data = JSON.parse(this.result);
+                
+                // Adding the course to the table
+                courseHandler.addCourse(data)
             } catch (e) {
                 alert("Bad file");
             }
-            
-            console.log(data);
-            courseHandler.addCourse(data)
         };
         
         reader.onprogress = function(event) {
@@ -35,11 +32,5 @@ function DragDrop(courseHandler) {
         
         reader.readAsText(event.dataTransfer.files[0]);
         event.preventDefault();
-        
-        showSplash.show = false;
-    }
-    
-    this.showSplash = function() {
-        return showSplash;
     }
 }

@@ -40,10 +40,49 @@ angular.module('marshalApp')
             courseHandler.deleteCourse(id);
         };
         
-        var dragDropDiv = document.getElementById('mainBody');
-        dragDropDiv.addEventListener('dragenter', dragDrop.dragEnter);
-        dragDropDiv.addEventListener('dragover', dragDrop.allowDrop);
-        dragDropDiv.addEventListener('drop', dragDrop.drop);
+        // Drag & drop stuff
         
-        $scope.showSplash = dragDrop.showSplash();
+        $scope.showDDSplash = false;
+        
+        $scope.dragEnter = function dragEnter(ev) {
+            ev.preventDefault();
+            $scope.showDDSplash = true;
+            $scope.$apply();
+        }
+        
+        $scope.allowDrop = function allowDrop(ev) {
+            ev.preventDefault();
+        }
+        
+        $scope.drop = function drop(ev) {
+            $scope.showDDSplash = false;
+            $scope.$apply();
+            
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                try {
+                    var data = JSON.parse(this.result);
+                    
+                    // Adding the course to the table
+                    courseHandler.addCourse(data);
+                } catch (e) {
+                    alert("Bad file");
+                }
+            };
+            
+            reader.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    // progressNode.max = event.total;
+                    // progressNode.value = event.loaded;
+                }
+            };
+            
+            reader.readAsText(ev.dataTransfer.files[0]);
+            ev.preventDefault();
+        }
+        
+        var dragDropDiv = document.getElementById('mainBody');
+        dragDropDiv.addEventListener('dragenter', $scope.dragEnter);
+        dragDropDiv.addEventListener('dragover', $scope.allowDrop);
+        dragDropDiv.addEventListener('drop', $scope.drop);
     }]);
