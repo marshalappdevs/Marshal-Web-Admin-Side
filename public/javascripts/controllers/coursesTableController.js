@@ -58,26 +58,30 @@ angular.module('marshalApp')
             //$scope.showDDSplash = false;
             $scope.$apply();
             
-            var reader = new FileReader();
-            reader.onloadend = function() {
-                try {
-                    var data = JSON.parse(this.result);
-                    
-                    // Adding the course to the table
-                    courseHandler.addCourse(data);
-                } catch (e) {
-                    alert("Bad file");
-                }
-            };
+            // Going through all files dropped, each one with it's own reader
+            for (var i = 0; i < ev.dataTransfer.files.length; i++) {
+                var reader = new FileReader();
+                reader.onloadend = function() {
+                    try {
+                        var data = JSON.parse(this.result);
+                        
+                        // Adding the course to the table
+                        courseHandler.addCourse(data);
+                    } catch (e) {
+                        alert("Bad file");
+                    }
+                };
+                
+                reader.onprogress = function(event) {
+                    if (event.lengthComputable) {
+                        // progressNode.max = event.total;
+                        // progressNode.value = event.loaded;
+                    }
+                };
+                
+                reader.readAsText(ev.dataTransfer.files[i]);
+            }
             
-            reader.onprogress = function(event) {
-                if (event.lengthComputable) {
-                    // progressNode.max = event.total;
-                    // progressNode.value = event.loaded;
-                }
-            };
-            
-            reader.readAsText(ev.dataTransfer.files[0]);
             ev.preventDefault();
         }
         
