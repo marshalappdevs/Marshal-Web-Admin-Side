@@ -46,7 +46,7 @@ angular.module('marshalApp')
         
         $scope.dragEnter = function dragEnter(ev) {
             ev.preventDefault();
-            $scope.showDDSplash = true;
+            //$scope.showDDSplash = true;
             $scope.$apply();
         }
         
@@ -55,7 +55,7 @@ angular.module('marshalApp')
         }
         
         $scope.drop = function drop(ev) {
-            $scope.showDDSplash = false;
+            //$scope.showDDSplash = false;
             $scope.$apply();
             
             var reader = new FileReader();
