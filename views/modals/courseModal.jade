@@ -1,5 +1,5 @@
 div(dir='rtl')#courseViewPanel.panel.panel-primary
     .panelHeading.panel-heading {{ toDisplay.name }}
-    img#courseImage(ng-src="{{ toDisplay.PictureUrl }}")
+    img#courseImage(ng-if="toDisplay.PictureUrl", ng-src="{{ toDisplay.PictureUrl }}")
     table.table.modalTable(dir='rtl')
         course-field(ng-repeat="prop in columns", ng-if="prop.realName !== 'name'", name="{{ prop.hebName }}", content="toDisplay[prop.realName].toString()")
