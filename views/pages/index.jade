@@ -15,7 +15,7 @@
                     td.col-md-8 תיאור
                     td.col-md-1 מחיר
             tbody#coursesTableBody
-                tr.courseRow(ng-repeat='course in courses', ng-mouseover='isOver = true', ng-mouseleave='isOver = false', style="cursor: pointer; cursor: hand;")
+                tr.courseRow(ng-repeat='course in courses', ng-style="hasPic(course)", ng-mouseover='isOver = true', ng-mouseleave='isOver = false', style="cursor: pointer; cursor: hand;")
                     td.centerAligned.col-md-1
                         .btn-group(role="group", aria-label="course-interaction")
                             button.crs-interaction.btn.btn-danger(ng-click='delete(course.ID)', ng-show='isOver')

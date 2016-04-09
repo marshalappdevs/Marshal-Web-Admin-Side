@@ -40,6 +40,14 @@ angular.module('marshalApp')
             courseHandler.deleteCourse(id);
         };
         
+        $scope.hasPic = function(course) {
+            if (course.PictureUrl) {
+                return {};
+            } else {
+                return { color: 'red' };
+            }
+        }
+        
         // Drag & drop stuff
         
         $scope.showDDSplash = false;

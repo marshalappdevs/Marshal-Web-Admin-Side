@@ -25,7 +25,8 @@ function CourseHandler() {
             TargetPopulation: "תכניתנים, מגן בסייבר, כותב לומדה, נתמ\"מ",
             ProfessionalDomain: "היל\"ה",
             Price: 993,
-            Comments: ""
+            Comments: "",
+            PictureUrl: "https://rogteran.files.wordpress.com/2015/06/js.png"
         }
     ];
     
