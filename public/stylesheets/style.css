@@ -117,3 +117,10 @@ input[type="text"].focus {
     height: 100%;
     color: #929292;
 }
+
+#courseImage {
+    display: block;
+    max-height: 100px;
+    margin-right: auto;
+    margin-left: auto;
+}
