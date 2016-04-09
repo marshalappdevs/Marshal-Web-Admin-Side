@@ -62,14 +62,15 @@ function CourseHandler() {
     this.getCourseTemplate = function() {
         return {
             Name: "",
-            symbol: "",
+            CourseCode: "",
             Description: "",
             Syllabus: "",
             DurationInDays: "",
             TargetPopulation: "",
             ProfessionalDomain: "",
             Price: 0,
-            Comments: ""
+            Comments: "",
+            PictureUrl: ""
         }
     };
 }
