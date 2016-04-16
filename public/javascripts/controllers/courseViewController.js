@@ -1,5 +1,5 @@
 angular.module('marshalApp')
-    .controller('courseModalCtrl', ['$scope', '$uibModalInstance', '$sce', 'selectedCourse', 'propGetter', 'Upload', function($scope, $uibModalInstance, $sce, selectedCourse, propGetter, Upload) {
+    .controller('courseModalCtrl', ['$scope', '$uibModalInstance', '$sce', 'selectedCourse', 'propGetter', 'Upload', '$http', function($scope, $uibModalInstance, $sce, selectedCourse, propGetter, Upload, $http) {
         $scope.toDisplay = selectedCourse.course;
         
         $scope.columns = propGetter.getPropNames();
@@ -19,6 +19,8 @@ angular.module('marshalApp')
             }).then(function(resp) {
                 if (resp.data.error_code === 0) {
                     console.log('Success ' + resp.config.data.file.name + 'uploaded.');
+                    $scope.progress = 'Finished!';
+                    //selectedCourse.course.PictureUrl = 
                 } else {
                     console.log('an error occured' + resp.data.err_desc.code);
                 }
