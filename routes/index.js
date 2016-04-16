@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../Database/mongoObject');
+var upload = require('../image_upload/image-upload');
 
 // Layouts
 
@@ -30,7 +31,7 @@ router.get('/courseField', function(req, res, next) {
     res.render('directives/courseField');
 });
 
-// Data
+// API
 
 router.get('/api/courses', function(req, res, next) {
     //var courses = db.model('Courses', )
@@ -41,6 +42,16 @@ router.get('/api/courses', function(req, res, next) {
             res.setHeader('Content-Type', 'application/json');
             res.json(courses);
         });
+    });
+});
+
+router.post('/api/images', function(req, res) {
+    upload(req, res, function(err) {
+        if (err) {
+            res.json({ error_code : 1, err_desc : err});
+            return;
+        }
+        res.json({ error_code : 0, err_desc : null});
     });
 });
 

@@ -5,6 +5,7 @@ angular.module
         'ngRoute',
         'ngAnimate',
         'ui.bootstrap',
-        'ngSanitize'
+        'ngSanitize',
+        'ngFileUpload'
     ]
 );
