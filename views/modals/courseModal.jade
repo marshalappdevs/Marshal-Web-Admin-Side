@@ -1,14 +1,14 @@
 div(dir='rtl')#courseViewPanel.panel.panel-primary
-    .panelHeading.panel-heading {{ toDisplay.name }}
-    img#courseImage(ng-if="toDisplay.PictureUrl", ng-src="{{ toDisplay.PictureUrl }}")
+    .panelHeading.panel-heading {{ vm.toDisplay.name }}
+    img#courseImage(ng-if="vm.toDisplay.PictureUrl", ng-src="{{ vm.toDisplay.PictureUrl }}")
     table.table.modalTable(dir='rtl')
-        course-field(ng-repeat="prop in columns", ng-if="prop.realName !== 'name'", name="{{ prop.hebName }}", content="toDisplay[prop.realName].toString()")
-    form(name="upload_form")
-        input(type="file", ngf-select, ng-model="file", name="file", ngf-pattern="'image/*'", accept="image/*", ngf-max-size="20MB")
+        course-field(ng-repeat="prop in vm.columns", ng-if="prop.realName !== 'name'", name="{{ prop.hebName }}", content="vm.toDisplay[prop.realName].toString()")
+    form(ng-if='!vm.toDisplay.PictureUrl', name="vm.upload_form")
+        input(type="file", ngf-select, ng-model="vm.file", name="file", ngf-pattern="'image/*'", accept="image/*", ngf-max-size="20MB")
         | Image thumbnail:
-        img(style="width:100px;", ngf-thumbnail="file || '/thumb.jpg'")
-        i(ng-show="upload_form.file.$error.required") *required
+        img(style="width:100px;", ngf-thumbnail="vm.file || '/thumb.jpg'")
+        i(ng-show="vm.upload_form.file.$error.required") *required
         br
-        i(ng-show="upload_form.file.$error.maxSize") File too large {{file.size / 1000000|number:1}}MB: max 20M
-        button(type="submit", ng-click="submit()") submit
-        p {{ progress }}
+        i(ng-show="vm.upload_form.file.$error.maxSize") File too large {{file.size / 1000000|number:1}}MB: max 20M
+        button(type="submit", ng-click="vm.submit()") submit
+        p {{ vm.progress }}

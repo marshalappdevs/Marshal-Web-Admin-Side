@@ -46,7 +46,7 @@ router.get('/api/courses', function(req, res, next) {
 });
 
 router.post('/api/images', upload, function(req, res) {
-    res.json({ error_code : 0, err_desc : null, file_name : req.file.filename});
+    res.json({ error_code : 0, err_desc : null, filename : req.file.filename});
 });
 
 module.exports = router;

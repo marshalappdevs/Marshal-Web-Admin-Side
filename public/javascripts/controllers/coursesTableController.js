@@ -21,7 +21,7 @@ angular.module('marshalApp')
                 {
                     animation: true,
                     templateUrl: 'courseModal',
-                    controller: 'courseModalCtrl'
+                    controller: 'courseModalCtrl as vm'
                 }
             );
         };
