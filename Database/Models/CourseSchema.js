@@ -14,6 +14,7 @@ module.exports = {
     DurationInDays : Number,
     PassingGrade : Number,
     Price : Number,
+    PictureUrl: String,
     MinimumPeople : Number,
     MaximumPeople : Number,
     Comments : String
