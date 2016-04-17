@@ -67,4 +67,13 @@ function CourseHandler($http) {
             PictureUrl: ""
         }
     };
+    
+    this.updateCourse = function(course) {
+        $http.post('api/courses', course)
+        .then(function(results) {
+            if (results.error) {
+                console.log (error);
+            }
+        });
+    }
 }
