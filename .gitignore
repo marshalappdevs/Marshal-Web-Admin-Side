@@ -38,6 +38,3 @@ node_modules
 
 #web strom
 .idea
-
-# unneeded images
-public/images
