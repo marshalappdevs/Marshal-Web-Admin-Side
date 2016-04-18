@@ -1,8 +1,8 @@
-div(dir='rtl')#imageUploadDir
+div(dir='rtl', ng-if='!vm.toDisplay.PictureUrl')#imageUploadDir
     #noImageWarning
         | *שים לב שלקורס/השתלמות אין תמונה, ולכן לא תופיע באפליקציה! העלה תמונה כעת:
     br
-    form(ng-if='!vm.toDisplay.PictureUrl', name="vm.upload_form")
+    form(name="vm.upload_form")
         //img(style="width:100px;", ngf-thumbnail="vm.file || '/images/thumb.png'")
         .form-group
             label בחר קובץ מקומי:
