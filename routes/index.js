@@ -87,7 +87,7 @@ router.post('/api/images', function(req, res) {
     if (req.body.imageUrl) {
         var datetimestamp = Date.now();
         var fileName = "file-" + datetimestamp + "." + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
-        var file = fs.createWriteStream(path.join(__dirname, '../public/images') + fileName);
+        var file = fs.createWriteStream(path.join(__dirname, '../public/images/') + fileName);
         https.get(req.body.imageUrl, function(result) {
             result.pipe(file);
             res.json({ error_code : 0, err_desc : null, filename : fileName });
