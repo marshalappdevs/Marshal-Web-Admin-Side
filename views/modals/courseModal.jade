@@ -3,13 +3,4 @@ div(dir='rtl')#courseViewPanel.panel.panel-primary
     img#courseImage(ng-if="vm.toDisplay.PictureUrl", ng-src="/api/images/{{ vm.toDisplay.ID }}")
     table.table.modalTable(dir='rtl')
         course-field(ng-repeat="prop in vm.columns", ng-if="prop.realName !== 'name'", name="{{ prop.hebName }}", content="vm.toDisplay[prop.realName].toString()")
-    form(ng-if='!vm.toDisplay.PictureUrl', name="vm.upload_form")
-        input(type="file", ngf-select, ng-model="vm.file", name="file", ngf-pattern="'image/*'", accept="image/*", ngf-max-size="20MB")
-        | Image thumbnail:
-        input(type="text", ng-model="vm.fileUrl")
-        img(style="width:100px;", ngf-thumbnail="vm.file || '/thumb.jpg'")
-        i(ng-show="vm.upload_form.file.$error.required") *required
-        br
-        i(ng-show="vm.upload_form.file.$error.maxSize") File too large {{file.size / 1000000|number:1}}MB: max 20M
-        button(type="submit", ng-click="vm.submit()") submit
-        p {{ vm.progress }}
+    image-upload-field
