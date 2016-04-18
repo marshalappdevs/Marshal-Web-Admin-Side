@@ -93,7 +93,8 @@ input[type="text"].focus {
 }
 
 .field {
-    padding: 1.5%;
+    /*padding: 1.5%;*/
+    width: 100%;
 }
 
 #dragDropImage {
@@ -123,4 +124,14 @@ input[type="text"].focus {
     max-height: 100px;
     margin-right: auto;
     margin-left: auto;
+}
+#imageUploadDir {
+    margin-top: 20px;
+    padding: 2%;
+}
+
+#noImageWarning {
+    color: red;
+    font-weight: bold;
+    font-style: italic;
 }

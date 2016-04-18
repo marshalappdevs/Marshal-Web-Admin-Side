@@ -3,7 +3,7 @@ var router = express.Router();
 var db = require('../Database/mongoObject');
 var upload = require('../image_upload/image-upload');
 var path = require('path');
-var http = require('http');
+var https = require('https');
 var fs = require('fs');
 
 // Layouts
@@ -32,6 +32,10 @@ router.get('/addCourseModal', function(req, res, next) {
 
 router.get('/courseField', function(req, res, next) {
     res.render('directives/courseField');
+});
+
+router.get('/imageUploadField', function(req, res, next) {
+    res.render('directives/imageUploadField');
 });
 
 // API
@@ -84,7 +88,7 @@ router.post('/api/images', function(req, res) {
         var datetimestamp = Date.now();
         var fileName = "file-" + datetimestamp + "." + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
         var file = fs.createWriteStream("public/images/" + fileName);
-        http.get(req.body.imageUrl, function(result) {
+        https.get(req.body.imageUrl, function(result) {
             result.pipe(file);
             res.json({ error_code : 0, err_desc : null, filename : fileName });
         });
