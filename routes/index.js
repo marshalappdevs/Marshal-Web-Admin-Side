@@ -55,6 +55,20 @@ router.get('/api/courses', function(req, res, next) {
 
 router.post('/api/courses', function(req, res) {
     db
+    .then(function(courses) {
+        courses.create(req.body, function(err, course) {
+            if (err) {
+                res.json({ code: 400, message: "Couldn't create new course.."});
+                console.log(err);
+            } else {
+                res.json({ code: 201, message: "Created successfuly" });
+            }
+        });
+    });
+});
+
+router.put('/api/courses', function(req, res) {
+    db
     .then(function (courses) {
         courses.update({ ID: req.body.ID}, req.body, function(err, result) {
             // If everything's alright
