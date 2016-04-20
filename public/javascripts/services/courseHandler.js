@@ -2,33 +2,7 @@ angular.module('marshalApp')
     .service('courseHandler', ['$http', CourseHandler]);
 
 function CourseHandler($http) {
-     var courses = [ ];
-    //     {
-    //         ID: 1,
-    //         Name: "Design Patterns",
-    //         CourseCode: "6813",
-    //         Description: "ההשתלמות מלמדת טכניקות Design ע\"פ תבניות קבועות ידועות מראש, כולל דרכי השימוש בהם בקוד והרצאת העשרה בנושא REST.",
-    //         Syllabus: "מבוא ל-Design Patterns<br>Singleton<br>Iterator<br>Framework<br>Factory<br>Template<br>MVC<br>Observer<br>Decorator",
-    //         DurationInDays: "5 ימים",
-    //         TargetPopulation: "תכניתנים ואקדמאים בוגרי מדעי המחשב/הנדסת תכונה/הנדסת מערכות מידע",
-    //         ProfessionalDomain: "עוצמה",
-    //         Price: 1455,
-    //         Comments: "יש לבצע מבחן כניסה להשתלמות"
-    //     },
-    //     {
-    //         ID: 3,
-    //         Name: "פיתוח Front End",
-    //         CourseCode: "2633",
-    //         Description: "עקרונות בניית אפליקציות WEB דינאמיות תוך שימוש ביכולות השונות של השפות HTML וJavascript וספריות JQuery וBootstrap.",
-    //         Syllabus: "מבוא ל-HTML<br>Forms<br>HTML5 Forms<br>מבוא ל-Javascript<br>ECMAScript6",
-    //         DurationInDays: "5 ימים",
-    //         TargetPopulation: "תכניתנים, מגן בסייבר, כותב לומדה, נתמ\"מ",
-    //         ProfessionalDomain: "היל\"ה",
-    //         Price: 993,
-    //         Comments: "",
-    //         PictureUrl: "https://rogteran.files.wordpress.com/2015/06/js.png"
-    //     }
-    // ];
+    var courses = [ ];
     
     this.getCourses = function() {
         $http.get('api/courses')
@@ -40,7 +14,15 @@ function CourseHandler($http) {
     };
     
     this.addCourse = function(course) {
-        courses.push(course);
+        $http.post('api/courses', course)
+        .then(function(result) {
+            if (result.data.code === 201) {
+                courses.push(course);
+                console.log(result.data.message);
+            } else {
+                console.log(result.data.message);
+            }
+        });
     };
     
     this.deleteCourse = function(id) {
@@ -69,7 +51,7 @@ function CourseHandler($http) {
     };
     
     this.updateCourse = function(course) {
-        $http.post('api/courses', course)
+        $http.put('api/courses', course)
         .then(function(results) {
             if (results.error) {
                 console.log (error);
