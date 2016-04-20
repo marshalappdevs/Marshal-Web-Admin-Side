@@ -42,6 +42,7 @@ router.get('/imageUploadField', function(req, res, next) {
 
 // Courses
 
+// Get all courses
 router.get('/api/courses', function(req, res, next) {
     db
     .then(function (courses) {
@@ -53,6 +54,7 @@ router.get('/api/courses', function(req, res, next) {
     });
 });
 
+// Create course
 router.post('/api/courses', function(req, res) {
     db
     .then(function(courses) {
@@ -67,6 +69,7 @@ router.post('/api/courses', function(req, res) {
     });
 });
 
+// Update courses (any property)
 router.put('/api/courses', function(req, res) {
     db
     .then(function (courses) {
@@ -77,6 +80,22 @@ router.put('/api/courses', function(req, res) {
             } else {
                 res.json({error: "something went wrong.."});
                 console.log(err, result);
+            }
+        });
+    });
+});
+
+// Delete courses
+router.delete('/api/courses/:courseId', function(req, res) {
+    db
+    .then(function(courses) {
+        courses.remove({ ID: req.params.courseId }, function(err, result) {
+            if (!err) {
+                console.log(result);
+                res.json({ code: 201, message: "Deleted course!" });
+            } else {
+                console.log(err);
+                res.json({ code: 400, message: "Couldn't delete course" })
             }
         });
     });

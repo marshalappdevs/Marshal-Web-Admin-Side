@@ -18,20 +18,24 @@ function CourseHandler($http) {
         .then(function(result) {
             if (result.data.code === 201) {
                 courses.push(course);
-                console.log(result.data.message);
-            } else {
-                console.log(result.data.message);
             }
+            
+            console.log(result.data.message);
         });
     };
     
     this.deleteCourse = function(id) {
-        courses.forEach(function(course, index) {
-            if (course.ID === id) {
-                courses.splice(index, 1);
-                
-                return;
+        $http.delete('api/courses/' + id)
+        .then(function(result) {
+            if (result.data.code === 201) {
+                courses.forEach(function(course, index) {
+                    if (course.ID === id) {
+                        courses.splice(index, 1);
+                    }
+                });
             }
+            
+            console.log(result.data.message);
         });
     }
     
