@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../Database/mongoObject');
+var dbMaterials = require('../Database/mongoObjectMaterials');
+var dbRatings = require('../Database/mongoObjectRatings');
+var dbGeneral = require('../Database/mongoObjectGeneral');
 var upload = require('../image_upload/image-upload');
 var path = require('path');
 var https = require('https');
@@ -136,5 +139,61 @@ router.post('/api/images', function(req, res) {
         });
     }
 });
+
+/////////////////////////////// IDO //////////////////////////////
+
+//////////////////////materials////////////////////////
+// Get all materials 
+router.get('/api/materials/', function(req, res, next) {
+    dbMaterials
+    .then(function (materials) {
+        materials.find(function (err, materials) {
+            if (err) return console.error(err);
+            res.setHeader('Content-Type', 'application/json');
+            res.json(materials);
+        });
+    });
+});
+//////////////////////////////////////////////////////
+/////////////////////ratings//////////////////////////
+// Get all ratings 
+router.get('/api/ratings/', function(req, res, next) {
+    dbRatings
+    .then(function (ratings) {
+        ratings.find(function (err, ratings) {
+            if (err) return console.error(err);
+            res.setHeader('Content-Type', 'application/json');
+            res.json(ratings);
+        });
+    });
+});
+//////////////////////////////////////////////////////
+// Create rating
+router.post('/api/ratings', function(req, res) {
+    dbRatings
+    .then(function(ratings) {
+        ratings.create(req.body, function(err, rating) {
+            if (err) {
+                res.json({ code: 400, message: "Couldn't create new course.."});
+                console.log(err);
+            } else {
+                res.json({ code: 201, message: "Created successfuly" });
+            }
+        });
+    });
+});
+//////////////////////////////////////////////////
+// Get rating by course id
+router.get('/api/ratings/:courseId', function (req, res, next) {
+    dbRatings
+    .then(function (ratings) {
+        ratings.find({ courseId: req.params.courseId } , function(err, ratings) {
+            if (err) return console.error(err);
+            res.setHeader('Content-Type', 'application/json');
+            res.json(ratings);
+        })
+    });
+});
+/////////////////////////////////////////////////
 
 module.exports = router;
