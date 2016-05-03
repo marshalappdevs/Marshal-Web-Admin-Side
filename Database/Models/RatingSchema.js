@@ -1,6 +1,6 @@
 module.exports = {
             userMailAddress : String,
-            courseId : String,
+            courseCode : String,
             rating : Number,
             comment : String
 }
