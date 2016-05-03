@@ -109,7 +109,7 @@ router.delete('/api/courses/:courseId', function(req, res) {
 router.get('/api/images/:courseId', function (req, res, next) {
     db
     .then(function (courses) {
-        courses.findOne({ ID: req.params.courseId }, 'PictureUrl', function(err, picUrl) {
+        courses.findOne({ CourseCode: req.params.courseId }, 'PictureUrl', function(err, picUrl) {
             // If there's no error
             if (!err) {
                 res.sendFile('images/' + picUrl._doc.PictureUrl, { root: path.join(__dirname, '../public') });
