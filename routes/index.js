@@ -213,7 +213,7 @@ router.delete('/api/ratings', function(req, res) {
     });
 });
 
-// Update courses (any property)
+// Update rating (any property)
 router.put('/api/ratings', function(req, res) {
     dbRatings
     .then(function (ratings) {
