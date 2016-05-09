@@ -3,5 +3,5 @@ module.exports = {
             courseCode : String,
             rating : Number,
             comment : String,
-            lastModified : String
+            lastModified : Date
 }
