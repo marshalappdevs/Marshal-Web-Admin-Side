@@ -197,11 +197,11 @@ router.get('/api/ratings/:courseId', function (req, res, next) {
 /////////////////////////////////////////////////
 
 // Delete rating
-router.delete('/api/ratings/:courseCode/:userEmail', function(req, res) {
+router.delete('/api/ratings', function(req, res) {
     dbRatings
     .then(function(ratings) {
-        courses.remove({ courseCode : req.params.courseCode, 
-            userMailAddress : req.params.userEmail}, function(err, result) {
+        courses.remove({ courseCode : req.body.courseCode, 
+            userMailAddress : req.body.userMailAddress}, function(err, result) {
             if (!err) {
                 console.log(result);
                 res.json({ code: 201, message: "Deleted rating!" });
