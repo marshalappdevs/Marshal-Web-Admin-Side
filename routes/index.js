@@ -200,7 +200,7 @@ router.get('/api/ratings/:courseId', function (req, res, next) {
 router.delete('/api/ratings/:courseCode/:userMailAddress', function(req, res) {
     dbRatings
     .then(function(ratings) {
-        courses.remove({ courseCode : req.params.courseCode, 
+        ratings.remove({ courseCode : req.params.courseCode, 
             userMailAddress : req.params.userMailAddress}, function(err, result) {
             if (!err) {
                 console.log(result);
@@ -217,7 +217,7 @@ router.delete('/api/ratings/:courseCode/:userMailAddress', function(req, res) {
 router.put('/api/ratings', function(req, res) {
     dbRatings
     .then(function (ratings) {
-        courses.update({ courseCode : req.body.courseCode, 
+        ratings.update({ courseCode : req.body.courseCode, 
                 userMailAddress : req.body.userMailAddress}, req.body, function(err, result) {
             // If everything's alright
             if (!err && result.ok === 1) {
