@@ -198,16 +198,16 @@ router.get('/api/ratings/:courseId', function (req, res, next) {
 
 // Delete rating
 router.delete('/api/ratings/:courseCode/:userEmail', function(req, res) {
-    db
-    .then(function(courses) {
+    dbRatings
+    .then(function(ratings) {
         courses.remove({ courseCode : req.params.courseCode, 
             userMailAddress : req.params.userEmail}, function(err, result) {
             if (!err) {
                 console.log(result);
-                res.json({ code: 201, message: "Deleted course!" });
+                res.json({ code: 201, message: "Deleted rating!" });
             } else {
                 console.log(err);
-                res.json({ code: 400, message: "Couldn't delete course" })
+                res.json({ code: 400, message: "Couldn't delete rating" })
             }
         });
     });
@@ -215,8 +215,8 @@ router.delete('/api/ratings/:courseCode/:userEmail', function(req, res) {
 
 // Update courses (any property)
 router.put('/api/ratings', function(req, res) {
-    db
-    .then(function (courses) {
+    dbRatings
+    .then(function (ratings) {
         courses.update({ courseCode : req.body.courseCode, 
                 userMailAddress : req.body.userMailAddress}, req.body, function(err, result) {
             // If everything's alright
