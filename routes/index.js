@@ -3,11 +3,13 @@ var router = express.Router();
 var db = require('../Database/mongoObject');
 var dbMaterials = require('../Database/mongoObjectMaterials');
 var dbRatings = require('../Database/mongoObjectRatings');
+var dbGcmRegisterations = require('../Database/mongoObjectGcmRegisteration');
 var dbGeneral = require('../Database/mongoObjectGeneral');
 var upload = require('../image_upload/image-upload');
 var path = require('path');
 var https = require('https');
 var fs = require('fs');
+var gcm = require('node-gcm');
 
 // Layouts
 
@@ -230,4 +232,87 @@ router.put('/api/ratings', function(req, res) {
     });
 });
 
+//////////////////////////////////////////////////////////
+///////////////////////////// GCM ////////////////////////
+//////////////////////////////////////////////////////////
+////////////////// Registerations ////////////////////////
+// Create new Registeration //////////////////////////////
+router.post('/api/gcm/register', function(req, res) {
+    dbGcmRegisterations
+    .then(function(registerations) {
+        registerations.create(req.body, function(err, registeration) {
+            if (err) {
+                res.json({ code: 400, message: "Couldn't create new registeration.."});
+                console.log(err);
+            } else {
+                res.json({ code: 201, message: "Created successfuly" });
+            }
+        });
+    });
+});
+
+// Update registeration (tokenId only) ////////////////////
+router.put('/api/gcm/update', function(req, res) {
+    dbGcmRegisterations
+    .then(function (registerations) {
+        registerations.update({hardwareId : req.body.hardwareId}, req.body, function(err, result) {
+            // If everything's alright
+            if (!err && result.ok === 1) {
+                res.json({ code: 200});
+            } else {
+                res.json({error: "something went wrong.."});
+                console.log(err, result);
+            }
+        });
+    });
+});
+
+// Delete registeration ////////////////////////////////
+router.delete('/api/gcm/unregister/:hardwareId', function(req, res) {
+    dbGcmRegisterations
+    .then(function(registerations) {
+        registerations.remove({hardwareId : req.params.hardwareId}, function(err, result) {
+            if (!err) {
+                console.log(result);
+                res.json({ code: 201, message: "UnRegistered!" });
+            } else {
+                console.log(err);
+                res.json({ code: 400, message: "Couldn't unregister" })
+            }
+        });
+    });
+});
+
+/////////////// Send Push ///////////////////////////
+router.post('/api/gcm/sendPush/:messageContent', function(req, res) {
+    dbGcmRegisterations
+    .then(function(registerations) {
+        registerations.find(function (err, registerations) {
+            if (err) return console.error(err);
+            
+            // Set up the sender with marshaldevs@gmail.com API key 
+            var sender = new gcm.Sender('AIzaSyBUN6SZxrx-u-N0-j7BqGwOPgDP8VBuYRs');
+            
+            // Initialize Message object
+            var message = new gcm.Message();
+            message.addData('content', req.params.messageContent);
+            
+            // Add the registration tokens of the devices you want to send to 
+            var registrationTokens = [];
+            registerations.forEach(function(registeration){
+                registrationTokens.push(registeration.registerationTokenId);
+            });
+            
+            // Send the message 
+            // ... trying only once 
+            sender.sendNoRetry(message, { registrationTokens: registrationTokens }, function(err, response) {
+                if(err) console.error(err);
+                else {
+                    console.log(response);
+                    res.response;
+                }   
+            });
+        });
+    });
+});
 module.exports = router;
