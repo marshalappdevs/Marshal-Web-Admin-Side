@@ -288,30 +288,33 @@ router.post('/api/gcm/sendPush/:messageContent', function(req, res) {
     dbGcmRegisterations
     .then(function(registerations) {
         registerations.find(function (err, registerations) {
-            if (err) return console.error(err);
-            
-            // Set up the sender with marshaldevs@gmail.com API key 
-            var sender = new gcm.Sender('AIzaSyBUN6SZxrx-u-N0-j7BqGwOPgDP8VBuYRs');
-            
-            // Initialize Message object
-            var message = new gcm.Message();
-            message.addData('content', req.params.messageContent);
-            
-            // Add the registration tokens of the devices you want to send to 
-            var registrationTokens = [];
-            registerations.forEach(function(registeration){
-                registrationTokens.push(registeration.registerationTokenId);
-            });
-            
-            // Send the message 
-            // ... trying only once 
-            sender.sendNoRetry(message, { registrationTokens: registrationTokens }, function(err, response) {
-                if(err) console.error(err);
-                else {
-                    console.log(response);
-                    res.json(response);
-                }   
-            });
+            if (err) 
+                return console.error(err);
+            else if (registerations.length > 0) {
+                    // Set up the sender with marshaldevs@gmail.com API key 
+                var sender = new gcm.Sender('AIzaSyBUN6SZxrx-u-N0-j7BqGwOPgDP8VBuYRs');
+                
+                // Initialize Message object
+                var message = new gcm.Message();
+                message.addData('content', req.params.messageContent);
+                
+                // Add the registration tokens of the devices you want to send to 
+                var registrationTokens = [];
+                registerations.forEach(function(registeration){
+                    registrationTokens.push(registeration.registerationTokenId);
+                });
+                
+                // Send the message 
+                // ... trying only once 
+                sender.sendNoRetry(message, { registrationTokens: registrationTokens }, function(err, response) {
+                    if(err) console.error(err);
+                    else {
+                        console.log(response);
+                        res.json(response);
+                    }   
+                });
+            } else
+                console.log("No GCM Registerations");
         });
     });
 });
