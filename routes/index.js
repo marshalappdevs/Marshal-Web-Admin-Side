@@ -292,7 +292,7 @@ router.post('/api/gcm/sendPush/:messageContent', function(req, res) {
                 return console.error(err);
             else if (registerations.length > 0) {
                     // Set up the sender with marshaldevs@gmail.com API key 
-                var sender = new gcm.Sender('AIzaSyBUN6SZxrx-u-N0-j7BqGwOPgDP8VBuYRs');
+                var sender = new gcm.Sender('AIzaSyClCaC-ImEDiDVLHTckfqtafjw3RmXwxnI');
                 
                 // Initialize Message object
                 var message = new gcm.Message();
