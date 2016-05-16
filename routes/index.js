@@ -315,6 +315,7 @@ router.post('/api/gcm/sendPush/:messageContent', function(req, res) {
                 });
             } else
                 console.log("No GCM Registerations");
+                res.json({"noGcmRegisterations":true});
         });
     });
 });
