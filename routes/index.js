@@ -296,7 +296,7 @@ router.post('/api/gcm/sendPush/:messageContent', function(req, res) {
                 
                 // Initialize Message object
                 var message = new gcm.Message();
-                message.addData('content', req.params.messageContent);
+                message.addData('message', req.params.messageContent);
                 
                 // Add the registration tokens of the devices you want to send to 
                 var registrationTokens = [];
@@ -306,16 +306,14 @@ router.post('/api/gcm/sendPush/:messageContent', function(req, res) {
                 
                 // Send the message 
                 // ... trying only once 
-                sender.sendNoRetry(message, { registrationTokens: registrationTokens }, function(err, response) {
+                sender.send(message, { registrationTokens: registrationTokens },10, function(err, response) {
                     if(err) console.error(err);
                     else {
                         console.log(response);
-                        res.json(response);
                     }   
                 });
             } else
                 console.log("No GCM Registerations");
-                res.json({noGcmRegisterations:true});
         });
     });
 });
