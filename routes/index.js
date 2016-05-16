@@ -252,7 +252,7 @@ router.post('/api/gcm/register', function(req, res) {
 });
 
 // Update registeration (tokenId only) ////////////////////
-router.put('/api/gcm/update', function(req, res) {
+router.put('/api/gcm/register', function(req, res) {
     dbGcmRegisterations
     .then(function (registerations) {
         registerations.update({hardwareId : req.body.hardwareId}, req.body, function(err, result) {
