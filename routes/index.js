@@ -327,7 +327,7 @@ router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
 router.get('/api/settings/', function(req, res, next) {
     dbSettings
     .then(function (settings) {
-        settings.find(function (err, settings) {
+        settings.findOne(function (err, settings) {
             if (err) return console.error(err);
             res.setHeader('Content-Type', 'application/json');
             res.json(settings);
