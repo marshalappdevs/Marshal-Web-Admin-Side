@@ -284,7 +284,7 @@ router.delete('/api/gcm/unregister/:hardwareId', function(req, res) {
 });
 
 /////////////// Send Push ///////////////////////////
-router.post('/api/gcm/sendPush/:messageContent', function(req, res) {
+router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
     dbGcmRegisterations
     .then(function(registerations) {
         registerations.find(function (err, registerations) {
@@ -310,10 +310,12 @@ router.post('/api/gcm/sendPush/:messageContent', function(req, res) {
                     if(err) console.error(err);
                     else {
                         console.log(response);
+                        // res.json(response);
                     }   
                 });
             } else
                 console.log("No GCM Registerations");
+                // res.json({noGcmRegisterations:true});
         });
     });
 });
