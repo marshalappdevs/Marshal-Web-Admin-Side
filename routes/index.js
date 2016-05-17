@@ -3,6 +3,7 @@ var router = express.Router();
 var db = require('../Database/mongoObject');
 var dbMaterials = require('../Database/mongoObjectMaterials');
 var dbRatings = require('../Database/mongoObjectRatings');
+var dbSettings = require('../Database/mongoObjectSettings');
 var dbGcmRegisterations = require('../Database/mongoObjectGcmRegisteration');
 var dbGeneral = require('../Database/mongoObjectGeneral');
 var upload = require('../image_upload/image-upload');
@@ -316,6 +317,20 @@ router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
             } else
                 console.log("No GCM Registerations");
                 // res.json({noGcmRegisterations:true});
+        });
+    });
+});
+
+/////////////////////////////////////////////////////////
+////////////// Settings /////////////////////////////////
+// Get settings
+router.get('/api/settings/', function(req, res, next) {
+    dbSettings
+    .then(function (settings) {
+        settings.find(function (err, settings) {
+            if (err) return console.error(err);
+            res.setHeader('Content-Type', 'application/json');
+            res.json(settings);
         });
     });
 });
