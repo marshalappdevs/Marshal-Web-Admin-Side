@@ -12,22 +12,16 @@ var https = require('https');
 var fs = require('fs');
 var gcm = require('node-gcm');
 
-var setLastUpdateNow = function() {
+function setLastUpdateNow() {
     console.log("setLastUpdateNow");
     var time = new Date().getTime();
     
     dbSettings
     .then(function (settings) {
         settings.findOne({ isSettingsDocument: true}, function(err, doc) {
-            // If everything's alright
-            if (!err && result.ok === 1) {
+            if(err == null) {
                 doc.lastUpdateAt = '/Date(' + time + ')/';
-                doc.visits.$inc();
-                doc.save();                
-                res.json({ code: 200});
-            } else {
-                res.json({error: "something went wrong.."});
-                console.log(err, result);
+                doc.save(); 
             }
         });
     });
@@ -90,6 +84,7 @@ router.post('/api/courses', function(req, res) {
                 res.json({ code: 400, message: "Couldn't create new course.."});
                 console.log(err);
             } else {
+                setLastUpdateNow();
                 res.json({ code: 201, message: "Created successfuly" });
             }
         });
@@ -103,6 +98,7 @@ router.put('/api/courses', function(req, res) {
         courses.update({ ID: req.body.ID}, req.body, function(err, result) {
             // If everything's alright
             if (!err && result.ok === 1) {
+                setLastUpdateNow();
                 res.json({ code: 200});
             } else {
                 res.json({error: "something went wrong.."});
@@ -119,6 +115,7 @@ router.delete('/api/courses/:courseId', function(req, res) {
         courses.remove({ ID: req.params.courseId }, function(err, result) {
             if (!err) {
                 console.log(result);
+                setLastUpdateNow();
                 res.json({ code: 201, message: "Deleted course!" });
             } else {
                 console.log(err);
@@ -150,6 +147,7 @@ router.post('/api/images', function(req, res) {
         var file = fs.createWriteStream(path.join(__dirname, '../public/images/') + fileName);
         https.get(req.body.imageUrl, function(result) {
             result.pipe(file);
+            setLastUpdateNow();
             res.json({ error_code : 0, err_desc : null, filename : fileName });
         });
     } else {
@@ -215,6 +213,7 @@ router.get('/api/ratings/:courseId', function (req, res, next) {
     .then(function (ratings) {
         ratings.find({ courseId: req.params.courseId } , function(err, ratings) {
             if (err) return console.error(err);
+            setLastUpdateNow();
             res.setHeader('Content-Type', 'application/json');
             res.json(ratings);
         })
@@ -230,6 +229,7 @@ router.delete('/api/ratings/:courseCode/:userMailAddress', function(req, res) {
             userMailAddress : req.params.userMailAddress}, function(err, result) {
             if (!err) {
                 console.log(result);
+                setLastUpdateNow();
                 res.json({ code: 201, message: "Deleted rating!" });
             } else {
                 console.log(err);
@@ -247,6 +247,7 @@ router.put('/api/ratings', function(req, res) {
                 userMailAddress : req.body.userMailAddress}, req.body, function(err, result) {
             // If everything's alright
             if (!err && result.ok === 1) {
+                setLastUpdateNow();
                 res.json({ code: 200});
             } else {
                 res.json({error: "something went wrong.."});
