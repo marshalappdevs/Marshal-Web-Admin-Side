@@ -274,6 +274,20 @@ router.post('/api/gcm/register', function(req, res) {
             }
         });
     });
+    
+    dbGcmRegisterations
+    .then(function(registerations) {
+        registerations.update({hardwareId : req.body.hardwareId},
+         req.body, {upsert:true}, function(err, result) {
+             if(!err) {
+                console.log(result);
+                res.json({ code: 201, message: "registered successfully! :)" });
+             } else {
+                console.log(err);
+                res.json({ code: 400, message: "Couldn't register... :(" })
+             }
+         })
+    });
 });
 
 // Update registeration (tokenId only) ////////////////////
