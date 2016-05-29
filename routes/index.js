@@ -263,17 +263,17 @@ router.put('/api/ratings', function(req, res) {
 ////////////////// Registerations ////////////////////////
 // Create new Registeration //////////////////////////////
 router.post('/api/gcm/register', function(req, res) {
-    dbGcmRegisterations
-    .then(function(registerations) {
-        registerations.create(req.body, function(err, registeration) {
-            if (err) {
-                res.json({ code: 400, message: "Couldn't create new registeration.."});
-                console.log(err);
-            } else {
-                res.json({ code: 201, message: "Created successfuly" });
-            }
-        });
-    });
+    // dbGcmRegisterations
+    // .then(function(registerations) {
+    //     registerations.create(req.body, function(err, registeration) {
+    //         if (err) {
+    //             res.json({ code: 400, message: "Couldn't create new registeration.."});
+    //             console.log(err);
+    //         } else {
+    //             res.json({ code: 201, message: "Created successfuly" });
+    //         }
+    //     });
+    // });
     
     dbGcmRegisterations
     .then(function(registerations) {
