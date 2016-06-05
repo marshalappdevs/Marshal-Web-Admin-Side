@@ -185,6 +185,7 @@ router.post('/api/materials', function(req, res) {
          req.body, {upsert:true}, function(err, result) {
              if(!err) {
                 console.log(result);
+                setLastUpdateNow();
                 res.json({ code: 201, message: "material created successfully! :)" });
              } else {
                 console.log(err);
