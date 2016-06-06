@@ -179,19 +179,31 @@ router.get('/api/materials/', function(req, res, next) {
 
 // Create material
 router.post('/api/materials', function(req, res) {
+    // dbMaterials
+    // .then(function(materials) {
+    //     materials.update({URL : req.body.URL},
+    //      req.body, {upsert:true}, function(err, result) {
+    //          if(!err) {
+    //             console.log(result);
+    //             setLastUpdateNow();
+    //             res.json({ code: 201, message: "material created successfully! :)" });
+    //          } else {
+    //             console.log(err);
+    //             res.json({ code: 400, message: "Couldn't create material... :(" })
+    //          }
+    //      })
+    // });
     dbMaterials
     .then(function(materials) {
-        materials.update({URL : req.body.URL},
-         req.body, {upsert:true}, function(err, result) {
-             if(!err) {
-                console.log(result);
-                setLastUpdateNow();
-                res.json({ code: 201, message: "material created successfully! :)" });
-             } else {
+        materials.create(req.body, function(err, material) {
+            if (err) {
+                res.json({ code: 400, message: "Couldn't create new material.."});
                 console.log(err);
-                res.json({ code: 400, message: "Couldn't create material... :(" })
-             }
-         })
+            } else {
+                setLastUpdateNow();
+                res.json({ code: 201, message: "Created successfuly" });
+            }
+        });
     });
 });
 
