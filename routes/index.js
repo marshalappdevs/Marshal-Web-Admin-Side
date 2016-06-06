@@ -181,7 +181,7 @@ router.get('/api/materials/', function(req, res, next) {
 router.post('/api/materials', function(req, res) {
     dbMaterials
     .then(function(materials) {
-        materials.update({URL : req.body.url},
+        materials.update({url : req.body.url},
          req.body, {upsert:true}, function(err, result) {
              if(!err) {
                 console.log(result);

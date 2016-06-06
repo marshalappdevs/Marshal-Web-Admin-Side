@@ -1,6 +1,6 @@
 module.exports = {
-            URL : String,
-            HashTags : String,
+            url : String,
+            hashTags : String,
             title : String,
             description : String,
             mainUrl : String,
