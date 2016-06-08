@@ -17,5 +17,6 @@ module.exports = {
     PictureUrl: String,
     MinimumPeople : Number,
     MaximumPeople : Number,
-    Comments : String
+    Comments : String,
+    Category : String
 }
