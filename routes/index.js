@@ -5,6 +5,7 @@ var dbMaterials = require('../Database/mongoObjectMaterials');
 var dbRatings = require('../Database/mongoObjectRatings');
 var dbSettings = require('../Database/mongoObjectSettings');
 var dbGcmRegisterations = require('../Database/mongoObjectGcmRegisteration');
+var dbMalshabItem = require('../Database/mongoObjectMalshabItem');
 var dbGeneral = require('../Database/mongoObjectGeneral');
 var upload = require('../image_upload/image-upload');
 var path = require('path');
@@ -205,6 +206,38 @@ router.post('/api/materials', function(req, res) {
     //         }
     //     });
     // });
+});
+//////////////////////////////////////////////////////
+
+//////////////////////materials///////////////////////
+// Get all malshab items 
+router.get('/api/malshabitems/', function(req, res, next) {
+    dbMalshabItem
+    .then(function (malshabItems) {
+        malshabItems.find(function (err, malshabItems) {
+            if (err) return console.error(err);
+            res.setHeader('Content-Type', 'application/json');
+            res.json(malshabItems);
+        });
+    });
+});
+
+// Create malshab item
+router.post('/api/malshabitems', function(req, res) {
+    dbMalshabItem
+    .then(function(malshabItems) {
+        malshabItems.update({url : req.body.url},
+         req.body, {upsert:true}, function(err, result) {
+             if(!err) {
+                console.log(result);
+                setLastUpdateNow();
+                res.json({ code: 201, message: "malshab item created successfully! :)" });
+             } else {
+                console.log(err);
+                res.json({ code: 400, message: "Couldn't create malshab item... :(" })
+             }
+         })
+    });
 });
 
 //////////////////////////////////////////////////////
