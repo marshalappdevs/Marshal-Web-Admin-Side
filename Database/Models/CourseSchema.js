@@ -18,5 +18,7 @@ module.exports = {
     MinimumPeople : Number,
     MaximumPeople : Number,
     Comments : String,
-    Category : String
+    Category : String,
+    IsMooc : Boolean,
+    IsMeetup : Boolean
 }
