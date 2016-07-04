@@ -156,51 +156,49 @@ router.post('/api/images', function(req, res) {
     }
 });
 
-// /////////////////////////////// IDO //////////////////////////////
+// Materials
+var materialsSchema = mongoose.Schema(require('../Database/Models/MaterialSchema'));
+var materials = mongoose.model('materials', materialsSchema);
 
-// //////////////////////materials///////////////////////
-// // Get all materials 
-// router.get('/api/materials/', function(req, res, next) {
-//     dbMaterials
-//     .then(function (materials) {
-//         materials.find(function (err, materials) {
-//             if (err) return console.error(err);
-//             res.setHeader('Content-Type', 'application/json');
-//             res.json(materials);
-//         });
-//     });
-// });
+// Get all materials 
+router.get('/api/materials/', function(req, res, next) {
+    materials.find(function (err, materials) {
+        if (err) return console.error(err);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(materials);
+    });
+});
 
-// // Create material
-// router.post('/api/materials', function(req, res) {
-//     dbMaterials
-//     .then(function(materials) {
-//         materials.update({url : req.body.url},
-//          req.body, {upsert:true}, function(err, result) {
-//              if(!err) {
-//                 console.log(result);
-//                 setLastUpdateNow();
-//                 res.json({ code: 201, message: "material created successfully! :)" });
-//              } else {
-//                 console.log(err);
-//                 res.json({ code: 400, message: "Couldn't create material... :(" })
-//              }
-//          })
-//     });
-//     // dbMaterials
-//     // .then(function(materials) {
-//     //     materials.create(req.body, function(err, material) {
-//     //         if (err) {
-//     //             res.json({ code: 400, message: "Couldn't create new material.."});
-//     //             console.log(err);
-//     //         } else {
-//     //             setLastUpdateNow();
-//     //             res.json({ code: 201, message: "Created successfuly" });
-//     //         }
-//     //     });
-//     // });
-// });
-// //////////////////////////////////////////////////////
+// Create material TODO: Ask Ido wtf is going on here
+router.post('/api/materials', function(req, res) {
+    dbMaterials
+    .then(function(materials) {
+        materials.update({url : req.body.url},
+         req.body, {upsert:true}, function(err, result) {
+             if(!err) {
+                console.log(result);
+                setLastUpdateNow();
+                res.json({ code: 201, message: "material created successfully! :)" });
+             } else {
+                console.log(err);
+                res.json({ code: 400, message: "Couldn't create material... :(" })
+             }
+         })
+});
+    // dbMaterials
+    // .then(function(materials) {
+    //     materials.create(req.body, function(err, material) {
+    //         if (err) {
+    //             res.json({ code: 400, message: "Couldn't create new material.."});
+    //             console.log(err);
+    //         } else {
+    //             setLastUpdateNow();
+    //             res.json({ code: 201, message: "Created successfuly" });
+    //         }
+    //     });
+    // });
+});
+
 
 // //////////////////////Malshab Items///////////////////////
 // // Get all malshab items 
