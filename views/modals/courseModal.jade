@@ -1,9 +1,0 @@
-div(dir='rtl')#courseViewPanel.panel.panel-primary
-    .panelHeading.panel-heading {{ vm.toDisplay.Name }}
-    img#courseImage(ng-if="vm.toDisplay.PictureUrl", ng-src="/api/images/{{ vm.toDisplay.ID }}")
-    table.table.modalTable(dir='rtl')
-        //course-field(ng-repeat="prop in vm.columns", ng-if="prop.realName !== 'name'", name="{{ prop.hebName }}", content="vm.toDisplay[prop.realName].toString()")
-        tr.row.field(ng-repeat="prop in vm.columns")
-            td.coursesTableHead.col-md-3 {{ prop.hebName }}
-            td.col-md-9(ng-bind-html='vm.toDisplay[prop.realName].toString()')
-    image-upload-field
