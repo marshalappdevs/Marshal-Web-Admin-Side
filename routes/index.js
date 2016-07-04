@@ -31,7 +31,7 @@ function setLastUpdateNow() {
 // Layouts
 
 router.get('/', function(req, res, next) {
-  res.render('layout', { title: 'Marshal' });
+  res.render('index');
 });
 
 // Pages
