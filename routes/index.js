@@ -199,37 +199,33 @@ router.post('/api/materials', function(req, res) {
     // });
 });
 
+// Malshabs
+var malshabItemSchema = mongoose.Schema(require('../Database/Models/MalshabItemSchema'));
+var malshabItems = mongoose.model('malshabItems', malshabItemSchema);
 
-// //////////////////////Malshab Items///////////////////////
-// // Get all malshab items 
-// router.get('/api/malshabitems/', function(req, res, next) {
-//     dbMalshabItem
-//     .then(function (malshabItems) {
-//         malshabItems.find(function (err, malshabItems) {
-//             if (err) return console.error(err);
-//             res.setHeader('Content-Type', 'application/json');
-//             res.json(malshabItems);
-//         });
-//     });
-// });
+// Get all malshab items 
+router.get('/api/malshabitems/', function(req, res, next) {
+    malshabItems.find(function (err, malshabItems) {
+            if (err) return console.error(err);
+            res.setHeader('Content-Type', 'application/json');
+            res.json(malshabItems);
+    });
+});
 
-// // Create malshab item
-// router.post('/api/malshabitems', function(req, res) {
-//     dbMalshabItem
-//     .then(function(malshabItems) {
-//         malshabItems.update({url : req.body.url},
-//          req.body, {upsert:true}, function(err, result) {
-//              if(!err) {
-//                 console.log(result);
-//                 setLastUpdateNow();
-//                 res.json({ code: 201, message: "malshab item created successfully! :)" });
-//              } else {
-//                 console.log(err);
-//                 res.json({ code: 400, message: "Couldn't create malshab item... :(" })
-//              }
-//          })
-//     });
-// });
+// Create malshab item
+router.post('/api/malshabitems', function(req, res) {
+    malshabItems.update({url : req.body.url},
+    req.body, {upsert:true}, function(err, result) {
+        if(!err) {
+        console.log(result);
+        setLastUpdateNow();
+        res.json({ code: 201, message: "malshab item created successfully! :)" });
+        } else {
+        console.log(err);
+        res.json({ code: 400, message: "Couldn't create malshab item... :(" })
+        }
+    })
+});
 
 // //////////////////////////////////////////////////////
 // /////////////////////ratings//////////////////////////
