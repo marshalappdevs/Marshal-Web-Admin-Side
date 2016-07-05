@@ -227,188 +227,161 @@ router.post('/api/malshabitems', function(req, res) {
     })
 });
 
-// //////////////////////////////////////////////////////
-// /////////////////////ratings//////////////////////////
-// // Get all ratings 
-// router.get('/api/ratings/', function(req, res, next) {
-//     dbRatings
-//     .then(function (ratings) {
-//         ratings.find(function (err, ratings) {
-//             if (err) return console.error(err);
-//             res.setHeader('Content-Type', 'application/json');
-//             res.json(ratings);
-//         });
-//     });
-// });
-// //////////////////////////////////////////////////////
-// // Create rating
-// router.post('/api/ratings', function(req, res) {
-//     dbRatings
-//     .then(function(ratings) {
-//         ratings.create(req.body, function(err, rating) {
-//             if (err) {
-//                 res.json({ code: 400, message: "Couldn't create new rating.."});
-//                 console.log(err);
-//             } else {
-//                 setLastUpdateNow();
-//                 res.json({ code: 201, message: "Created successfuly" });
-//             }
-//         });
-//     });
-// });
+// Ratings
+var ratingsSchema = mongoose.Schema(require('../Database/Models/RatingSchema'));
+var ratings = mongoose.model('ratings', ratingsSchema);
 
-// //////////////////////////////////////////////////
-// // Get rating by course id
-// router.get('/api/ratings/:courseId', function (req, res, next) {
-//     dbRatings
-//     .then(function (ratings) {
-//         ratings.find({ courseId: req.params.courseId } , function(err, ratings) {
-//             if (err) return console.error(err);
-//             setLastUpdateNow();
-//             res.setHeader('Content-Type', 'application/json');
-//             res.json(ratings);
-//         })
-//     });
-// });
-// /////////////////////////////////////////////////
+// Get all ratings 
+router.get('/api/ratings/', function(req, res, next) {
+    ratings.find(function (err, ratings) {
+            if (err) return console.error(err);
+            res.setHeader('Content-Type', 'application/json');
+            res.json(ratings);
+    });
+});
 
-// // Delete rating
-// router.delete('/api/ratings/:courseCode/:userMailAddress', function(req, res) {
-//     dbRatings
-//     .then(function(ratings) {
-//         ratings.remove({ courseCode : req.params.courseCode, 
-//             userMailAddress : req.params.userMailAddress}, function(err, result) {
-//             if (!err) {
-//                 console.log(result);
-//                 setLastUpdateNow();
-//                 res.json({ code: 201, message: "Deleted rating!" });
-//             } else {
-//                 console.log(err);
-//                 res.json({ code: 400, message: "Couldn't delete rating" })
-//             }
-//         });
-//     });
-// });
+// Create rating
+router.post('/api/ratings', function(req, res) {
+    ratings.create(req.body, function(err, rating) {
+            if (err) {
+                res.json({ code: 400, message: "Couldn't create new rating.."});
+                console.log(err);
+            } else {
+                setLastUpdateNow();
+                res.json({ code: 201, message: "Created successfuly" });
+            }
+    });
+});
+
+// Get rating by course id
+router.get('/api/ratings/:courseId', function (req, res, next) {
+    ratings.find({ courseId: req.params.courseId } , function(err, ratings) {
+            if (err) return console.error(err);
+            setLastUpdateNow();
+            res.setHeader('Content-Type', 'application/json');
+            res.json(ratings);
+    })
+});
+/////////////////////////////////////////////////
+
+// Delete rating
+router.delete('/api/ratings/:courseCode/:userMailAddress', function(req, res) {
+    ratings.remove({ courseCode : req.params.courseCode, 
+        userMailAddress : req.params.userMailAddress}, function(err, result) {
+            if (!err) {
+                console.log(result);
+                setLastUpdateNow();
+                res.json({ code: 201, message: "Deleted rating!" });
+            } else {
+                console.log(err);
+                res.json({ code: 400, message: "Couldn't delete rating" })
+            }
+        });
+});
 
 // // Update rating (any property)
-// router.put('/api/ratings', function(req, res) {
-//     dbRatings
-//     .then(function (ratings) {
-//         ratings.update({ courseCode : req.body.courseCode, 
-//                 userMailAddress : req.body.userMailAddress}, req.body, function(err, result) {
-//             // If everything's alright
-//             if (!err && result.ok === 1) {
-//                 setLastUpdateNow();
-//                 res.json({ code: 200});
-//             } else {
-//                 res.json({error: "something went wrong.."});
-//                 console.log(err, result);
-//             }
-//         });
-//     });
-// });
+router.put('/api/ratings', function(req, res) {
+    ratings.update({ courseCode : req.body.courseCode, 
+            userMailAddress : req.body.userMailAddress}, req.body, function(err, result) {
+        // If everything's alright
+        if (!err && result.ok === 1) {
+            setLastUpdateNow();
+            res.json({ code: 200});
+        } else {
+            res.json({error: "something went wrong.."});
+            console.log(err, result);
+        }
+    });
+});
 
-// //////////////////////////////////////////////////////////
-// ///////////////////////////// GCM ////////////////////////
-// //////////////////////////////////////////////////////////
-// ////////////////// Registerations ////////////////////////
-// // Create new Registeration //////////////////////////////
-// router.post('/api/gcm/register', function(req, res) {
-//     // dbGcmRegisterations
-//     // .then(function(registerations) {
-//     //     registerations.create(req.body, function(err, registeration) {
-//     //         if (err) {
-//     //             res.json({ code: 400, message: "Couldn't create new registeration.."});
-//     //             console.log(err);
-//     //         } else {
-//     //             res.json({ code: 201, message: "Created successfuly" });
-//     //         }
-//     //     });
-//     // });
-    
-//     dbGcmRegisterations
-//     .then(function(registerations) {
-//         registerations.update({hardwareId : req.body.hardwareId},
-//          req.body, {upsert:true}, function(err, result) {
-//              if(!err) {
-//                 console.log(result);
-//                 res.json({ code: 201, message: "registered successfully! :)" });
-//              } else {
-//                 console.log(err);
-//                 res.json({ code: 400, message: "Couldn't register... :(" })
-//              }
-//          })
-//     });
-// });
+// GCM 
+// Registerations
+var GcmRegisterationSchema = mongoose.Schema(require('../Database/Models/GcmRegisterationSchema'));
+var regisrations = mongoose.model('GcmRegisterations', GcmRegisterationSchema);
 
-// // Update registeration (tokenId only) ////////////////////
-// router.put('/api/gcm/register', function(req, res) {
-//     dbGcmRegisterations
-//     .then(function (registerations) {
-//         registerations.update({hardwareId : req.body.hardwareId}, req.body, function(err, result) {
-//             // If everything's alright
-//             if (!err && result.ok === 1) {
-//                 res.json({ code: 200});
-//             } else {
-//                 res.json({error: "something went wrong.."});
-//                 console.log(err, result);
-//             }
-//         });
-//     });
-// });
+router.post('/api/gcm/register', function(req, res) {
+    // dbGcmRegisterations
+    // .then(function(registerations) {
+    //     registerations.create(req.body, function(err, registeration) {
+    //         if (err) {
+    //             res.json({ code: 400, message: "Couldn't create new registeration.."});
+    //             console.log(err);
+    //         } else {
+    //             res.json({ code: 201, message: "Created successfuly" });
+    //         }
+    //     });
+    // });
+    registerations.update({hardwareId : req.body.hardwareId},
+         req.body, {upsert:true}, function(err, result) {
+             if(!err) {
+                console.log(result);
+                res.json({ code: 201, message: "registered successfully! :)" });
+             } else {
+                console.log(err);
+                res.json({ code: 400, message: "Couldn't register... :(" })
+             }
+         })
+});
 
-// // Delete registeration ////////////////////////////////
-// router.delete('/api/gcm/unregister/:hardwareId', function(req, res) {
-//     dbGcmRegisterations
-//     .then(function(registerations) {
-//         registerations.remove({hardwareId : req.params.hardwareId}, function(err, result) {
-//             if (!err) {
-//                 console.log(result);
-//                 res.json({ code: 201, message: "UnRegistered!" });
-//             } else {
-//                 console.log(err);
-//                 res.json({ code: 400, message: "Couldn't unregister" })
-//             }
-//         });
-//     });
-// });
+// Update registeration (tokenId only) ////////////////////
+router.put('/api/gcm/register', function(req, res) {
+    registerations.update({hardwareId : req.body.hardwareId}, req.body, function(err, result) {
+            // If everything's alright
+            if (!err && result.ok === 1) {
+                res.json({ code: 200});
+            } else {
+                res.json({error: "something went wrong.."});
+                console.log(err, result);
+            }
+        });
+});
 
-// /////////////// Send Push ///////////////////////////
-// router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
-//     dbGcmRegisterations
-//     .then(function(registerations) {
-//         registerations.find(function (err, registerations) {
-//             if (err) 
-//                 return console.error(err);
-//             else if (registerations.length > 0) {
-//                     // Set up the sender with marshaldevs@gmail.com API key 
-//                 var sender = new gcm.Sender('AIzaSyAsgh-FO4NHH25pPoEeUFJj0AptIs6guwU');
-                
-//                 // Initialize Message object
-//                 var message = new gcm.Message();
-//                 message.addData('message', req.params.messageContent);
-                
-//                 // Add the registration tokens of the devices you want to send to 
-//                 var registrationTokens = [];
-//                 registerations.forEach(function(registeration){
-//                     registrationTokens.push(registeration.registerationTokenId);
-//                 });
-                
-//                 // Send the message 
-//                 // ... trying only once 
-//                 sender.send(message, { registrationTokens: registrationTokens },10, function(err, response) {
-//                     if(err) console.error(err);
-//                     else {
-//                         console.log(response);
-//                         // res.json(response);
-//                     }   
-//                 });
-//             } else
-//                 console.log("No GCM Registerations");
-//                 // res.json({noGcmRegisterations:true});
-//         });
-//     });
-// });
+// Delete registeration ////////////////////////////////
+router.delete('/api/gcm/unregister/:hardwareId', function(req, res) {
+    registerations.remove({hardwareId : req.params.hardwareId}, function(err, result) {
+        if (!err) {
+            console.log(result);
+            res.json({ code: 201, message: "UnRegistered!" });
+        } else {
+            console.log(err);
+            res.json({ code: 400, message: "Couldn't unregister" })
+        }
+    });
+});
+
+/////////////// Send Push ///////////////////////////
+router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
+        registerations.find(function (err, registerations) {
+        if (err) 
+            return console.error(err);
+        else if (registerations.length > 0) {
+                // Set up the sender with marshaldevs@gmail.com API key 
+            var sender = new gcm.Sender('AIzaSyAsgh-FO4NHH25pPoEeUFJj0AptIs6guwU');
+            
+            // Initialize Message object
+            var message = new gcm.Message();
+            message.addData('message', req.params.messageContent);
+            
+            // Add the registration tokens of the devices you want to send to 
+            var registrationTokens = [];
+            registerations.forEach(function(registeration){
+                registrationTokens.push(registeration.registerationTokenId);
+            });
+            
+            // Send the message 
+            // ... trying only once 
+            sender.send(message, { registrationTokens: registrationTokens },10, function(err, response) {
+                if(err) console.error(err);
+                else {
+                    console.log(response);
+                    // res.json(response);
+                }   
+            });
+        } else
+            console.log("No GCM Registerations");
+            // res.json({noGcmRegisterations:true});
+    });
+});
 
 // /////////////////////////////////////////////////////////
 // ////////////// Settings /////////////////////////////////
