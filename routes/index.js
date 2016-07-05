@@ -18,20 +18,17 @@ var mongoose = require('mongoose')
 // DB connection
 mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal');
 
-// function setLastUpdateNow() {
-//     console.log("setLastUpdateNow");
-//     var time = new Date().getTime();
+function setLastUpdateNow() {
+    console.log("setLastUpdateNow");
+    var time = new Date().getTime();
     
-//     dbSettings
-//     .then(function (settings) {
-//         settings.findOne({ isSettingsDocument: true}, function(err, doc) {
-//             if(err == null) {
-//                 doc.lastUpdateAt = '/Date(' + time + ')/';
-//                 doc.save(); 
-//             }
-//         });
-//     });
-// };
+    settings.findOne({ isSettingsDocument: true}, function(err, doc) {
+            if(err == null) {
+                doc.lastUpdateAt = '/Date(' + time + ')/';
+                doc.save(); 
+            }
+    });
+};
 
 // Layouts
 
