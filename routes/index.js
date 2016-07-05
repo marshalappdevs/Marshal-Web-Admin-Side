@@ -351,7 +351,7 @@ router.delete('/api/gcm/unregister/:hardwareId', function(req, res) {
 
 /////////////// Send Push ///////////////////////////
 router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
-        registerations.find(function (err, registerations) {
+    registerations.find(function (err, registerations) {
         if (err) 
             return console.error(err);
         else if (registerations.length > 0) {
@@ -383,17 +383,16 @@ router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
     });
 });
 
-// /////////////////////////////////////////////////////////
-// ////////////// Settings /////////////////////////////////
-// // Get settings
-// router.get('/api/settings/', function(req, res, next) {
-//     dbSettings
-//     .then(function (settings) {
-//         settings.findOne(function (err, settings) {
-//             if (err) return console.error(err);
-//             res.setHeader('Content-Type', 'application/json');
-//             res.json(settings);
-//         });
-//     });
-// });
+// Settings
+var settingsSchema = mongoose.Schema(require('../Database/Models/SettingsSchema'));
+var settings = mongoose.model('Settings', settingsSchema);
+
+// Get settings
+router.get('/api/settings/', function(req, res, next) {
+    settings.findOne(function (err, settings) {
+        if (err) return console.error(err);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(settings);
+    });
+});
 module.exports = router;
