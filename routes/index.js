@@ -294,7 +294,7 @@ router.put('/api/ratings', function(req, res) {
 // GCM 
 // Registerations
 var GcmRegisterationSchema = mongoose.Schema(require('../Database/Models/GcmRegisterationSchema'));
-var regisrations = mongoose.model('gcmregisterations', GcmRegisterationSchema);
+var registerations = mongoose.model('gcmregisterations', GcmRegisterationSchema);
 
 router.post('/api/gcm/register', function(req, res) {
     // dbGcmRegisterations
