@@ -1,11 +1,13 @@
 <html lang="en" ng-app="marshalApp" dir="rtl">
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>מרש"ל</title>
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css">
   </head>
   <body layout="row" ng-controller="AppCtrl">
 
     <!--Navbar-->
-    <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+    <md-sidenav layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="$mdMedia('gt-md')">
       <md-toolbar class="md-tall md-hue-2">
         <span flex></span>
         <div layout="column" class="md-toolbar-tools-bottom inset">
@@ -47,14 +49,11 @@
 
     <!--Main content-->
     <div layout="column" class="relative" layout-fill role="main">
-      <md-button class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="showAdd($event)">
-        <ng-md-icon icon="add"></ng-md-icon>
-      </md-button>
       <md-toolbar ng-show="!showSearch">
 
           <!--Main toolbar-->
         <div class="md-toolbar-tools">
-          <md-button ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
+          <md-button ng-click="toggleSidenav('right')" hide-gt-md aria-label="Menu">
             <ng-md-icon icon="menu"></ng-md-icon>
           </md-button>
           <h3>
@@ -91,9 +90,6 @@
           </md-input-container>
           <md-button aria-label="Search" ng-click="showSearch = !showSearch">
             <ng-md-icon icon="search"></ng-md-icon>
-          </md-button>
-          <md-button aria-label="Open Settings" ng-click="showListBottomSheet($event)">
-            <ng-md-icon icon="more_vert"></ng-md-icon>
           </md-button>
         </div>
        
