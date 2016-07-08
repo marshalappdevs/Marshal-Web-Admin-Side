@@ -61,7 +61,7 @@ app.config(function($mdThemingProvider, $routeProvider) {
 
   $routeProvider.
       when('/', {
-        templateUrl: 'javascripts/example.html',
+        templateUrl: 'javascripts/templates/example.html',
         controller: 'ExampleCtrl'
       }).
       when('/example', {
