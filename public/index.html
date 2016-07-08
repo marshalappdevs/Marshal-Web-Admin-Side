@@ -26,7 +26,8 @@
             <div class="inset">
               <ng-md-icon icon="{{item.icon}}"></ng-md-icon>
             </div>
-            <div class="inset">{{item.title}}
+            <div class="inset" ng-click="redirectView(item.link)">
+              {{item.title}}
             </div>
           </md-item-content>
         </a>

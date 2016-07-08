@@ -1,13 +1,16 @@
 var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute']);
 
-app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog', function($scope, $mdBottomSheet, $mdSidenav, $mdDialog){
+app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$location','$mdSidenav', '$mdDialog', function($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location){
   $scope.toggleSidenav = function(menuId) {
     $mdSidenav(menuId).toggle();
   };
 
+  $scope.redirectView = function(redLink) {
+    $location.path(redLink);
+  }
  	$scope.menu = [
     {
-      link : '',
+      link : '/courses',
       title: 'קורסים',
       icon: 'dashboard'
     },
