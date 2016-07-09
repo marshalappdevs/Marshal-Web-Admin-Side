@@ -3,14 +3,14 @@
       <div role="panel"
             id="tab1-content"
             layout="row" layout-align="center center">
-          <md-card flex-gt-sm="90" flex-gt-md="80">
+          <md-card flex-gt-sm="100" flex-gt-md="80">
             <md-card-content>
               <h2>משהו</h2>
-              <md-list>
+              <md-list flex>
                 <md-item ng-repeat="item in activity | filter:search">
                   <md-item-content>
-                    <div class="md-tile-left inset" hide-sm>
-                        <user-avatar></user-avatar>
+                    <div class="md-tile-right inset" style="float: right" hide-sm>
+                      <user-avatar></user-avatar>
                     </div>
                     <div class="md-tile-content">
                       <h3>{{item.what}}</h3>
