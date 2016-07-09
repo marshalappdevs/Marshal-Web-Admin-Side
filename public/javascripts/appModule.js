@@ -2,13 +2,27 @@ var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute']);
 
 app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog', '$location', function($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location){
   
+
+  /* Toggles menu's location */
   $scope.toggleSidenav = function(menuId) {
     $mdSidenav(menuId).toggle();
   };
 
+  /* Redirects between views */
   $scope.redirectView = function(redLink) {
     $location.path(redLink);
   }
+
+  /* Updating current feature */
+  $scope.updateView = function (item = {title: 'ראשי וסטטיסטיקות'}) {
+    if(item.link) {
+      $scope.redirectView(item.link);
+    }
+    
+    $scope.currView = item.title;
+  }
+
+  /* JSON of the menu offered on the sidebar */
  	$scope.menu = [
     {
       link : '/',
@@ -36,6 +50,8 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
       icon: 'person'
     }
   ];
+
+  /* JSON of the submenu */
   $scope.settings = [
     {
       link : '',
@@ -43,8 +59,16 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
       icon: 'settings'
     }
   ];
-  $scope.alert = ''; }]);
 
+  // Initiallize current view
+  $scope.updateView();
+
+  $scope.alert = '';
+
+}]);
+
+
+/* TODO: Remove this directive after getting rid of the examples */
 app.directive('userAvatar', function() {
   return {
     replace: true,
@@ -53,11 +77,14 @@ app.directive('userAvatar', function() {
 });
 
 app.config(function($mdThemingProvider, $routeProvider) {
+  
+  /* Theming */
   var customBlueMap = 		$mdThemingProvider.extendPalette('light-blue', {
     'contrastDefaultColor': 'light',
     'contrastDarkColors': ['50'],
     '50': 'ffffff'
   });
+
   $mdThemingProvider.definePalette('customBlue', customBlueMap);
   $mdThemingProvider.theme('default')
     .primaryPalette('customBlue', {
@@ -66,8 +93,10 @@ app.config(function($mdThemingProvider, $routeProvider) {
     })
     .accentPalette('red');
   $mdThemingProvider.theme('input', 'default')
-        .primaryPalette('grey');
+      .primaryPalette('grey');
 
+ /* Routing
+    TODO: Change to correct controllers once they've been created */
   $routeProvider.
       when('/', {
         templateUrl: 'javascripts/templates/home.tmpl',
