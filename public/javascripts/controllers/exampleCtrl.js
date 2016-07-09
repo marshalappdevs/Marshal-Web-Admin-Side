@@ -1,5 +1,9 @@
 angular.module('marshalApp')
 .controller('ExampleCtrl', ['$scope', '$mdDialog', function($scope, $mdDialog){
+    // Emitting current feature to parent scope
+    $scope.$emit('currFeatureChange', "ראשי וסטטיסטיקות");
+
+
     $scope.activity = [
       {
         what: 'לתכנת את הדרעק הזה',

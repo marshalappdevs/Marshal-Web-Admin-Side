@@ -1,44 +1,67 @@
 var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute']);
 
-app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$location','$mdSidenav', '$mdDialog', function($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location){
+app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', function($scope, $mdSidenav, $location){
+  
+
+  /* Toggles menu's location */
   $scope.toggleSidenav = function(menuId) {
     $mdSidenav(menuId).toggle();
   };
 
+  /* Redirects between views */
   $scope.redirectView = function(redLink) {
     $location.path(redLink);
   }
+
+  /* Updates current feature text once emitted from child scope */
+  $scope.$on('currFeatureChange', function(event, currFeature) {
+    $scope.currView = currFeature;
+  });
+
+  /* JSON of the menu offered on the sidebar */
  	$scope.menu = [
+    {
+      link : '/',
+      title: 'ראשי וסטטיסטיקות',
+      icon: 'home'
+    },
     {
       link : '/courses',
       title: 'קורסים',
-      icon: 'dashboard'
+      icon: 'school'
     },
     {
-      link : '',
+      link : '/materials',
+      title: 'חומרי עזר ולימוד',
+      icon: 'local_library'
+    },
+    {
+      link : '/meetups',
+      title: 'מיטאפים',
+      icon: 'event_available'
+    },
+    {
+      link : '/malshabs',
       title: 'מידע למלש"בים',
-      icon: 'group'
-    },
-    {
-      link : '',
-      title: 'חומרי לימוד',
-      icon: 'message'
+      icon: 'person'
     }
   ];
+
+  /* JSON of the submenu */
   $scope.settings = [
     {
       link : '',
-      title: 'זבל',
-      icon: 'delete'
-    },
-    {
-      link : 'showListBottomSheet($event)',
-      title: 'משתמשים',
+      title: 'הגדרות',
       icon: 'settings'
     }
   ];
-  $scope.alert = ''; }]);
 
+  $scope.alert = '';
+
+}]);
+
+
+/* TODO: Remove this directive after getting rid of the examples */
 app.directive('userAvatar', function() {
   return {
     replace: true,
@@ -47,11 +70,14 @@ app.directive('userAvatar', function() {
 });
 
 app.config(function($mdThemingProvider, $routeProvider) {
+  
+  /* Theming */
   var customBlueMap = 		$mdThemingProvider.extendPalette('light-blue', {
     'contrastDefaultColor': 'light',
     'contrastDarkColors': ['50'],
     '50': 'ffffff'
   });
+
   $mdThemingProvider.definePalette('customBlue', customBlueMap);
   $mdThemingProvider.theme('default')
     .primaryPalette('customBlue', {
@@ -60,16 +86,30 @@ app.config(function($mdThemingProvider, $routeProvider) {
     })
     .accentPalette('red');
   $mdThemingProvider.theme('input', 'default')
-        .primaryPalette('grey');
+      .primaryPalette('grey');
 
+ /* Routing
+    TODO: Change to correct controllers once they've been created */
   $routeProvider.
       when('/', {
-        templateUrl: 'javascripts/templates/example.html',
+        templateUrl: 'javascripts/templates/home.tmpl',
         controller: 'ExampleCtrl'
       }).
-      when('/example', {
-        templateUrl: 'templates/example2.html',
-        controller: 'ExampleTwoCtrl'
+      when('/courses', {
+        templateUrl: 'javascripts/templates/courses.tmpl',
+        controller: 'coursesCtrl'
+      }).
+      when('/malshabs', {
+        templateUrl: 'javascripts/templates/malshab.tmpl',
+        controller: 'malshabCtrl'
+      }).
+      when('/materials', {
+        templateUrl: 'javascripts/templates/materials.tmpl',
+        controller: 'materialsCtrl'
+      }).
+      when('/meetups', {
+        templateUrl: 'javascripts/templates/meetups.tmpl',
+        controller: 'meetupsCtrl'
       }).
       otherwise({
         redirectTo: '/'
