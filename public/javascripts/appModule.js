@@ -1,6 +1,7 @@
 var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute']);
 
-app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$location','$mdSidenav', '$mdDialog', function($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location){
+app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog', '$location', function($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location){
+  
   $scope.toggleSidenav = function(menuId) {
     $mdSidenav(menuId).toggle();
   };
@@ -10,30 +11,35 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$location','$mdSidenav', 
   }
  	$scope.menu = [
     {
+      link : '/',
+      title: 'ראשי וסטטיסטיקות',
+      icon: 'home'
+    },
+    {
       link : '/courses',
       title: 'קורסים',
-      icon: 'dashboard'
+      icon: 'school'
     },
     {
-      link : '',
+      link : '/materials',
+      title: 'חומרי עזר ולימוד',
+      icon: 'local_library'
+    },
+    {
+      link : '/meetups',
+      title: 'מיטאפים',
+      icon: 'event_available'
+    },
+    {
+      link : '/malshabs',
       title: 'מידע למלש"בים',
-      icon: 'group'
-    },
-    {
-      link : '',
-      title: 'חומרי לימוד',
-      icon: 'message'
+      icon: 'person'
     }
   ];
   $scope.settings = [
     {
       link : '',
-      title: 'זבל',
-      icon: 'delete'
-    },
-    {
-      link : 'showListBottomSheet($event)',
-      title: 'משתמשים',
+      title: 'הגדרות',
       icon: 'settings'
     }
   ];
@@ -64,12 +70,24 @@ app.config(function($mdThemingProvider, $routeProvider) {
 
   $routeProvider.
       when('/', {
-        templateUrl: 'javascripts/templates/example.html',
+        templateUrl: 'javascripts/templates/home.tmpl',
         controller: 'ExampleCtrl'
       }).
-      when('/example', {
-        templateUrl: 'templates/example2.html',
-        controller: 'ExampleTwoCtrl'
+      when('/courses', {
+        templateUrl: 'javascripts/templates/courses.tmpl',
+        controller: 'ExampleCtrl'
+      }).
+      when('/malshabs', {
+        templateUrl: 'javascripts/templates/malshab.tmpl',
+        controller: 'ExampleCtrl'
+      }).
+      when('/materials', {
+        templateUrl: 'javascripts/templates/materials.tmpl',
+        controller: 'ExampleCtrl'
+      }).
+      when('/meetups', {
+        templateUrl: 'javascripts/templates/meetups.tmpl',
+        controller: 'ExampleCtrl'
       }).
       otherwise({
         redirectTo: '/'
