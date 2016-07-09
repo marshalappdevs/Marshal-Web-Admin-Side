@@ -26,7 +26,7 @@
             <div class="inset">
               <ng-md-icon icon="{{item.icon}}"></ng-md-icon>
             </div>
-            <div class="inset" ng-click="updateView(item)">
+            <div class="inset" ng-click="redirectView(item.link)">
               {{item.title}}
             </div>
           </md-item-content>
@@ -103,5 +103,9 @@
     <script src="//cdn.jsdelivr.net/angular-material-icons/0.4.0/angular-material-icons.min.js"></script> 
     <script src="/javascripts/appModule.js"></script>
     <script src="/javascripts/controllers/exampleCtrl.js"></script>
+    <script src="/javascripts/controllers/coursesCtrl.js"></script>
+    <script src="/javascripts/controllers/malshabCtrl.js"></script>
+    <script src="/javascripts/controllers/materialsCtrl.js"></script>
+    <script src="/javascripts/controllers/meetupsCtrl.js"></script>
   </body>
 </html>

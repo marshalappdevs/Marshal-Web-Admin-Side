@@ -1,6 +1,6 @@
 var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute']);
 
-app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog', '$location', function($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location){
+app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', function($scope, $mdSidenav, $location){
   
 
   /* Toggles menu's location */
@@ -13,14 +13,10 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
     $location.path(redLink);
   }
 
-  /* Updating current feature */
-  $scope.updateView = function (item = {title: 'ראשי וסטטיסטיקות'}) {
-    if(item.link) {
-      $scope.redirectView(item.link);
-    }
-    
-    $scope.currView = item.title;
-  }
+  /* Updates current feature text once emitted from child scope */
+  $scope.$on('currFeatureChange', function(event, currFeature) {
+    $scope.currView = currFeature;
+  });
 
   /* JSON of the menu offered on the sidebar */
  	$scope.menu = [
@@ -59,9 +55,6 @@ app.controller('AppCtrl', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog',
       icon: 'settings'
     }
   ];
-
-  // Initiallize current view
-  $scope.updateView();
 
   $scope.alert = '';
 
@@ -104,19 +97,19 @@ app.config(function($mdThemingProvider, $routeProvider) {
       }).
       when('/courses', {
         templateUrl: 'javascripts/templates/courses.tmpl',
-        controller: 'ExampleCtrl'
+        controller: 'coursesCtrl'
       }).
       when('/malshabs', {
         templateUrl: 'javascripts/templates/malshab.tmpl',
-        controller: 'ExampleCtrl'
+        controller: 'malshabCtrl'
       }).
       when('/materials', {
         templateUrl: 'javascripts/templates/materials.tmpl',
-        controller: 'ExampleCtrl'
+        controller: 'materialsCtrl'
       }).
       when('/meetups', {
         templateUrl: 'javascripts/templates/meetups.tmpl',
-        controller: 'ExampleCtrl'
+        controller: 'meetupsCtrl'
       }).
       otherwise({
         redirectTo: '/'
