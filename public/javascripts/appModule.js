@@ -88,27 +88,26 @@ app.config(function($mdThemingProvider, $routeProvider) {
   $mdThemingProvider.theme('input', 'default')
       .primaryPalette('grey');
 
- /* Routing
-    TODO: Change to correct controllers once they've been created */
+ /* Routing */
   $routeProvider.
       when('/', {
         templateUrl: 'javascripts/templates/home.html',
         controller: 'ExampleCtrl'
       }).
       when('/courses', {
-        templateUrl: 'javascripts/templates/courses.tmpl',
+        templateUrl: 'javascripts/templates/courses.html',
         controller: 'coursesCtrl'
       }).
       when('/malshabs', {
-        templateUrl: 'javascripts/templates/malshab.tmpl',
+        templateUrl: 'javascripts/templates/malshab.html',
         controller: 'malshabCtrl'
       }).
       when('/materials', {
-        templateUrl: 'javascripts/templates/materials.tmpl',
+        templateUrl: 'javascripts/templates/materials.html',
         controller: 'materialsCtrl'
       }).
       when('/meetups', {
-        templateUrl: 'javascripts/templates/meetups.tmpl',
+        templateUrl: 'javascripts/templates/meetups.html',
         controller: 'meetupsCtrl'
       }).
       otherwise({
