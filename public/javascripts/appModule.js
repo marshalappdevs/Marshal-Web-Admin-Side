@@ -92,7 +92,7 @@ app.config(function($mdThemingProvider, $routeProvider) {
     TODO: Change to correct controllers once they've been created */
   $routeProvider.
       when('/', {
-        templateUrl: 'javascripts/templates/home.tmpl',
+        templateUrl: 'javascripts/templates/home.html',
         controller: 'ExampleCtrl'
       }).
       when('/courses', {
