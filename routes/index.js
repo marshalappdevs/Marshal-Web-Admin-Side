@@ -10,6 +10,7 @@ var passport  = require('passport');
 var jwt = require('jsonwebtoken');
 var config = require('../config/main');
 var User = require('../Database/Models/UserSchema');
+require('../config/passport')(passport);
 
 // DB connection
 mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal');
@@ -73,6 +74,35 @@ router.post('/register', function(req, res) {
       }
       res.json({ success: true, message: 'Successfully created new user.' });
     });
+});
+
+router.get('/dashboard', passport.authenticate('jwt', { session: false }), function(req, res) {
+  res.send('It worked! User id is: ' + req.user._id + '.');
+});
+
+router.post('/auth', function(req, res) {
+  User.findOne({
+    username: req.body.username
+  }, function(err, user) {
+    if (err) throw err;
+
+    if (!user) {
+      res.send({ success: false, message: 'Authentication failed. User not found.' });
+    } else {
+      // Check if password matches
+      user.comparePass(req.body.password, function(err, isMatch) {
+        if (isMatch && !err) {
+          // Create token if the password matched and no error was thrown
+          var token = jwt.sign(user, config.secret, {
+            expiresIn: 10080 // in seconds
+          });
+          res.json({ success: true, token: 'JWT ' + token });
+        } else {
+          res.send({ success: false, message: 'Authentication failed. Passwords did not match.' });
+        }
+      });
+    }
+  });
 });
 
 // Courses
