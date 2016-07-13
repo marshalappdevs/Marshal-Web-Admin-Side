@@ -1,19 +1,13 @@
 var express = require('express');
 var router = express.Router();
-// var db = require('../Database/mongoObject');
-// var dbMaterials = require('../Database/mongoObjectMaterials');
-// var dbRatings = require('../Database/mongoObjectRatings');
-// var dbSettings = require('../Database/mongoObjectSettings');
-// var dbGcmRegisterations = require('../Database/mongoObjectGcmRegisteration');
-// var dbMalshabItem = require('../Database/mongoObjectMalshabItem');
-// var dbGeneral = require('../Database/mongoObjectGeneral');
-var db
 var upload = require('../image_upload/image-upload');
 var path = require('path');
 var https = require('https');
 var fs = require('fs');
 var gcm = require('node-gcm');
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
+var passport  = require('passport');
+var jwt = require('jsonwebtoken');
 
 // DB connection
 mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal');
