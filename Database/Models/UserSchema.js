@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var sha = require('sha.js');
-var sha256 = createHash('sha256');
+var sha256 = sha('sha256');
 
 // User schema
 var UserSchema = new mongoose.Schema({
