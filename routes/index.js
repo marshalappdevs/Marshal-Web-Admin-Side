@@ -8,6 +8,8 @@ var gcm = require('node-gcm');
 var mongoose = require('mongoose');
 var passport  = require('passport');
 var jwt = require('jsonwebtoken');
+var config = require('../config/main');
+var User = require('../Database/Models/UserSchema');
 
 // DB connection
 mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal');
@@ -57,6 +59,21 @@ router.get('/imageUploadField', function(req, res, next) {
 });
 
 // API
+
+router.post('/register', function(req, res) {
+  var newUser = new User({
+      username: 'hila',
+      password: '123456'
+    });
+
+    // Attempt to save the user
+    newUser.save(function(err) {
+      if (err) {
+        return res.json({ success: false, message: 'That email address already exists.'});
+      }
+      res.json({ success: true, message: 'Successfully created new user.' });
+    });
+});
 
 // Courses
 var coursesSchema = mongoose.Schema(require('../Database/Models/CourseSchema'));
