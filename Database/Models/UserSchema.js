@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
-var sha = require('sha.js');
-var sha256 = sha('sha256');
+var crypto = require('crypto');
 
 // User schema
 var UserSchema = new mongoose.Schema({
@@ -24,7 +23,7 @@ var UserSchema = new mongoose.Schema({
 UserSchema.pre('save', function(next){
     var user = this;
     if(this.isModified('password') || this.isNew) {
-        this.password = sha256.update(this.password, 'utf8').digest('hex');
+        this.password = crypto.createHash('sha256').update(this.password).digest('hex');
         next();
     }
     else
@@ -34,8 +33,8 @@ UserSchema.pre('save', function(next){
 });
 
 UserSchema.methods.comparePass = function(pw, cb) {
-    pw = sha256.update(pw, 'utf8').digest('hex');
-    console.log(this.password);
+    console.log(pw);
+    pw = crypto.createHash('sha256').update(pw).digest('hex');;
     if(pw == this.password)
     {
         cb(null, true);

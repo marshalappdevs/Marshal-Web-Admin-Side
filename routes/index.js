@@ -11,6 +11,7 @@ var jwt = require('jsonwebtoken');
 var config = require('../config/main');
 var User = require('../Database/Models/UserSchema');
 require('../config/passport')(passport);
+require('../config/passportAdmin')(passport);
 
 // DB connection
 mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal');
@@ -18,11 +19,11 @@ mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal');
 function setLastUpdateNow() {
     console.log("setLastUpdateNow");
     var time = new Date().getTime();
-    
+
     settings.findOne({ isSettingsDocument: true}, function(err, doc) {
             if(err == null) {
                 doc.lastUpdateAt = '/Date(' + time + ')/';
-                doc.save(); 
+                doc.save();
             }
     });
 };
@@ -77,8 +78,13 @@ router.post('/register', function(req, res) {
 });
 
 router.get('/dashboard', passport.authenticate('jwt', { session: false }), function(req, res) {
-  res.send('It worked! User id is: ' + req.user._id + '.');
+  res.send('It worked! User id role: ' + req.user.role + '.');
 });
+
+router.get('/dashboard2', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
+  res.send('It worked! User id role: ' + req.user.role + '.');
+});
+
 
 router.post('/auth', function(req, res) {
   User.findOne({
@@ -94,7 +100,7 @@ router.post('/auth', function(req, res) {
         if (isMatch && !err) {
           // Create token if the password matched and no error was thrown
           var token = jwt.sign(user, config.secret, {
-            expiresIn: 10080 // in seconds
+            expiresIn: 40 // in seconds
           });
           res.json({ success: true, token: 'JWT ' + token });
         } else {
@@ -198,7 +204,7 @@ router.post('/api/images', function(req, res) {
 var materialsSchema = mongoose.Schema(require('../Database/Models/MaterialSchema'));
 var materials = mongoose.model('materials', materialsSchema);
 
-// Get all materials 
+// Get all materials
 router.get('/api/materials/', function(req, res, next) {
     materials.find(function (err, materials) {
         if (err) return console.error(err);
@@ -241,7 +247,7 @@ router.post('/api/materials', function(req, res) {
 var malshabItemSchema = mongoose.Schema(require('../Database/Models/MalshabItemSchema'));
 var malshabItems = mongoose.model('malshabItems', malshabItemSchema);
 
-// Get all malshab items 
+// Get all malshab items
 router.get('/api/malshabitems/', function(req, res, next) {
     malshabItems.find(function (err, malshabItems) {
             if (err) return console.error(err);
@@ -269,7 +275,7 @@ router.post('/api/malshabitems', function(req, res) {
 var ratingsSchema = mongoose.Schema(require('../Database/Models/RatingSchema'));
 var ratings = mongoose.model('ratings', ratingsSchema);
 
-// Get all ratings 
+// Get all ratings
 router.get('/api/ratings/', function(req, res, next) {
     ratings.find(function (err, ratings) {
             if (err) return console.error(err);
@@ -304,7 +310,7 @@ router.get('/api/ratings/:courseId', function (req, res, next) {
 
 // Delete rating
 router.delete('/api/ratings/:courseCode/:userMailAddress', function(req, res) {
-    ratings.remove({ courseCode : req.params.courseCode, 
+    ratings.remove({ courseCode : req.params.courseCode,
         userMailAddress : req.params.userMailAddress}, function(err, result) {
             if (!err) {
                 console.log(result);
@@ -319,7 +325,7 @@ router.delete('/api/ratings/:courseCode/:userMailAddress', function(req, res) {
 
 // // Update rating (any property)
 router.put('/api/ratings', function(req, res) {
-    ratings.update({ courseCode : req.body.courseCode, 
+    ratings.update({ courseCode : req.body.courseCode,
             userMailAddress : req.body.userMailAddress}, req.body, function(err, result) {
         // If everything's alright
         if (!err && result.ok === 1) {
@@ -332,7 +338,7 @@ router.put('/api/ratings', function(req, res) {
     });
 });
 
-// GCM 
+// GCM
 // Registerations
 var GcmRegisterationSchema = mongoose.Schema(require('../Database/Models/GcmRegisterationSchema'));
 var regisrations = mongoose.model('GcmRegisterations', GcmRegisterationSchema);
@@ -390,30 +396,30 @@ router.delete('/api/gcm/unregister/:hardwareId', function(req, res) {
 /////////////// Send Push ///////////////////////////
 router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
     registerations.find(function (err, registerations) {
-        if (err) 
+        if (err)
             return console.error(err);
         else if (registerations.length > 0) {
-                // Set up the sender with marshaldevs@gmail.com API key 
+                // Set up the sender with marshaldevs@gmail.com API key
             var sender = new gcm.Sender('AIzaSyAsgh-FO4NHH25pPoEeUFJj0AptIs6guwU');
-            
+
             // Initialize Message object
             var message = new gcm.Message();
             message.addData('message', req.params.messageContent);
-            
-            // Add the registration tokens of the devices you want to send to 
+
+            // Add the registration tokens of the devices you want to send to
             var registrationTokens = [];
             registerations.forEach(function(registeration){
                 registrationTokens.push(registeration.registerationTokenId);
             });
-            
-            // Send the message 
-            // ... trying only once 
+
+            // Send the message
+            // ... trying only once
             sender.send(message, { registrationTokens: registrationTokens },10, function(err, response) {
                 if(err) console.error(err);
                 else {
                     console.log(response);
                     // res.json(response);
-                }   
+                }
             });
         } else
             console.log("No GCM Registerations");
