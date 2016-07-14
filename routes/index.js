@@ -62,20 +62,21 @@ router.get('/imageUploadField', function(req, res, next) {
 
 // API
 
-router.post('/register', function(req, res) {
-  var newUser = new User({
-      username: 'hila',
-      password: '123456'
-    });
+// router.post('/register', function(req, res) {
+//   var newUser = new User({
+//       username: 'hila2',
+//       password: '123456',
+//       role: "Admin"
+//     });
 
-    // Attempt to save the user
-    newUser.save(function(err) {
-      if (err) {
-        return res.json({ success: false, message: 'That email address already exists.'});
-      }
-      res.json({ success: true, message: 'Successfully created new user.' });
-    });
-});
+//     // Attempt to save the user
+//     newUser.save(function(err) {
+//       if (err) {
+//         return res.json({ success: false, message: 'That email address already exists.'});
+//       }
+//       res.json({ success: true, message: 'Successfully created new user.' });
+//     });
+// });
 
 router.get('/dashboard', passport.authenticate('jwt', { session: false }), function(req, res) {
   res.send('It worked! User id role: ' + req.user.role + '.');
