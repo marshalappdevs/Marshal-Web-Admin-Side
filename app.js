@@ -26,6 +26,7 @@ app.use('/users', users);
 
 // Load the strategy
 require('./config/passport')(passport);
+require('./config/passportAdmin')(passport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
