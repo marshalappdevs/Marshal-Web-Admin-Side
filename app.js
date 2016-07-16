@@ -35,6 +35,11 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+app.use(function(req, res, next) {
+  res.status(401).location('/').end();
+});
+
+
 // error handlers
 
 // development error handler
