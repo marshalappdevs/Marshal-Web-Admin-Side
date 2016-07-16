@@ -10,6 +10,15 @@ var passport  = require('passport');
 var jwt = require('jsonwebtoken');
 var config = require('../config/main');
 var User = require('../Database/Models/UserSchema');
+var bouncer =  require ("express-bouncer")(25000, 100000, 3);
+
+/* 
+*
+* Definitions and initiallization
+*
+*/
+
+// Loading both passport strategies
 require('../config/passport')(passport);
 require('../config/passportAdmin')(passport);
 
@@ -27,6 +36,22 @@ function setLastUpdateNow() {
             }
     });
 };
+
+// Adding localhost on the bruteforce whitelist
+bouncer.whitelist.push("127.0.0.1");
+
+// When login is blocked due to failures
+bouncer.blocked = function (req, res, next, remaining)
+{
+    res.status(429).send("יותר מדי בקשות התחברות כושלות, נסה מחדש בעוד" + remaining / 1000 + "שניות");
+};
+
+
+/* 
+*
+* ROUTING
+*
+*/
 
 // Layouts
 
@@ -78,7 +103,9 @@ router.get('/imageUploadField', function(req, res, next) {
 //     });
 // });
 
-router.get('/dashboard', passport.authenticate('jwt', { session: false }), function(req, res) {
+// Example authentication
+
+router.get('/dashboard', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function(req, res) {
   res.send('It worked! User id role: ' + req.user.role + '.');
 });
 
@@ -86,26 +113,28 @@ router.get('/dashboard2', passport.authenticate('jwtAdmin', { session: false }),
   res.send('It worked! User id role: ' + req.user.role + '.');
 });
 
+// Authentication
 
-router.post('/auth', function(req, res) {
+router.post('/auth', bouncer.block ,function(req, res) {
   User.findOne({
     username: req.body.username
   }, function(err, user) {
     if (err) throw err;
 
     if (!user) {
-      res.send({ success: false, message: 'Authentication failed. User not found.' });
+      res.send({ success: false, message: 'השם או הסיסמה שסופקו לא תואמים' });
     } else {
       // Check if password matches
       user.comparePass(req.body.password, function(err, isMatch) {
         if (isMatch && !err) {
           // Create token if the password matched and no error was thrown
           var token = jwt.sign(user, config.secret, {
-            expiresIn: 40 // in seconds
+            expiresIn: 400 // in seconds
           });
+          bouncer.reset(req);
           res.json({ success: true, token: 'JWT ' + token });
         } else {
-          res.send({ success: false, message: 'Authentication failed. Passwords did not match.' });
+          res.send({ success: false, message: 'השם או הסיסמה שסופקו לא תואמים' });
         }
       });
     }
