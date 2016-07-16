@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var passport  = require('passport');
 var jwt = require('jsonwebtoken');
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -20,9 +19,7 @@ app.use(cookieParser());
 app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/scripts', express.static(path.join(__dirname, 'node_modules')));
-
 app.use('/', routes);
-app.use('/users', users);
 
 // Load the strategy
 require('./config/passport')(passport);
@@ -35,10 +32,15 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-app.use(function(req, res, next) {
-  res.status(401).location('/').end();
+
+routes.get('/', function(req, res, next) {
+  console.log("HEYYY");
+  res.sendFile(path.join(__dirname + '/public/home.html'));
 });
 
+routes.get('/login', function(req, res, next) {
+  res.sendFile(path.join(__dirname + '/public/login.html'));
+});
 
 // error handlers
 
@@ -47,10 +49,6 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    // res.render('error', {
-    //   message: err.message,
-    //   error: err
-    // });
     console.log(err.message, err, req.originalUrl);
   });
 }
@@ -59,10 +57,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-//   res.render('error', {
-//     message: err.message,
-//     error: {}
-//   });
+  res.end();
   console.log(err.message, err, req.originalUrl);
 });
 

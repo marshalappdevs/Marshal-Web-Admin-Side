@@ -1,0 +1,74 @@
+<html lang="en" ng-app="marshalApp" dir="rtl">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>מרש"ל - פאנל ניהול</title>
+
+    <!-- Chrome, Firefox OS, Opera and Vivaldi -->
+    <meta name="theme-color" content="#03a9f4">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#03a9f4">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#03a9f4">
+
+     <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="images/ic_launcher-web.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="מרשל פאנל ניהול">
+    <link rel="apple-touch-icon-precomposed" href="images/ic_launcher-web.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/ic_launcher-web.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc.5/angular-material.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    <link rel="stylesheet" href="/stylesheets/styles.css">
+  </head>
+  <body layout="row" ng-controller="AppCtrl">
+
+    <div layout="column" flex id="content" role="main">
+			<md-content layout="vertical" flex id="content">
+        <img src="images/ic_launcher-web.png" height="192px" width="192px" />
+				<div layout="row" layout-align="center center" layout-fill>
+					<md-whiteframe class="md-whiteframe-z1" layout="column" flex="30" layout-padding>
+						<md-content md-theme="docs-dark">
+							<md-input-container>
+								<label>Email</label>
+								<input ng-model="user.email">
+							</md-input-container>
+							<md-input-container>
+								<label>Password</label>
+								<input ng-model="user.password" type="password">
+							</md-input-container>
+							<md-input-container layout-align="center center">
+								<div layout="row" layout-sm="column" layout-margin>
+									<md-button class="md-raised" flex="50" flex-sm="100">Login</md-button>
+									<md-button class="md-raised md-primary" flex="50" flex-sm="100">Register</md-button>
+								</div>
+							</md-input-container>
+						</md-content>
+					</md-whiteframe>
+				</div>
+			</md-content>
+		</div>
+
+    <!-- Angular Material Dependencies -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-aria.min.js"></script>
+     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc.5/angular-material.min.js"></script>
+    <script src="//cdn.jsdelivr.net/angular-material-icons/0.4.0/angular-material-icons.min.js"></script> 
+    <script src="/javascripts/appModule.js"></script>
+    <script src="/javascripts/controllers/exampleCtrl.js"></script>
+    <script src="/javascripts/controllers/coursesCtrl.js"></script>
+    <script src="/javascripts/controllers/malshabCtrl.js"></script>
+    <script src="/javascripts/controllers/materialsCtrl.js"></script>
+    <script src="/javascripts/controllers/meetupsCtrl.js"></script>
+  </body>
+</html>
