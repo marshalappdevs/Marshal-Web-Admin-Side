@@ -1,19 +1,26 @@
 var express = require('express');
 var router = express.Router();
-// var db = require('../Database/mongoObject');
-// var dbMaterials = require('../Database/mongoObjectMaterials');
-// var dbRatings = require('../Database/mongoObjectRatings');
-// var dbSettings = require('../Database/mongoObjectSettings');
-// var dbGcmRegisterations = require('../Database/mongoObjectGcmRegisteration');
-// var dbMalshabItem = require('../Database/mongoObjectMalshabItem');
-// var dbGeneral = require('../Database/mongoObjectGeneral');
-var db
 var upload = require('../image_upload/image-upload');
 var path = require('path');
 var https = require('https');
 var fs = require('fs');
 var gcm = require('node-gcm');
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
+var passport  = require('passport');
+var jwt = require('jsonwebtoken');
+var config = require('../config/main');
+var User = require('../Database/Models/UserSchema');
+var bouncer =  require ("express-bouncer")(25000, 1000000, 3);
+
+/* 
+*
+* Definitions and initiallization
+*
+*/
+
+// Loading both passport strategies
+require('../config/passport')(passport);
+require('../config/passportAdmin')(passport);
 
 // DB connection
 mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal');
@@ -21,26 +28,29 @@ mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal');
 function setLastUpdateNow() {
     console.log("setLastUpdateNow");
     var time = new Date().getTime();
-    
+
     settings.findOne({ isSettingsDocument: true}, function(err, doc) {
             if(err == null) {
                 doc.lastUpdateAt = '/Date(' + time + ')/';
-                doc.save(); 
+                doc.save();
             }
     });
 };
 
-// Layouts
+// Adding localhost on the bruteforce whitelist
+bouncer.whitelist.push("127.0.0.1");
 
-router.get('/', function(req, res, next) {
-  res.render('index');
-});
+// When login is blocked due to failures
+bouncer.blocked = function (req, res, next, remaining)
+{
+    res.status(429).send(" יותר מדי בקשות התחברות כושלות, נסה מחדש בעוד" + remaining / 1000 + " שניות");
+};
 
-// Pages
-
-router.get('/index', function(req, res, next) {
-    res.render('pages/index');
-});
+/* 
+*
+* ROUTING
+*
+*/
 
 // Modals
 
@@ -64,10 +74,62 @@ router.get('/imageUploadField', function(req, res, next) {
 
 // API
 
+// router.post('/register', function(req, res) {
+//   var newUser = new User({
+//       username: 'hila2',
+//       password: '123456',
+//       role: "Admin"
+//     });
+
+//     // Attempt to save the user
+//     newUser.save(function(err) {
+//       if (err) {
+//         return res.json({ success: false, message: 'That email address already exists.'});
+//       }
+//       res.json({ success: true, message: 'Successfully created new user.' });
+//     });
+// });
+
+// Example authentication
+
+router.get('/dashboard', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function(req, res) {
+  res.send('It worked! User id role: ' + req.user.role + '.');
+});
+
+router.get('/dashboard2', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
+  res.send('It worked! User id role: ' + req.user.role + '.');
+});
+
+// Authentication
+
+router.post('/auth', bouncer.block, function(req, res) {
+  User.findOne({ username: req.body.username }, function(err, user) {
+    if (err) {throw err};
+    if (!user) {
+      res.send({ success: false, message: 'השם או הסיסמה שסופקו לא תואמים' });
+    } else {
+      // Check if password matches
+      user.comparePass(req.body.password, function(err, isMatch) {
+        if (isMatch && !err) {
+          // Create token if the password matched and no error was thrown
+          var token = jwt.sign(user, config.secret, {
+            expiresIn: 400
+          });
+
+          // Indicating that login was successful and no need to wait
+          bouncer.reset(req);
+          res.json({ success: true, token: 'JWT ' + token });
+        } else {
+          res.send({ success: false, message: 'השם או הסיסמה שסופקו לא תואמים' });
+        }
+      });
+    }
+  });
+});
+
 // Courses
 var coursesSchema = mongoose.Schema(require('../Database/Models/CourseSchema'));
 var courses = mongoose.model('Courses', coursesSchema);
-
 
 // Get all courses
 router.get('/api/courses', function(req, res, next) {
@@ -91,7 +153,7 @@ router.post('/api/courses', function(req, res) {
     });
 });
 
-// // Update courses (any property)
+// Update courses (any property)
 router.put('/api/courses/:id', function(req, res) {
     courses.update({ ID: req.params.id}, req.body, function(err, result) {
             // If everything's alright
@@ -157,7 +219,7 @@ router.post('/api/images', function(req, res) {
 var materialsSchema = mongoose.Schema(require('../Database/Models/MaterialSchema'));
 var materials = mongoose.model('materials', materialsSchema);
 
-// Get all materials 
+// Get all materials
 router.get('/api/materials/', function(req, res, next) {
     materials.find(function (err, materials) {
         if (err) return console.error(err);
@@ -200,7 +262,7 @@ router.post('/api/materials', function(req, res) {
 var malshabItemSchema = mongoose.Schema(require('../Database/Models/MalshabItemSchema'));
 var malshabItems = mongoose.model('malshabItems', malshabItemSchema);
 
-// Get all malshab items 
+// Get all malshab items
 router.get('/api/malshabitems/', function(req, res, next) {
     malshabItems.find(function (err, malshabItems) {
             if (err) return console.error(err);
@@ -228,7 +290,7 @@ router.post('/api/malshabitems', function(req, res) {
 var ratingsSchema = mongoose.Schema(require('../Database/Models/RatingSchema'));
 var ratings = mongoose.model('ratings', ratingsSchema);
 
-// Get all ratings 
+// Get all ratings
 router.get('/api/ratings/', function(req, res, next) {
     ratings.find(function (err, ratings) {
             if (err) return console.error(err);
@@ -263,7 +325,7 @@ router.get('/api/ratings/:courseId', function (req, res, next) {
 
 // Delete rating
 router.delete('/api/ratings/:courseCode/:userMailAddress', function(req, res) {
-    ratings.remove({ courseCode : req.params.courseCode, 
+    ratings.remove({ courseCode : req.params.courseCode,
         userMailAddress : req.params.userMailAddress}, function(err, result) {
             if (!err) {
                 console.log(result);
@@ -278,7 +340,7 @@ router.delete('/api/ratings/:courseCode/:userMailAddress', function(req, res) {
 
 // // Update rating (any property)
 router.put('/api/ratings', function(req, res) {
-    ratings.update({ courseCode : req.body.courseCode, 
+    ratings.update({ courseCode : req.body.courseCode,
             userMailAddress : req.body.userMailAddress}, req.body, function(err, result) {
         // If everything's alright
         if (!err && result.ok === 1) {
@@ -291,7 +353,7 @@ router.put('/api/ratings', function(req, res) {
     });
 });
 
-// GCM 
+// GCM
 // Registerations
 var GcmRegisterationSchema = mongoose.Schema(require('../Database/Models/GcmRegisterationSchema'));
 var registerations = mongoose.model('gcmregisterations', GcmRegisterationSchema);
@@ -349,30 +411,30 @@ router.delete('/api/gcm/unregister/:hardwareId', function(req, res) {
 /////////////// Send Push ///////////////////////////
 router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
     registerations.find(function (err, registerations) {
-        if (err) 
+        if (err)
             return console.error(err);
         else if (registerations.length > 0) {
-                // Set up the sender with marshaldevs@gmail.com API key 
+                // Set up the sender with marshaldevs@gmail.com API key
             var sender = new gcm.Sender('AIzaSyAsgh-FO4NHH25pPoEeUFJj0AptIs6guwU');
-            
+
             // Initialize Message object
             var message = new gcm.Message();
             message.addData('message', req.params.messageContent);
-            
-            // Add the registration tokens of the devices you want to send to 
+
+            // Add the registration tokens of the devices you want to send to
             var registrationTokens = [];
             registerations.forEach(function(registeration){
                 registrationTokens.push(registeration.registerationTokenId);
             });
-            
-            // Send the message 
-            // ... trying only once 
+
+            // Send the message
+            // ... trying only once
             sender.send(message, { registrationTokens: registrationTokens },10, function(err, response) {
                 if(err) console.error(err);
                 else {
                     console.log(response);
                     // res.json(response);
-                }   
+                }
             });
         } else
             console.log("No GCM Registerations");
@@ -392,4 +454,6 @@ router.get('/api/settings/', function(req, res, next) {
         res.json(settings);
     });
 });
+
+
 module.exports = router;
