@@ -10,7 +10,7 @@ var passport  = require('passport');
 var jwt = require('jsonwebtoken');
 var config = require('../config/main');
 var User = require('../Database/Models/UserSchema');
-var bouncer =  require ("express-bouncer")(25000, 100000, 3);
+var bouncer =  require ("express-bouncer")(25000, 1000000, 3);
 
 /* 
 *
@@ -43,27 +43,14 @@ bouncer.whitelist.push("127.0.0.1");
 // When login is blocked due to failures
 bouncer.blocked = function (req, res, next, remaining)
 {
-    res.status(429).send("יותר מדי בקשות התחברות כושלות, נסה מחדש בעוד" + remaining / 1000 + "שניות");
+    res.status(429).send(" יותר מדי בקשות התחברות כושלות, נסה מחדש בעוד" + remaining / 1000 + " שניות");
 };
-
 
 /* 
 *
 * ROUTING
 *
 */
-
-// Layouts
-
-router.get('/', function(req, res, next) {
-  res.render('index');
-});
-
-// Pages
-
-router.get('/index', function(req, res, next) {
-    res.render('pages/index');
-});
 
 // Modals
 
@@ -115,12 +102,9 @@ router.get('/dashboard2', passport.authenticate('jwtAdmin', { session: false }),
 
 // Authentication
 
-router.post('/auth', bouncer.block ,function(req, res) {
-  User.findOne({
-    username: req.body.username
-  }, function(err, user) {
-    if (err) throw err;
-
+router.post('/auth', bouncer.block, function(req, res) {
+  User.findOne({ username: req.body.username }, function(err, user) {
+    if (err) {throw err};
     if (!user) {
       res.send({ success: false, message: 'השם או הסיסמה שסופקו לא תואמים' });
     } else {
@@ -129,8 +113,10 @@ router.post('/auth', bouncer.block ,function(req, res) {
         if (isMatch && !err) {
           // Create token if the password matched and no error was thrown
           var token = jwt.sign(user, config.secret, {
-            expiresIn: 400 // in seconds
+            expiresIn: 400
           });
+
+          // Indicating that login was successful and no need to wait
           bouncer.reset(req);
           res.json({ success: true, token: 'JWT ' + token });
         } else {
@@ -144,7 +130,6 @@ router.post('/auth', bouncer.block ,function(req, res) {
 // Courses
 var coursesSchema = mongoose.Schema(require('../Database/Models/CourseSchema'));
 var courses = mongoose.model('Courses', coursesSchema);
-
 
 // Get all courses
 router.get('/api/courses', function(req, res, next) {
@@ -168,7 +153,7 @@ router.post('/api/courses', function(req, res) {
     });
 });
 
-// // Update courses (any property)
+// Update courses (any property)
 router.put('/api/courses/:id', function(req, res) {
     courses.update({ ID: req.params.id}, req.body, function(err, result) {
             // If everything's alright
@@ -469,4 +454,6 @@ router.get('/api/settings/', function(req, res, next) {
         res.json(settings);
     });
 });
+
+
 module.exports = router;
