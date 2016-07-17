@@ -1,8 +1,9 @@
 var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute']);
 
-app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', function($scope, $mdSidenav, $location){
+app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', 'httpService', function($scope, $mdSidenav, $location, httpService){
   
-
+  httpService.printCon();
+  
   /* Toggles menu's location */
   $scope.toggleSidenav = function(menuId) {
     $mdSidenav(menuId).toggle();
