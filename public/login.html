@@ -27,35 +27,67 @@
 
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc.5/angular-material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-    <link rel="stylesheet" href="/stylesheets/styles.css">
-  </head>
-  <body layout="row" ng-controller="AppCtrl">
+    <style>
+      @font-face {
+        font-family: "NotoHebrew";
+        src: url("../fonts/Noto.ttf");
+        font-weight: normal;
+      }
 
-    <div layout="column" flex id="content" role="main">
-			<md-content layout="vertical" flex id="content">
-        <img src="images/ic_launcher-web.png" height="192px" width="192px" />
-				<div layout="row" layout-align="center center" layout-fill>
-					<md-whiteframe class="md-whiteframe-z1" layout="column" flex="30" layout-padding>
-						<md-content md-theme="docs-dark">
-							<md-input-container>
-								<label>Email</label>
-								<input ng-model="user.email">
-							</md-input-container>
-							<md-input-container>
-								<label>Password</label>
-								<input ng-model="user.password" type="password">
-							</md-input-container>
-							<md-input-container layout-align="center center">
-								<div layout="row" layout-sm="column" layout-margin>
-									<md-button class="md-raised" flex="50" flex-sm="100">Login</md-button>
-									<md-button class="md-raised md-primary" flex="50" flex-sm="100">Register</md-button>
-								</div>
-							</md-input-container>
-						</md-content>
-					</md-whiteframe>
-				</div>
-			</md-content>
-		</div>
+      body {
+        background-color: #f4f4f4;
+        font-family: "Roboto", "NotoHebrew";
+      }
+
+      body,
+      html {
+        height: 100%;
+      }
+
+      .login-wrap {
+        height: 100%;
+        background-color: transparent;
+      }
+
+      .login-content {
+      }
+
+      .login-card {
+        width: 400px;
+        padding: 20px 0;
+      }
+      </style>
+  </head>
+  <body>
+    <md-content layout="row" layout-align="center center" class="md-padding login-wrap">
+      <div class="login-content">
+        <center>  <img src="/images/ic_launcher-web.png" height="192px" width="192px" style="margin: 0 auto; padding-bottom: 20px"> </center>
+       <div layout="row">
+          <md-card class="login-card">
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">התחבר</span>
+            </md-card-title-text>
+          </md-card-title>
+            <md-card-content>
+              <md-input-container class="md-icon-float md-block">
+                <label>שם משתמש</label>
+                <input type="email" required name="email">
+              </md-input-container>
+
+              <md-input-container class="md-icon-float md-block">
+                <label>סיסמה</label>
+                <input type="password" required name="password">
+              </md-input-container>
+            </md-card-content>
+
+            <md-card-actions layout="row" layout-align="end center">
+              <md-button class="md-raised md-primary">התחבר</md-button>
+            </md-card-actions>
+          </md-card>
+        </div>
+      </div>
+    </md-content>
 
     <!-- Angular Material Dependencies -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
