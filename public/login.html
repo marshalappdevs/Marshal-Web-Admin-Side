@@ -58,7 +58,8 @@
       }
       </style>
   </head>
-  <body>
+  <body ng-controller="loginCtrl">
+    <div layout-fill id="toast-container">
     <md-content layout="row" layout-align="center center" class="md-padding login-wrap">
       <div class="login-content">
         <center>  <img src="/images/ic_launcher-web.png" height="192px" width="192px" style="margin: 0 auto; padding-bottom: 20px"> </center>
@@ -72,23 +73,26 @@
             <md-card-content>
               <md-input-container class="md-icon-float md-block">
                 <label>שם משתמש</label>
-                <input type="email" required name="email">
+                <input type="text" required name="text" ng-model="username" ng-disabled="activated">
               </md-input-container>
 
               <md-input-container class="md-icon-float md-block">
                 <label>סיסמה</label>
-                <input type="password" required name="password">
+                <input type="password" required name="password" ng-model="password" ng-disabled="activated">
               </md-input-container>
             </md-card-content>
 
             <md-card-actions layout="row" layout-align="end center">
-              <md-button class="md-raised md-primary">התחבר</md-button>
+              <md-button class="md-raised md-primary" ng-click="doLogin()" ng-disabled="activated">התחבר</md-button>
             </md-card-actions>
+             <md-card-footer layout="row" layout-align="center center">
+            <md-progress-circular md-mode="indeterminate" ng-disabled="!activated" class="md-accent" md-diameter="70" ng-hide="!activated"></md-progress-circular>
+             </md-card-footer>
           </md-card>
         </div>
       </div>
     </md-content>
-
+    </div>
     <!-- Angular Material Dependencies -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-animate.min.js"></script>
@@ -97,10 +101,6 @@
     <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc.5/angular-material.min.js"></script>
     <script src="//cdn.jsdelivr.net/angular-material-icons/0.4.0/angular-material-icons.min.js"></script> 
     <script src="/javascripts/appModule.js"></script>
-    <script src="/javascripts/controllers/exampleCtrl.js"></script>
-    <script src="/javascripts/controllers/coursesCtrl.js"></script>
-    <script src="/javascripts/controllers/malshabCtrl.js"></script>
-    <script src="/javascripts/controllers/materialsCtrl.js"></script>
-    <script src="/javascripts/controllers/meetupsCtrl.js"></script>
+    <script src="/javascripts/controllers/loginCtrl.js"></script>
   </body>
 </html>
