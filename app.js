@@ -24,6 +24,7 @@ app.use('/', routes);
 // Load the strategy
 require('./config/passport')(passport);
 require('./config/passportAdmin')(passport);
+require('./config/passportLogin')(passport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -33,8 +34,7 @@ app.use(function(req, res, next) {
 });
 
 
-routes.get('/', function(req, res, next) {
-  console.log("HEYYY");
+routes.get('/', passport.authenticate('jwtLogin', { session: false, failureRedirect: '/login' }), function(req, res, next) {
   res.sendFile(path.join(__dirname + '/public/home.html'));
 });
 
