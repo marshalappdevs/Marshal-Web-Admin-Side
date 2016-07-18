@@ -34,7 +34,7 @@ app.use(function(req, res, next) {
 });
 
 
-routes.get('/', passport.authenticate('jwtLogin', { session: false, failureRedirect: '/login' }), function(req, res, next) {
+routes.get('/', passport.authenticate('jwtLogin', { session: false, failureRedirect: '/login#?msg=np' }), function(req, res, next) {
   res.sendFile(path.join(__dirname + '/public/home.html'));
 });
 
