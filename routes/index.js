@@ -43,7 +43,7 @@ bouncer.whitelist.push("127.0.0.1");
 // When login is blocked due to failures
 bouncer.blocked = function (req, res, next, remaining)
 {
-    res.status(429).send(" יותר מדי בקשות התחברות כושלות, נסה מחדש בעוד" + remaining / 1000 + " שניות");
+    res.status(429).send(" יותר מדי בקשות התחברות כושלות, נסה מחדש בעוד " + remaining / 1000 + " שניות " );
 };
 
 /* 
@@ -106,7 +106,7 @@ router.post('/auth', bouncer.block, function(req, res) {
   User.findOne({ username: req.body.username }, function(err, user) {
     if (err) {throw err};
     if (!user) {
-      res.send({ success: false, message: 'השם או הסיסמה שסופקו לא תואמים' });
+      res.status(400).send('השם או הסיסמה שסופקו לא תואמים');
     } else {
       // Check if password matches
       user.comparePass(req.body.password, function(err, isMatch) {
@@ -120,7 +120,7 @@ router.post('/auth', bouncer.block, function(req, res) {
           bouncer.reset(req);
           res.json({ success: true, token: 'JWT ' + token });
         } else {
-          res.send({ success: false, message: 'השם או הסיסמה שסופקו לא תואמים' });
+          res.status(400).send('השם או הסיסמה שסופקו לא תואמים');
         }
       });
     }
