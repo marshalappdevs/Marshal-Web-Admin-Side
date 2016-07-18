@@ -21,6 +21,7 @@ var bouncer =  require ("express-bouncer")(25000, 1000000, 3);
 // Loading both passport strategies
 require('../config/passport')(passport);
 require('../config/passportAdmin')(passport);
+require('../config/passportLogin')(passport);
 
 // DB connection
 mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal');
@@ -96,6 +97,10 @@ router.get('/dashboard', passport.authenticate('jwt', { session: false, failureR
   res.send('It worked! User id role: ' + req.user.role + '.');
 });
 
+router.get('/dashboard3', passport.authenticate('jwtLogin', { session: false, failureRedirect: '/' }), function(req, res) {
+  res.send('It worked! User id role: ' + req.user.role + '.');
+});
+
 router.get('/dashboard2', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
   res.send('It worked! User id role: ' + req.user.role + '.');
 });
@@ -112,13 +117,22 @@ router.post('/auth', bouncer.block, function(req, res) {
       user.comparePass(req.body.password, function(err, isMatch) {
         if (isMatch && !err) {
           // Create token if the password matched and no error was thrown
-          var token = jwt.sign(user, config.secret, {
+          var apiToken = jwt.sign(user, config.secret, {
             expiresIn: 400
           });
+          var loginToken;
+
+          // Check if this request is api token request or login request
+          if(req.body.isLogin)
+          {
+            loginToken = jwt.sign(user, config.loginSecret, {
+                expiresIn: 3600
+             });
+          }
 
           // Indicating that login was successful and no need to wait
           bouncer.reset(req);
-          res.json({ success: true, token: 'JWT ' + token });
+          res.json({ success: true, apiToken: apiToken, loginToken: loginToken});
         } else {
           res.status(400).send('השם או הסיסמה שסופקו לא תואמים');
         }
@@ -126,6 +140,7 @@ router.post('/auth', bouncer.block, function(req, res) {
     }
   });
 });
+
 
 // Courses
 var coursesSchema = mongoose.Schema(require('../Database/Models/CourseSchema'));
