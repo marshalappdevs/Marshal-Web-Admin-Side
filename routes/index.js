@@ -125,7 +125,7 @@ router.post('/auth', bouncer.block, function(req, res) {
           // Check if this request is api token request or login request
           if(req.body.isLogin)
           {
-            loginToken = jwt.sign(user, config.loginSecret, {
+            loginToken = jwt.sign({username: req.body.username}, config.loginSecret, {
                 expiresIn: 3600
              });
           }

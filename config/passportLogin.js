@@ -10,7 +10,7 @@ module.exports = function(passport) {
   opts.jwtFromRequest = ExtractJwt.fromUrlQueryParameter('token');
   opts.secretOrKey = config.loginSecret;
   passport.use('jwtLogin', new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({_id: jwt_payload._doc._id}, function(err, user) {
+    User.findOne({username: jwt_payload.username}, function(err, user) {
       if (err) {
         return done(err, false);
       }
