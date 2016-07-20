@@ -142,7 +142,7 @@ router.post('/auth', bouncer.block, function(req, res) {
   });
 });
 
-router.post('api/authapp', bouncer.block, function(req, res) {
+router.post('/api/authapp', bouncer.block, function(req, res) {
   var hashedAuthReq = req.body.authReq;
   var currDate = new Date();
   var expectedString = config.expectedStringPrefix + " " + currDate.getUTCDate()+"/"+currDate.getUTCMonth() + " " + currDate.getUTCHours() + ":" + currDate.getUTCMinutes();
