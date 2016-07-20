@@ -11,6 +11,7 @@ var jwt = require('jsonwebtoken');
 var config = require('../config/main');
 var User = require('../Database/Models/UserSchema');
 var bouncer =  require ("express-bouncer")(25000, 1000000, 3);
+var crypto = require('crypto');
 
 /* 
 *
@@ -139,6 +140,23 @@ router.post('/auth', bouncer.block, function(req, res) {
       });
     }
   });
+});
+
+router.post('api/authapp', bouncer.block, function(req, res) {
+  var hashedAuthReq = req.body.authReq;
+  var currDate = new Date();
+  var expectedString = config.expectedStringPrefix + " " + currDate.getUTCDate()+"/"+currDate.getUTCMonth() + " " + currDate.getUTCHours() + ":" + currDate.getUTCMinutes();
+  var expectedHashed = crypto.createHash('sha256').update(expectedHashed).digest('hex');
+
+  if(expectedHashed == expectedString) {
+    var apiToken = jwt.sign(user, config.secret, {
+            expiresIn: 400
+    });
+    bouncer.reset(req);
+    res.send(apiToken);
+  } else {
+      res.status(400).send('BADREQ');
+  }
 });
 
 
