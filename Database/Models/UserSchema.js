@@ -34,7 +34,7 @@ UserSchema.pre('save', function(next){
 
 UserSchema.methods.comparePass = function(pw, cb) {
     console.log(pw);
-    pw = crypto.createHash('sha256').update(pw).digest('hex');;
+    pw = crypto.createHash('sha256').update(pw).digest('hex');
     if(pw == this.password)
     {
         cb(null, true);
