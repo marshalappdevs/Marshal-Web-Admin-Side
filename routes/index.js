@@ -142,17 +142,32 @@ router.post('/auth', bouncer.block, function(req, res) {
   });
 });
 
-router.post('/api/authapp', bouncer.block, function(req, res) {
+router.post('/api/authapp', function(req, res) {
   var hashedAuthReq = req.body.authReq;
+  console.log(hashedAuthReq);
   var currDate = new Date();
-  var expectedString = config.expectedStringPrefix + " " + currDate.getUTCDate()+"/"+currDate.getUTCMonth() + " " + currDate.getUTCHours() + ":" + currDate.getUTCMinutes();
-  var expectedHashed = crypto.createHash('sha256').update(expectedHashed).digest('hex');
+  var nHours, nMinutes;
+  if(currDate.getUTCHours() < 10) {
+      nHours = "0" + currDate.getUTCHours();
+  } else {
+      nHours = currDate.getUTCHours();
+  }
 
-  if(expectedHashed == expectedString) {
-    var apiToken = jwt.sign(user, config.secret, {
+  if(currDate.getUTCMinutes() < 10) {
+      nMinutes = "0" + currDate.getUTCMinutes();
+  } else {
+      nMinutes = currDate.getUTCMinutes();
+  }
+  
+  var expectedString = config.expectedStringPrefix + " " + currDate.getUTCDate()+"/"+ (currDate.getUTCMonth() + 1) + " " + nHours + ":" + nMinutes;
+  console.log(expectedString);
+  var expectedHashed = crypto.createHash('sha256').update(expectedString).digest('hex');
+console.log(expectedHashed);
+
+  if(expectedHashed == hashedAuthReq) {
+    var apiToken = jwt.sign({username: "hila",password: "123456", role: "Client"}, config.secret, {
             expiresIn: 400
     });
-    bouncer.reset(req);
     res.send(apiToken);
   } else {
       res.status(400).send('BADREQ');
