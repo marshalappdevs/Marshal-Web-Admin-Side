@@ -1,8 +1,11 @@
 angular.module('marshalApp')
-.controller('ExampleCtrl', ['$scope', '$mdDialog', function($scope, $mdDialog){
+.controller('ExampleCtrl', ['$scope', '$mdDialog','httpService', function($scope, $mdDialog, httpService){
     // Emitting current feature to parent scope
     $scope.$emit('currFeatureChange', "ראשי וסטטיסטיקות");
 
+    httpService.get('/dashboard2').then(function(response) {
+      alert(response.data);
+    })
 
     $scope.activity = [
       {
