@@ -278,9 +278,7 @@ router.get('/api/materials/', function(req, res, next) {
 
 // Create material TODO: Ask Ido wtf is going on here
 router.post('/api/materials', function(req, res) {
-    dbMaterials
-    .then(function(materials) {
-        materials.update({url : req.body.url},
+    materials.update({url : req.body.url},
          req.body, {upsert:true}, function(err, result) {
              if(!err) {
                 console.log(result);
@@ -291,19 +289,6 @@ router.post('/api/materials', function(req, res) {
                 res.json({ code: 400, message: "Couldn't create material... :(" })
              }
          })
-});
-    // dbMaterials
-    // .then(function(materials) {
-    //     materials.create(req.body, function(err, material) {
-    //         if (err) {
-    //             res.json({ code: 400, message: "Couldn't create new material.."});
-    //             console.log(err);
-    //         } else {
-    //             setLastUpdateNow();
-    //             res.json({ code: 201, message: "Created successfuly" });
-    //         }
-    //     });
-    // });
 });
 
 // Malshabs
