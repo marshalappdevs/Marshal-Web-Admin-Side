@@ -11,6 +11,7 @@ angular.module('marshalApp')
         // Get api and login tokens, and redirect if correct, display message otherwise
         $http.post('/auth', $scope.userData).then(function(response) {
            $window.localStorage.setItem('apiToken', response.data.apiToken);
+           $window.localStorage.setItem('loginToken', response.data.loginToken);
            $window.location.href = '/?token='+response.data.loginToken;
         },
         function(response) {
