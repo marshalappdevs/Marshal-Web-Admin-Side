@@ -127,7 +127,7 @@ router.post('/auth', bouncer.block, function(req, res) {
           if(req.body.isLogin)
           {
             loginToken = jwt.sign({username: req.body.username}, config.loginSecret, {
-                expiresIn: 3600
+                expiresIn: 10800
              });
           }
 
@@ -140,6 +140,20 @@ router.post('/auth', bouncer.block, function(req, res) {
       });
     }
   });
+});
+
+router.post('/refresh', passport.authenticate('jwtAdmin', { session: false }) , function(req, res) {
+  User.findOne({ username: req.body.username }, function(err, user) {
+    if (err) {throw err};
+
+    // Create token if the password matched and no error was thrown
+    var apiToken = jwt.sign(user, config.secret, {
+        expiresIn: 400
+    });
+
+    res.json({success: true, apiToken: apiToken});
+    });
+  
 });
 
 router.post('/api/authapp', function(req, res) {
@@ -160,14 +174,15 @@ router.post('/api/authapp', function(req, res) {
   }
   
   var expectedString = config.expectedStringPrefix + " " + currDate.getUTCDate()+"/"+ (currDate.getUTCMonth() + 1) + " " + nHours + ":" + nMinutes;
-  console.log(expectedString);
+
   var expectedHashed = crypto.createHash('sha256').update(expectedString).digest('hex');
-console.log(expectedHashed);
+
 
   if(expectedHashed == hashedAuthReq) {
     var apiToken = jwt.sign({username: "hila",password: "123456", role: "Client"}, config.secret, {
             expiresIn: 400
     });
+
     res.send(apiToken);
   } else {
       res.status(400).send('BADREQ');

@@ -1,7 +1,9 @@
-var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute']);
+var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute', 'angular-jwt']);
 
 app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', 'httpService', function($scope, $mdSidenav, $location, httpService){
-  
+
+  /* Brodcasting current username */ 
+
   /* Toggles menu's location */
   $scope.toggleSidenav = function(menuId) {
     $mdSidenav(menuId).toggle();
