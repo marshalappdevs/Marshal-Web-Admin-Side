@@ -33,13 +33,12 @@
 
     <!--Navbar-->
     <md-sidenav layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="$mdMedia('gt-md')">
-      <md-toolbar class="md-tall md-hue-2">
+      <md-toolbar class="md-tall md-hue-2" style="background-image:url(/images/sidenavbg.png)">
         <span flex></span>
         <div layout="column" class="md-toolbar-tools-bottom inset">
-          <user-avatar></user-avatar>
           <span></span>
-          <div>עדו הגבר</div>
-          <div>adothegever@basmach.com</div>
+          <div class="md-headline">אהלן, {{username}}</div>
+          <div>מחובר מ-{{since}}</div>
         </div>
       </md-toolbar>
       <md-list>
