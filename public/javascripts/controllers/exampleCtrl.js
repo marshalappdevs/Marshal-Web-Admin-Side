@@ -4,7 +4,7 @@ angular.module('marshalApp')
     $scope.$emit('currFeatureChange', "ראשי וסטטיסטיקות");
 
     httpService.get('/dashboard2').then(function(response) {
-      alert(response.data);
+      console.log(response.data);
     })
 
     $scope.activity = [
