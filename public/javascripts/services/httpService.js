@@ -1,18 +1,22 @@
 angular.module('marshalApp')
-    .factory('httpService', ['$q', '$http', '$window', '$mdDialog', 'jwtHelper', '$rootScope', function($q, $http, $window, $mdDialog, jwtHelper, $rootScope) {
+    .factory('httpService', ['$q', '$http', '$window', '$mdDialog', 'jwtHelper', '$mdMedia', function($q, $http, $window, $mdDialog, jwtHelper, $mdMedia) {
         
         // Get ApiToken and its properties
         var token = $window.localStorage.getItem('apiToken');
         var username = jwtHelper.decodeToken(token)._doc.username;
         var isExpired = jwtHelper.isTokenExpired(token);
 
+        setInterval(function() { isExpired = jwtHelper.isTokenExpired(token);}, 150000);
+
         // Showing dialog to reconnect when apiToken is expired
         var reconnect = function() {
+            var isFullScreen = $mdMedia('sm') || $mdMedia('xs');
             return $mdDialog.show({
                 controller: 'passDialogController',
                 templateUrl: 'javascripts/templates/passDialog.html',
                 parent: angular.element(document.body),
                 clickOutsideToClose:true,
+                fullScreen: isFullScreen
             });
         };
 
@@ -79,7 +83,7 @@ angular.module('marshalApp')
                                        });
 
                     defrredHttp.resolve(httpPromise);
-                });
+                }, function() {defrredHttp.reject();});
 
                 return defrredHttp.promise;
             },
