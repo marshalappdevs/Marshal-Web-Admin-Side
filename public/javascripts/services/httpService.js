@@ -4,9 +4,6 @@ angular.module('marshalApp')
         // Get ApiToken and its properties
         var token = $window.localStorage.getItem('apiToken');
         var username = jwtHelper.decodeToken(token)._doc.username;
-        var isExpired = jwtHelper.isTokenExpired(token);
-
-        setInterval(function() { isExpired = jwtHelper.isTokenExpired(token);}, 150000);
 
         // Showing dialog to reconnect when apiToken is expired
         var reconnect = function() {
@@ -25,13 +22,14 @@ angular.module('marshalApp')
             var deferred = $q.defer();
 
             // If token is expired, a login is required
-            if(isExpired) {
+            if(jwtHelper.isTokenExpired(token)) {
                 reconnect().then(function(password) {
                     var userData = {username: username, password: password, isLogin: false};
                     
                     // Get a new api token
                     $http.post('/auth', userData).then(function(response) {
                         $window.localStorage.setItem('apiToken', response.data.apiToken);
+                        token = response.data.apiToken;
                         deferred.resolve();
                     },
                     function(response) {
@@ -61,6 +59,7 @@ angular.module('marshalApp')
                 }).then(function(response) {
                     // Setting new api token
                     $window.localStorage.setItem('apiToken', response.data.apiToken);
+                    token = response.data.apiToken;
                     deferred.resolve();
                 });
             }

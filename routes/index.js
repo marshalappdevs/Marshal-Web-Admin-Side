@@ -119,7 +119,7 @@ router.post('/auth', bouncer.block, function(req, res) {
         if (isMatch && !err) {
           // Create token if the password matched and no error was thrown
           var apiToken = jwt.sign(user, config.secret, {
-            expiresIn: 400
+            expiresIn: 600
           });
           var loginToken;
 
@@ -148,7 +148,7 @@ router.post('/refresh', passport.authenticate('jwtAdmin', { session: false }) , 
 
     // Create token if the password matched and no error was thrown
     var apiToken = jwt.sign(user, config.secret, {
-        expiresIn: 400
+        expiresIn: 600
     });
 
     res.json({success: true, apiToken: apiToken});
