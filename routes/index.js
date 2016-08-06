@@ -117,10 +117,17 @@ router.post('/auth', bouncer.block, function(req, res) {
       // Check if password matches
       user.comparePass(req.body.password, function(err, isMatch) {
         if (isMatch && !err) {
+          // Lighten API Token
+          var signUser = {};
+          signUser._doc = user._doc;
+          signUser._doc.pass = 'Encrypted.'
+
           // Create token if the password matched and no error was thrown
-          var apiToken = jwt.sign(user, config.secret, {
+          var apiToken = jwt.sign(signUser, config.secret, {
             expiresIn: 600
           });
+
+          // For creating a login token when needed
           var loginToken;
 
           // Check if this request is api token request or login request
@@ -146,8 +153,13 @@ router.post('/refresh', passport.authenticate('jwtAdmin', { session: false }) , 
   User.findOne({ username: req.body.username }, function(err, user) {
     if (err) {throw err};
 
+    // Lighten API token
+    var signUser = {};
+    signUser._doc = user._doc;
+    signUser._doc.pass = 'Encrypted.';
+
     // Create token if the password matched and no error was thrown
-    var apiToken = jwt.sign(user, config.secret, {
+    var apiToken = jwt.sign(signUser, config.secret, {
         expiresIn: 600
     });
 

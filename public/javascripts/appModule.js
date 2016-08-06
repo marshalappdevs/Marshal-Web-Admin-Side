@@ -1,8 +1,11 @@
 var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute', 'angular-jwt']);
 
-app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', 'httpService', function($scope, $mdSidenav, $location, httpService){
+app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', 'httpService', '$window', 'jwtHelper', function($scope, $mdSidenav, $location, httpService, $window, jwtHelper){
 
   /* Brodcasting current username */ 
+  $scope.token = $window.localStorage.getItem('loginToken');
+  $scope.username = jwtHelper.decodeToken($scope.token).username;
+  $scope.since = new Date(jwtHelper.decodeToken($scope.token).iat * 1000).toLocaleDateString() + " " + new Date(jwtHelper.decodeToken($scope.token).iat * 1000).toLocaleTimeString();
 
   /* Toggles menu's location */
   $scope.toggleSidenav = function(menuId) {
