@@ -170,7 +170,7 @@ router.post('/refresh', passport.authenticate('jwtAdmin', { session: false }) , 
 
 router.post('/api/authapp', function(req, res) {
   var hashedAuthReq = req.body.authReq;
-  console.log(hashedAuthReq);
+  console.log("recieved hash: " + hashedAuthReq);
   var currDate = new Date();
   var nHours, nMinutes;
   if(currDate.getUTCHours() < 10) {
@@ -189,6 +189,7 @@ router.post('/api/authapp', function(req, res) {
 
   var expectedHashed = crypto.createHash('sha256').update(expectedString).digest('hex');
 
+  console.log("expected hash: " + expectedHashed);
 
   if(expectedHashed == hashedAuthReq) {
     var apiToken = jwt.sign({username: "hila",password: "123456", role: "Client"}, config.secret, {
