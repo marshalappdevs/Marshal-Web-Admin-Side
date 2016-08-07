@@ -189,6 +189,7 @@ router.post('/api/authapp', function(req, res) {
 
   var expectedHashed = crypto.createHash('sha256').update(expectedString).digest('hex');
 
+  console.log("expected string: " + expectedString);
   console.log("expected hash: " + expectedHashed);
 
   if(expectedHashed == hashedAuthReq) {
