@@ -184,8 +184,18 @@ router.post('/api/authapp', function(req, res) {
   } else {
       nMinutes = currDate.getUTCMinutes();
   }
-  
-  var expectedString = config.expectedStringPrefix + " " + currDate.getUTCDate()+"/"+ (currDate.getUTCMonth() + 1) + " " + nHours + ":" + nMinutes;
+
+  var nDay = currDate.getUTCDate();
+  if (nDay < 10) {
+    nDay = "0" + nDay;
+  }
+
+  var nMonth = currDate.getUTCMonth() + 1;
+  if (nMonth < 10) {
+    nMonth = "0" + nMonth;
+  }
+
+  var expectedString = config.expectedStringPrefix + " " + nDay +"/"+ nMonth + " " + nHours + ":" + nMinutes;
 
   var expectedHashed = crypto.createHash('sha256').update(expectedString).digest('hex');
 
