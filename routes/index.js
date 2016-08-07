@@ -207,6 +207,8 @@ router.post('/api/authapp', function(req, res) {
             expiresIn: 400
     });
 
+    console.log(apiToken);
+
     res.send(apiToken);
   } else {
       res.status(400).send('BADREQ');
