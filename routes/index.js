@@ -203,7 +203,6 @@ router.post('/api/authapp', function(req, res) {
   console.log("expected hash: " + expectedHashed);
 
   if(expectedHashed == hashedAuthReq) {
-    var apiToken = jwt.sign({username: "hila",password: "123456", role: "Client"}, config.secret, {
             expiresIn: 400
     });
 
