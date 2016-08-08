@@ -86,41 +86,73 @@ angular.module('marshalApp')
 
                 return defrredHttp.promise;
             },
-            post: function(urlToGet) {
-               return $http({
-                    method: 'POST',
-                    url: urlToGet,
-                    headers: {
-                        'Authorization': 'JWT ' + $window.localStorage.getItem('apiToken')
-                    }
+            post: function(urlToGet, reqData) {
+               var defrredHttp = $q.defer();
+                refresh().then(function() {
+                    var httpPromise =   $http({
+                                        method: 'POST',
+                                         url: urlToGet,
+                                         data: reqData,
+                                         headers: {
+                                            'Authorization': 'JWT ' + $window.localStorage.getItem('apiToken')
+                                        }
                 });
+
+                    defrredHttp.resolve(httpPromise);
+                }, function() {defrredHttp.reject();});
+
+                return defrredHttp.promise;
             },
-            put: function(urlToGet) {
-               return $http({
-                    method: 'PUT',
-                    url: urlToGet,
-                    headers: {
-                        'Authorization': 'JWT ' + $window.localStorage.getItem('apiToken')
-                    }
-                });
+            put: function(urlToGet, reqData) {
+                var defrredHttp = $q.defer();
+                refresh().then(function() {
+                    var httpPromise =   $http({
+                                        method: 'PUT',
+                                         url: urlToGet,
+                                         data: reqData,
+                                         headers: {
+                                            'Authorization': 'JWT ' + $window.localStorage.getItem('apiToken')
+                                         }
+                                    });
+
+                    defrredHttp.resolve(httpPromise);
+                }, function() {defrredHttp.reject();});
+
+                return defrredHttp.promise;
             },
-            delete: function(urlToGet) {
-               return $http({
-                    method: 'DELETE',
-                    url: urlToGet,
-                    headers: {
-                        'Authorization': 'JWT ' + $window.localStorage.getItem('apiToken')
-                    }
-                });
+            delete: function(urlToGet, reqData) {
+                var defrredHttp = $q.defer();
+                refresh().then(function() {
+                    var httpPromise =   $http({
+                                        method: 'DELETE',
+                                         url: urlToGet,
+                                         data: reqData,
+                                         headers: {
+                                            'Authorization': 'JWT ' + $window.localStorage.getItem('apiToken')
+                                            }
+                                        });
+
+                    defrredHttp.resolve(httpPromise);
+                }, function() {defrredHttp.reject();});
+
+                return defrredHttp.promise;
             },
-            update: function(urlToGet) {
-               return $http({
-                    method: 'UPDATE',
-                    url: urlToGet,
-                    headers: {
-                        'Authorization': 'JWT ' + $window.localStorage.getItem('apiToken')
-                    }
-                });
+            update: function(urlToGet, reqData) {
+                var defrredHttp = $q.defer();
+                refresh().then(function() {
+                    var httpPromise =   $http({
+                                         method: 'UPDATE',
+                                         url: urlToGet,
+                                         data: reqData,
+                                         headers: {
+                                            'Authorization': 'JWT ' + $window.localStorage.getItem('apiToken')
+                                        }
+                                         });
+
+                    defrredHttp.resolve(httpPromise);
+                }, function() {defrredHttp.reject();});
+
+                return defrredHttp.promise;
             }
         }
         }])
