@@ -21,7 +21,7 @@ angular.module('marshalApp')
     };
 
     if($location.search().msg == 'np') {
-        $mdToast.show($mdToast.simple().textContent("אין למשתמש הרשאות להתחבר"));
+        $mdToast.show($mdToast.simple().textContent("אין לך הרשאות להתחבר, התחבר עם משתמש בעל הרשאות נרחבות יותר"));
     }
 }]);
 
