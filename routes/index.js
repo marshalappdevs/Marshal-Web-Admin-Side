@@ -170,7 +170,7 @@ router.post('/refresh', passport.authenticate('jwtAdmin', { session: false }) , 
 
 router.post('/api/authapp', function(req, res) {
   var hashedAuthReq = req.body.authReq;
-  console.log(hashedAuthReq);
+  console.log("recieved hash: " + hashedAuthReq);
   var currDate = new Date();
   var nHours, nMinutes;
   if(currDate.getUTCHours() < 10) {
@@ -184,16 +184,30 @@ router.post('/api/authapp', function(req, res) {
   } else {
       nMinutes = currDate.getUTCMinutes();
   }
-  
-  var expectedString = config.expectedStringPrefix + " " + currDate.getUTCDate()+"/"+ (currDate.getUTCMonth() + 1) + " " + nHours + ":" + nMinutes;
+
+  var nDay = currDate.getUTCDate();
+  if (nDay < 10) {
+    nDay = "0" + nDay;
+  }
+
+  var nMonth = currDate.getUTCMonth() + 1;
+  if (nMonth < 10) {
+    nMonth = "0" + nMonth;
+  }
+
+  var expectedString = config.expectedStringPrefix + " " + nDay +"/"+ nMonth + " " + nHours + ":" + nMinutes;
 
   var expectedHashed = crypto.createHash('sha256').update(expectedString).digest('hex');
 
+  console.log("expected string: " + expectedString);
+  console.log("expected hash: " + expectedHashed);
 
   if(expectedHashed == hashedAuthReq) {
     var apiToken = jwt.sign({username: "hila",password: "123456", role: "Client"}, config.secret, {
             expiresIn: 400
     });
+
+    console.log(apiToken);
 
     res.send(apiToken);
   } else {
@@ -305,9 +319,7 @@ router.get('/api/materials/', function(req, res, next) {
 
 // Create material TODO: Ask Ido wtf is going on here
 router.post('/api/materials', function(req, res) {
-    dbMaterials
-    .then(function(materials) {
-        materials.update({url : req.body.url},
+    materials.update({url : req.body.url},
          req.body, {upsert:true}, function(err, result) {
              if(!err) {
                 console.log(result);
@@ -318,19 +330,6 @@ router.post('/api/materials', function(req, res) {
                 res.json({ code: 400, message: "Couldn't create material... :(" })
              }
          })
-});
-    // dbMaterials
-    // .then(function(materials) {
-    //     materials.create(req.body, function(err, material) {
-    //         if (err) {
-    //             res.json({ code: 400, message: "Couldn't create new material.."});
-    //             console.log(err);
-    //         } else {
-    //             setLastUpdateNow();
-    //             res.json({ code: 201, message: "Created successfuly" });
-    //         }
-    //     });
-    // });
 });
 
 // Malshabs
@@ -431,7 +430,7 @@ router.put('/api/ratings', function(req, res) {
 // GCM
 // Registerations
 var GcmRegisterationSchema = mongoose.Schema(require('../Database/Models/GcmRegisterationSchema'));
-var regisrations = mongoose.model('GcmRegisterations', GcmRegisterationSchema);
+var registerations = mongoose.model('gcmregisterations', GcmRegisterationSchema);
 
 router.post('/api/gcm/register', function(req, res) {
     // dbGcmRegisterations
