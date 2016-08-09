@@ -374,7 +374,7 @@ router.get('/api/ratings/', function(req, res, next) {
 });
 
 // Create rating
-router.post('/api/ratings', function(req, res) {
+router.post('/api/ratings', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function(req, res) {
     ratings.create(req.body, function(err, rating) {
             if (err) {
                 res.json({ code: 400, message: "Couldn't create new rating.."});
@@ -521,7 +521,7 @@ var settingsSchema = mongoose.Schema(require('../Database/Models/SettingsSchema'
 var settings = mongoose.model('Settings', settingsSchema);
 
 // Get settings
-router.get('/api/settings/', function(req, res, next) {
+router.get('/api/settings/', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function(req, res, next) {
     settings.findOne(function (err, settings) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
