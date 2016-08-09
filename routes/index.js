@@ -398,7 +398,7 @@ router.get('/api/ratings/:courseId', passport.authenticate('jwt', { session: fal
 /////////////////////////////////////////////////
 
 // Delete rating
-router.delete('/api/ratings/:courseCode/:userMailAddress', function(req, res) {
+router.delete('/api/ratings/:courseCode/:userMailAddress',  passport.authenticate('jwt', { session: false }), function(req, res) {
     ratings.remove({ courseCode : req.params.courseCode,
         userMailAddress : req.params.userMailAddress}, function(err, result) {
             if (!err) {
@@ -413,7 +413,7 @@ router.delete('/api/ratings/:courseCode/:userMailAddress', function(req, res) {
 });
 
 // // Update rating (any property)
-router.put('/api/ratings', function(req, res) {
+router.put('/api/ratings',  passport.authenticate('jwt', { session: false }), function(req, res) {
     ratings.update({ courseCode : req.body.courseCode,
             userMailAddress : req.body.userMailAddress}, req.body, function(err, result) {
         // If everything's alright
@@ -432,7 +432,7 @@ router.put('/api/ratings', function(req, res) {
 var GcmRegisterationSchema = mongoose.Schema(require('../Database/Models/GcmRegisterationSchema'));
 var registerations = mongoose.model('gcmregisterations', GcmRegisterationSchema);
 
-router.post('/api/gcm/register', function(req, res) {
+router.post('/api/gcm/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
     // dbGcmRegisterations
     // .then(function(registerations) {
     //     registerations.create(req.body, function(err, registeration) {
@@ -457,7 +457,7 @@ router.post('/api/gcm/register', function(req, res) {
 });
 
 // Update registeration (tokenId only) ////////////////////
-router.put('/api/gcm/register', function(req, res) {
+router.put('/api/gcm/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
     registerations.update({hardwareId : req.body.hardwareId}, req.body, function(err, result) {
             // If everything's alright
             if (!err && result.ok === 1) {
@@ -470,7 +470,7 @@ router.put('/api/gcm/register', function(req, res) {
 });
 
 // Delete registeration ////////////////////////////////
-router.delete('/api/gcm/unregister/:hardwareId', function(req, res) {
+router.delete('/api/gcm/unregister/:hardwareId',  passport.authenticate('jwt', { session: false }), function(req, res) {
     registerations.remove({hardwareId : req.params.hardwareId}, function(err, result) {
         if (!err) {
             console.log(result);
