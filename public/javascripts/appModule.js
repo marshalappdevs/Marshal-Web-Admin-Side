@@ -22,6 +22,14 @@ app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', 'httpService', '$
     $scope.currView = currFeature;
   });
 
+  /* Logout
+      TODO: Invalidate the token on the server */
+  $scope.logout = function () {
+    $window.localStorage.removeItem('apiToken');
+    $window.localStorage.removeItem('loginToken');
+    $window.location.href = '/login';
+  }
+
   /* JSON of the menu offered on the sidebar */
  	$scope.menu = [
     {
