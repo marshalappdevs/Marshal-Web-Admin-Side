@@ -272,7 +272,7 @@ router.delete('/api/courses/:courseId', function(req, res) {
 
 // // Images
 
-router.get('/api/images/:courseId', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+router.get('/api/images/:courseId', function (req, res, next) {
     courses.findOne({ CourseCode: req.params.courseId }, 'PictureUrl', function(err, picUrl) {
         // If there's no error
         if (!err) {
