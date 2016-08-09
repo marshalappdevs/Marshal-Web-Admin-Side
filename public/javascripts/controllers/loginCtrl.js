@@ -20,7 +20,9 @@ angular.module('marshalApp')
         });
     };
 
-    if($location.search().msg == 'np') {
+    if($window.localStorage.getItem('loginToken')) {
+        $window.location.href = '/?token='+$window.localStorage.getItem('loginToken');
+    } else if($location.search().msg == 'np') {
         $mdToast.show($mdToast.simple().textContent("אין לך הרשאות להתחבר, התחבר עם משתמש בעל הרשאות נרחבות יותר"));
     }
 }]);
