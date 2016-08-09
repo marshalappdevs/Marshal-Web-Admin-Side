@@ -82,6 +82,9 @@
           <md-button aria-label="Search" ng-click="showSearch = !showSearch">
             <ng-md-icon icon="search"></ng-md-icon>
           </md-button>
+          <md-button aria-label="Logout" ng-click = "logout()" >
+           <ng-md-icon icon="exit_to_app"></ng-md-icon>
+          </md-button>
         </div>
       </md-toolbar>
 
@@ -91,7 +94,7 @@
             חיפוש
           </h3>
           <md-button ng-click="showSearch = !showSearch; search=''" aria-label="Back">
-            <ng-md-icon icon="arrow_back"></ng-md-icon>
+            <ng-md-icon icon="arrow_forward"></ng-md-icon>
           </md-button>
           <md-input-container md-theme="input" flex inset>
             <label>&nbsp;</label>
