@@ -221,7 +221,7 @@ var coursesSchema = mongoose.Schema(require('../Database/Models/CourseSchema'));
 var courses = mongoose.model('Courses', coursesSchema);
 
 // Get all courses
-router.get('/api/courses', function(req, res, next) {
+router.get('/api/courses', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     courses.find(function (err, courses) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
@@ -272,7 +272,7 @@ router.delete('/api/courses/:courseId', function(req, res) {
 
 // // Images
 
-router.get('/api/images/:courseId', function (req, res, next) {
+router.get('/api/images/:courseId', passport.authenticate('jwt', { session: false }), function (req, res, next) {
     courses.findOne({ CourseCode: req.params.courseId }, 'PictureUrl', function(err, picUrl) {
         // If there's no error
         if (!err) {
@@ -309,7 +309,7 @@ var materialsSchema = mongoose.Schema(require('../Database/Models/MaterialSchema
 var materials = mongoose.model('materials', materialsSchema);
 
 // Get all materials
-router.get('/api/materials/', function(req, res, next) {
+router.get('/api/materials/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     materials.find(function (err, materials) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
@@ -337,7 +337,7 @@ var malshabItemSchema = mongoose.Schema(require('../Database/Models/MalshabItemS
 var malshabItems = mongoose.model('malshabItems', malshabItemSchema);
 
 // Get all malshab items
-router.get('/api/malshabitems/', function(req, res, next) {
+router.get('/api/malshabitems/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     malshabItems.find(function (err, malshabItems) {
             if (err) return console.error(err);
             res.setHeader('Content-Type', 'application/json');
@@ -365,7 +365,7 @@ var ratingsSchema = mongoose.Schema(require('../Database/Models/RatingSchema'));
 var ratings = mongoose.model('ratings', ratingsSchema);
 
 // Get all ratings
-router.get('/api/ratings/', function(req, res, next) {
+router.get('/api/ratings/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     ratings.find(function (err, ratings) {
             if (err) return console.error(err);
             res.setHeader('Content-Type', 'application/json');
@@ -387,7 +387,7 @@ router.post('/api/ratings', passport.authenticate('jwt', { session: false, failu
 });
 
 // Get rating by course id
-router.get('/api/ratings/:courseId', function (req, res, next) {
+router.get('/api/ratings/:courseId', passport.authenticate('jwt', { session: false }), function (req, res, next) {
     ratings.find({ courseId: req.params.courseId } , function(err, ratings) {
             if (err) return console.error(err);
             setLastUpdateNow();
@@ -521,7 +521,7 @@ var settingsSchema = mongoose.Schema(require('../Database/Models/SettingsSchema'
 var settings = mongoose.model('Settings', settingsSchema);
 
 // Get settings
-router.get('/api/settings/', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function(req, res, next) {
+router.get('/api/settings/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     settings.findOne(function (err, settings) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
