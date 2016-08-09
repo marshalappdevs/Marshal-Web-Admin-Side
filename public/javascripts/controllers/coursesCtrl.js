@@ -373,7 +373,7 @@ httpService.get("/api/courses").then(function (response){
               if ($scope.allcoursesreal[i].CourseCode ==  $scope.allratings[j].courseCode) {
                   $scope.allcoursesrealWithRating[i].rating = response.data[j].rating;
                   ratigfound = true;
-
+// TODO: this makes tooooooooons of http requests
 //                   httpService.get("/api/images/"+$scope.allcoursesrealWithRating[i].CourseCode).then(function (response){
 //                       $scope.allcoursesrealWithRating[i].imgurlofpic = response.data;
 // }                 );
