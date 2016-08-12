@@ -482,7 +482,7 @@ router.delete('/api/gcm/unregister/:hardwareId',  passport.authenticate('jwt', {
     });
 });
 
-/////////////// Send Push ///////////////////////////
+////////////// Send Push ///////////////////////////
 router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
     registerations.find(function (err, registerations) {
         if (err)
