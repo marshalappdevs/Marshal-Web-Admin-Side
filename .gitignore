@@ -1,3 +1,4 @@
+config/main.js
 # Logs
 logs
 *.log
@@ -38,7 +39,3 @@ node_modules
 
 #web strom
 .idea
-
-#keys
-config/main.js
-config/main.js
