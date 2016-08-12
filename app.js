@@ -26,13 +26,6 @@ require('./config/passport')(passport);
 require('./config/passportAdmin')(passport);
 require('./config/passportLogin')(passport);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
 
 routes.get('/', passport.authenticate('jwtLogin', { session: false, failureRedirect: '/login#?msg=np' }), function(req, res, next) {
   res.sendFile(path.join(__dirname + '/public/home.html'));
