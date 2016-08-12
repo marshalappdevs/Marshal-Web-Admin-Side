@@ -38,3 +38,6 @@ node_modules
 
 #web strom
 .idea
+
+#keys
+config/main.js
