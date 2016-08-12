@@ -25,7 +25,7 @@ require('../config/passportAdmin')(passport);
 require('../config/passportLogin')(passport);
 
 // DB connection
-mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal');
+mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal', {user: config.dbUser, pass: config.dbPass});
 
 function setLastUpdateNow() {
     console.log('setLastUpdateNow');
@@ -489,7 +489,7 @@ router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
             return console.error(err);
         else if (registerations.length > 0) {
                 // Set up the sender with marshaldevs@gmail.com API key
-            var sender = new gcm.Sender('AIzaSyAsgh-FO4NHH25pPoEeUFJj0AptIs6guwU');
+            var sender = new gcm.Sender(config.serverApi);
 
             // Initialize Message object
             var message = new gcm.Message();
