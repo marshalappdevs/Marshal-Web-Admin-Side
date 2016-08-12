@@ -1,5 +1,5 @@
 angular.module('marshalApp')
-.controller('loginCtrl', ['$scope', '$http','$mdToast','$window', '$location',function($scope, $http, $mdToast, $window, $location){
+.controller('loginCtrl', ['$scope', '$http','$mdToast','$window', '$location', 'bsLoadingOverlayService', 'jwtHelper', function($scope, $http, $mdToast, $window, $location, bsLoadingOverlayService, jwtHelper){
     $scope.activated = false;
 
     // Login mehod
@@ -20,10 +20,26 @@ angular.module('marshalApp')
         });
     };
 
-    if($window.localStorage.getItem('loginToken')) {
-        $window.location.href = '/?token='+$window.localStorage.getItem('loginToken');
-    } else if($location.search().msg == 'np') {
+    try {
+        // Auto login
+        var token = $window.localStorage.getItem('loginToken');
+        if(token && !(jwtHelper.isTokenExpired(token))) {
+            // Eye candy
+            $scope.activated = true;
+            $scope.username = jwtHelper.decodeToken(token).username;
+            $scope.password = 'thisisnotthepassword'
+
+            // Actual redirection
+            $window.location.href = '/?token='+$window.localStorage.getItem('loginToken');
+        } else if($location.search().msg == 'np') {
         $mdToast.show($mdToast.simple().textContent("אין לך הרשאות להתחבר, התחבר עם משתמש בעל הרשאות נרחבות יותר"));
+        }
+    } 
+    catch(err) {
+        // If someone tampered with his login token, then remove it
+        $window.localStorage.removeItem('loginToken');
+        $window.localStorage.removeItem('apiToken');
+        $window.location.reload(false);
     }
 }]);
 
