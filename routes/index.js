@@ -488,8 +488,9 @@ router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
         if (err)
             return console.error(err);
         else if (registerations.length > 0) {
-                // Set up the sender with marshaldevs@gmail.com API key
+            // Set up the sender with marshaldevs@gmail.com API key
             var sender = new gcm.Sender(config.serverApi);
+
 
             // Initialize Message object
             var message = new gcm.Message();
