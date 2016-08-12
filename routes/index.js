@@ -10,7 +10,7 @@ var passport  = require('passport');
 var jwt = require('jsonwebtoken');
 var config = require('../config/main');
 var User = require('../Database/Models/UserSchema');
-var bouncer =  require ("express-bouncer")(25000, 1000000, 3);
+var bouncer =  require ('express-bouncer')(25000, 1000000, 3);
 var crypto = require('crypto');
 
 /* 
@@ -28,24 +28,24 @@ require('../config/passportLogin')(passport);
 mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal');
 
 function setLastUpdateNow() {
-    console.log("setLastUpdateNow");
+    console.log('setLastUpdateNow');
     var time = new Date().getTime();
 
     settings.findOne({ isSettingsDocument: true}, function(err, doc) {
-            if(err == null) {
-                doc.lastUpdateAt = '/Date(' + time + ')/';
-                doc.save();
-            }
+        if(err == null) {
+            doc.lastUpdateAt = '/Date(' + time + ')/';
+            doc.save();
+        }
     });
 };
 
 // Adding localhost on the bruteforce whitelist
-bouncer.whitelist.push("127.0.0.1");
+bouncer.whitelist.push('127.0.0.1');
 
 // When login is blocked due to failures
 bouncer.blocked = function (req, res, next, remaining)
 {
-    res.status(429).send(" יותר מדי בקשות התחברות כושלות, נסה מחדש בעוד " + remaining / 1000 + " שניות " );
+    res.status(429).send(' יותר מדי בקשות התחברות כושלות, נסה מחדש בעוד ' + remaining / 1000 + ' שניות ' );
 };
 
 /* 
@@ -95,124 +95,124 @@ router.get('/imageUploadField', function(req, res, next) {
 // Example authentication
 
 router.get('/dashboard', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function(req, res) {
-  res.send('It worked! User id role: ' + req.user.role + '.');
+    res.send('It worked! User id role: ' + req.user.role + '.');
 });
 
 router.get('/dashboard3', passport.authenticate('jwtLogin', { session: false, failureRedirect: '/' }), function(req, res) {
-  res.send('It worked! User id role: ' + req.user.role + '.');
+    res.send('It worked! User id role: ' + req.user.role + '.');
 });
 
 router.get('/dashboard2', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
-  res.send('It worked! User id role: ' + req.user.role + '.');
+    res.send('It worked! User id role: ' + req.user.role + '.');
 });
 
 // Authentication
 
 router.post('/auth', bouncer.block, function(req, res) {
-  User.findOne({ username: req.body.username }, function(err, user) {
-    if (err) {throw err};
-    if (!user) {
-      res.status(400).send('השם או הסיסמה שסופקו לא תואמים');
-    } else {
+    User.findOne({ username: req.body.username }, function(err, user) {
+        if (err) {throw err;};
+        if (!user) {
+          res.status(400).send('השם או הסיסמה שסופקו לא תואמים');
+      } else {
       // Check if password matches
-      user.comparePass(req.body.password, function(err, isMatch) {
-        if (isMatch && !err) {
+          user.comparePass(req.body.password, function(err, isMatch) {
+            if (isMatch && !err) {
           // Lighten API Token
-          var signUser = {};
-          signUser._doc = user._doc;
-          signUser._doc.pass = 'Encrypted.'
+              var signUser = {};
+              signUser._doc = user._doc;
+              signUser._doc.pass = 'Encrypted.';
 
           // Create token if the password matched and no error was thrown
-          var apiToken = jwt.sign(signUser, config.secret, {
-            expiresIn: 600
-          });
+              var apiToken = jwt.sign(signUser, config.secret, {
+                expiresIn: 600
+            });
 
           // For creating a login token when needed
-          var loginToken;
+              var loginToken;
 
           // Check if this request is api token request or login request
-          if(req.body.isLogin)
+              if(req.body.isLogin)
           {
-            loginToken = jwt.sign({username: req.body.username}, config.loginSecret, {
-                expiresIn: 10800
-             });
-          }
+                loginToken = jwt.sign({username: req.body.username}, config.loginSecret, {
+                  expiresIn: 10800
+              });
+            }
 
           // Indicating that login was successful and no need to wait
-          bouncer.reset(req);
-          res.json({ success: true, apiToken: apiToken, loginToken: loginToken});
-        } else {
-          res.status(400).send('השם או הסיסמה שסופקו לא תואמים');
-        }
-      });
-    }
-  });
+              bouncer.reset(req);
+              res.json({ success: true, apiToken: apiToken, loginToken: loginToken});
+          } else {
+              res.status(400).send('השם או הסיסמה שסופקו לא תואמים');
+          }
+        });
+      }
+    });
 });
 
 router.post('/refresh', passport.authenticate('jwtAdmin', { session: false }) , function(req, res) {
-  User.findOne({ username: req.body.username }, function(err, user) {
-    if (err) {throw err};
+    User.findOne({ username: req.body.username }, function(err, user) {
+        if (err) {throw err;};
 
     // Lighten API token
-    var signUser = {};
-    signUser._doc = user._doc;
-    signUser._doc.pass = 'Encrypted.';
+        var signUser = {};
+        signUser._doc = user._doc;
+        signUser._doc.pass = 'Encrypted.';
 
     // Create token if the password matched and no error was thrown
-    var apiToken = jwt.sign(signUser, config.secret, {
-        expiresIn: 600
-    });
+        var apiToken = jwt.sign(signUser, config.secret, {
+          expiresIn: 600
+      });
 
-    res.json({success: true, apiToken: apiToken});
+        res.json({success: true, apiToken: apiToken});
     });
   
 });
 
 router.post('/api/authapp', function(req, res) {
-  var hashedAuthReq = req.body.authReq;
-  console.log("recieved hash: " + hashedAuthReq);
-  var currDate = new Date();
-  var nHours, nMinutes;
-  if(currDate.getUTCHours() < 10) {
-      nHours = "0" + currDate.getUTCHours();
-  } else {
-      nHours = currDate.getUTCHours();
-  }
+    var hashedAuthReq = req.body.authReq;
+    console.log('recieved hash: ' + hashedAuthReq);
+    var currDate = new Date();
+    var nHours, nMinutes;
+    if(currDate.getUTCHours() < 10) {
+        nHours = '0' + currDate.getUTCHours();
+    } else {
+        nHours = currDate.getUTCHours();
+    }
 
-  if(currDate.getUTCMinutes() < 10) {
-      nMinutes = "0" + currDate.getUTCMinutes();
-  } else {
-      nMinutes = currDate.getUTCMinutes();
-  }
+    if(currDate.getUTCMinutes() < 10) {
+        nMinutes = '0' + currDate.getUTCMinutes();
+    } else {
+        nMinutes = currDate.getUTCMinutes();
+    }
 
-  var nDay = currDate.getUTCDate();
-  if (nDay < 10) {
-    nDay = "0" + nDay;
-  }
+    var nDay = currDate.getUTCDate();
+    if (nDay < 10) {
+        nDay = '0' + nDay;
+    }
 
-  var nMonth = currDate.getUTCMonth() + 1;
-  if (nMonth < 10) {
-    nMonth = "0" + nMonth;
-  }
+    var nMonth = currDate.getUTCMonth() + 1;
+    if (nMonth < 10) {
+        nMonth = '0' + nMonth;
+    }
 
-  var expectedString = config.expectedStringPrefix + " " + nDay +"/"+ nMonth + " " + nHours + ":" + nMinutes;
+    var expectedString = config.expectedStringPrefix + ' ' + nDay +'/'+ nMonth + ' ' + nHours + ':' + nMinutes;
 
-  var expectedHashed = crypto.createHash('sha256').update(expectedString).digest('hex');
+    var expectedHashed = crypto.createHash('sha256').update(expectedString).digest('hex');
 
-  console.log("expected string: " + expectedString);
-  console.log("expected hash: " + expectedHashed);
+    console.log('expected string: ' + expectedString);
+    console.log('expected hash: ' + expectedHashed);
 
-  if(expectedHashed == hashedAuthReq) {
-    var apiToken = jwt.sign({_doc: {_id: '57866c42c22f43782dd0b2e3'}}, config.secret, {
-            expiresIn: 400
-    });
+    if(expectedHashed == hashedAuthReq) {
+        var apiToken = jwt.sign({_doc: {_id: '57866c42c22f43782dd0b2e3'}}, config.secret, {
+          expiresIn: 400
+      });
 
-    console.log(apiToken);
+        console.log(apiToken);
 
-    res.send(apiToken);
-  } else {
-      res.status(400).send('BADREQ');
-  }
+        res.send(apiToken);
+    } else {
+        res.status(400).send('BADREQ');
+    }
 });
 
 
@@ -233,11 +233,11 @@ router.get('/api/courses', passport.authenticate('jwt', { session: false }), fun
 router.post('/api/courses', function(req, res) {
     courses.create(req.body, function(err, course) {
         if (err) {
-            res.json({ code: 400, message: "Couldn't create new course.."});
+            res.json({ code: 400, message: 'Couldn\'t create new course..'});
             console.log(err);
         } else {
             setLastUpdateNow();
-            res.json({ code: 201, message: "Created successfuly" });
+            res.json({ code: 201, message: 'Created successfuly' });
         }
     });
 });
@@ -246,13 +246,13 @@ router.post('/api/courses', function(req, res) {
 router.put('/api/courses/:id', function(req, res) {
     courses.update({ ID: req.params.id}, req.body, function(err, result) {
             // If everything's alright
-            if (!err && result.ok === 1) {
-                setLastUpdateNow();
-                res.json({ code: 200});
-            } else {
-                res.json({code:400, error: "something went wrong.."});
-                console.log(err, result);
-            }
+        if (!err && result.ok === 1) {
+            setLastUpdateNow();
+            res.json({ code: 200});
+        } else {
+            res.json({code:400, error: 'something went wrong..'});
+            console.log(err, result);
+        }
     });
 });
 
@@ -262,10 +262,10 @@ router.delete('/api/courses/:courseId', function(req, res) {
         if (!err) {
             console.log(result);
             setLastUpdateNow();
-            res.json({ code: 201, message: "Deleted course!" });
+            res.json({ code: 201, message: 'Deleted course!' });
         } else {
             console.log(err);
-            res.json({ code: 400, message: "Couldn't delete course" })
+            res.json({ code: 400, message: 'Couldn\'t delete course' });
         }
     });
 });
@@ -278,14 +278,14 @@ router.get('/api/images/:courseId', function (req, res, next) {
         if (!err) {
             res.sendFile('images/' + picUrl._doc.PictureUrl, { root: path.join(__dirname, '../public') });
         }
-    })
+    });
 });
 
 router.post('/api/images', function(req, res) {
     // Checks if only url has been sent
     if (req.body.imageUrl) {
         var datetimestamp = Date.now();
-        var fileName = "file-" + datetimestamp + "." + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
+        var fileName = 'file-' + datetimestamp + '.' + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
         var file = fs.createWriteStream(path.join(__dirname, '../public/images/') + fileName);
         https.get(req.body.imageUrl, function(result) {
             result.pipe(file);
@@ -322,14 +322,14 @@ router.post('/api/materials', function(req, res) {
     materials.update({url : req.body.url},
          req.body, {upsert:true}, function(err, result) {
              if(!err) {
-                console.log(result);
-                setLastUpdateNow();
-                res.json({ code: 201, message: "material created successfully! :)" });
+                 console.log(result);
+                 setLastUpdateNow();
+                 res.json({ code: 201, message: 'material created successfully! :)' });
              } else {
-                console.log(err);
-                res.json({ code: 400, message: "Couldn't create material... :(" })
+                 console.log(err);
+                 res.json({ code: 400, message: 'Couldn\'t create material... :(' });
              }
-         })
+         });
 });
 
 // Malshabs
@@ -339,9 +339,9 @@ var malshabItems = mongoose.model('malshabItems', malshabItemSchema);
 // Get all malshab items
 router.get('/api/malshabitems/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     malshabItems.find(function (err, malshabItems) {
-            if (err) return console.error(err);
-            res.setHeader('Content-Type', 'application/json');
-            res.json(malshabItems);
+        if (err) return console.error(err);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(malshabItems);
     });
 });
 
@@ -350,14 +350,14 @@ router.post('/api/malshabitems', function(req, res) {
     malshabItems.update({url : req.body.url},
     req.body, {upsert:true}, function(err, result) {
         if(!err) {
-        console.log(result);
-        setLastUpdateNow();
-        res.json({ code: 201, message: "malshab item created successfully! :)" });
+            console.log(result);
+            setLastUpdateNow();
+            res.json({ code: 201, message: 'malshab item created successfully! :)' });
         } else {
-        console.log(err);
-        res.json({ code: 400, message: "Couldn't create malshab item... :(" })
+            console.log(err);
+            res.json({ code: 400, message: 'Couldn\'t create malshab item... :(' });
         }
-    })
+    });
 });
 
 // Ratings
@@ -367,33 +367,33 @@ var ratings = mongoose.model('ratings', ratingsSchema);
 // Get all ratings
 router.get('/api/ratings/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     ratings.find(function (err, ratings) {
-            if (err) return console.error(err);
-            res.setHeader('Content-Type', 'application/json');
-            res.json(ratings);
+        if (err) return console.error(err);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(ratings);
     });
 });
 
 // Create rating
 router.post('/api/ratings', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function(req, res) {
     ratings.create(req.body, function(err, rating) {
-            if (err) {
-                res.json({ code: 400, message: "Couldn't create new rating.."});
-                console.log(err);
-            } else {
-                setLastUpdateNow();
-                res.json({ code: 201, message: "Created successfuly" });
-            }
+        if (err) {
+            res.json({ code: 400, message: 'Couldn\'t create new rating..'});
+            console.log(err);
+        } else {
+            setLastUpdateNow();
+            res.json({ code: 201, message: 'Created successfuly' });
+        }
     });
 });
 
 // Get rating by course id
 router.get('/api/ratings/:courseId', passport.authenticate('jwt', { session: false }), function (req, res, next) {
     ratings.find({ courseId: req.params.courseId } , function(err, ratings) {
-            if (err) return console.error(err);
-            setLastUpdateNow();
-            res.setHeader('Content-Type', 'application/json');
-            res.json(ratings);
-    })
+        if (err) return console.error(err);
+        setLastUpdateNow();
+        res.setHeader('Content-Type', 'application/json');
+        res.json(ratings);
+    });
 });
 /////////////////////////////////////////////////
 
@@ -401,15 +401,15 @@ router.get('/api/ratings/:courseId', passport.authenticate('jwt', { session: fal
 router.delete('/api/ratings/:courseCode/:userMailAddress',  passport.authenticate('jwt', { session: false }), function(req, res) {
     ratings.remove({ courseCode : req.params.courseCode,
         userMailAddress : req.params.userMailAddress}, function(err, result) {
-            if (!err) {
-                console.log(result);
-                setLastUpdateNow();
-                res.json({ code: 201, message: "Deleted rating!" });
-            } else {
-                console.log(err);
-                res.json({ code: 400, message: "Couldn't delete rating" })
-            }
-        });
+        if (!err) {
+            console.log(result);
+            setLastUpdateNow();
+            res.json({ code: 201, message: 'Deleted rating!' });
+        } else {
+            console.log(err);
+            res.json({ code: 400, message: 'Couldn\'t delete rating' });
+        }
+    });
 });
 
 // // Update rating (any property)
@@ -417,14 +417,14 @@ router.put('/api/ratings',  passport.authenticate('jwt', { session: false }), fu
     ratings.update({ courseCode : req.body.courseCode,
             userMailAddress : req.body.userMailAddress}, req.body, function(err, result) {
         // If everything's alright
-        if (!err && result.ok === 1) {
-            setLastUpdateNow();
-            res.json({ code: 200});
-        } else {
-            res.json({error: "something went wrong.."});
-            console.log(err, result);
-        }
-    });
+                if (!err && result.ok === 1) {
+                    setLastUpdateNow();
+                    res.json({ code: 200});
+                } else {
+                    res.json({error: 'something went wrong..'});
+                    console.log(err, result);
+                }
+            });
 });
 
 // GCM
@@ -447,26 +447,26 @@ router.post('/api/gcm/register',  passport.authenticate('jwt', { session: false 
     registerations.update({hardwareId : req.body.hardwareId},
          req.body, {upsert:true}, function(err, result) {
              if(!err) {
-                console.log(result);
-                res.json({ code: 201, message: "registered successfully! :)" });
+                 console.log(result);
+                 res.json({ code: 201, message: 'registered successfully! :)' });
              } else {
-                console.log(err);
-                res.json({ code: 400, message: "Couldn't register... :(" })
+                 console.log(err);
+                 res.json({ code: 400, message: 'Couldn\'t register... :(' });
              }
-         })
+         });
 });
 
 // Update registeration (tokenId only) ////////////////////
 router.put('/api/gcm/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
     registerations.update({hardwareId : req.body.hardwareId}, req.body, function(err, result) {
             // If everything's alright
-            if (!err && result.ok === 1) {
-                res.json({ code: 200});
-            } else {
-                res.json({error: "something went wrong.."});
-                console.log(err, result);
-            }
-        });
+        if (!err && result.ok === 1) {
+            res.json({ code: 200});
+        } else {
+            res.json({error: 'something went wrong..'});
+            console.log(err, result);
+        }
+    });
 });
 
 // Delete registeration ////////////////////////////////
@@ -474,10 +474,10 @@ router.delete('/api/gcm/unregister/:hardwareId',  passport.authenticate('jwt', {
     registerations.remove({hardwareId : req.params.hardwareId}, function(err, result) {
         if (!err) {
             console.log(result);
-            res.json({ code: 201, message: "UnRegistered!" });
+            res.json({ code: 201, message: 'UnRegistered!' });
         } else {
             console.log(err);
-            res.json({ code: 400, message: "Couldn't unregister" })
+            res.json({ code: 400, message: 'Couldn\'t unregister' });
         }
     });
 });
@@ -511,7 +511,7 @@ router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
                 }
             });
         } else
-            console.log("No GCM Registerations");
+            console.log('No GCM Registerations');
             // res.json({noGcmRegisterations:true});
     });
 });
