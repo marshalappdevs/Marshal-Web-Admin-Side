@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var router = express.Router();
 var upload = require('../image_upload/image-upload');
@@ -12,6 +14,7 @@ var config = require('../config/main');
 var User = require('../Database/Models/UserSchema');
 var bouncer =  require ('express-bouncer')(25000, 1000000, 3);
 var crypto = require('crypto');
+var emitter = require('../config/emitter');
 
 /* 
 *
@@ -23,6 +26,13 @@ var crypto = require('crypto');
 require('../config/passport')(passport);
 require('../config/passportAdmin')(passport);
 require('../config/passportLogin')(passport);
+
+// Reload passport strategies
+emitter.on('secretChange', function() {
+    require('../config/passport')(passport);
+    require('../config/passportAdmin')(passport);
+});
+
 
 // DB connection
 mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal', {user: config.dbUser, pass: config.dbPass});
@@ -134,7 +144,7 @@ router.post('/auth', bouncer.block, function(req, res) {
               if(req.body.isLogin)
           {
                 loginToken = jwt.sign({username: req.body.username}, config.loginSecret, {
-                  expiresIn: 10800
+                  expiresIn: 604800
               });
             }
 
@@ -170,7 +180,6 @@ router.post('/refresh', passport.authenticate('jwtAdmin', { session: false }) , 
 
 router.post('/api/authapp', function(req, res) {
     var hashedAuthReq = req.body.authReq;
-    console.log('recieved hash: ' + hashedAuthReq);
     var currDate = new Date();
     var nHours, nMinutes;
     if(currDate.getUTCHours() < 10) {

@@ -7,6 +7,9 @@
 var app = require('../app');
 var debug = require('debug')('Bsmh-Marshal:server');
 var http = require('http');
+var https = require('https');
+var config = require('../config/main');
+var emitter = require('../config/emitter');
 
 /**
  * Get port from environment and store in Express.
@@ -88,3 +91,43 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+/**
+ * Generate new secret to sign api keys every 12 hours
+ */
+ 
+var options = {
+  port: 443,
+  host: 'api.random.org', 
+  path: '/json-rpc/1/invoke',
+  method: 'POST',
+  headers: {'Content-type': 'application/json-rpc'}
+};
+
+var reqBody = '{"jsonrpc": "2.0", "method": "generateStrings","params": {"apiKey": "'+ config.randomApiKey +'","n": '+config.n+', "length": '+config.length+', "characters": "'+config.allChars+'", "replacement": true}, "id": 7589}';
+
+var callback = function(response) {
+  var str = ''
+  var res;
+  response.on('data', function (chunk) {
+    str += chunk;
+  });
+
+  response.on('end', function () {
+    res = JSON.parse(str);
+    // Set new secret for generating future tokens
+    config.secret = res.result.random.data[0] + res.result.random.data[1];
+
+    // Notify secret change so passport strategies would be reloaded
+    emitter.emit('secretChange');
+  });
+}
+
+// Change secret every now and then
+setInterval(function() {
+  var req = https.request(options, callback);
+  req.write(reqBody);
+  req.end();
+}, config.changeKeyInterval)
+
+ 
