@@ -17,37 +17,52 @@ angular.module('marshalApp')
             });
         };
 
-        var refresh = function(password) {
+        /**
+         * This function handles all reconnection procedure
+        */
+        var passReconnectProc = function() {
+            var deferredReconnect = $q.defer();
+            reconnect().then(function(password) {
+                var userData = {username: username, password: password, isLogin: false};
+                
+                // Get a new api token
+                $http.post('/auth', userData).then(function(response) {
+                    $window.localStorage.setItem('apiToken', response.data.apiToken);
+                    token = response.data.apiToken;
+                    deferredReconnect.resolve();
+                },
+                function(response) {
+                    // Show error
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                            .parent(angular.element(document.body))
+                            .clickOutsideToClose(true)
+                            .title('התחברות מחדש כשלה')
+                            .textContent(response.data)
+                            .ariaLabel('Failed Login')
+                            .ok('אוקיי')
+                    );
+
+                    // Reject promise
+                    deferredReconnect.reject();
+                });
+            });
+
+            return deferredReconnect.promise;
+        }
+
+
+        /**
+         *  This function is responisble for getting a new token
+         */
+        var refresh = function() {
             // Creates a new promise
             var deferred = $q.defer();
 
             // If token is expired, a login is required
             if(jwtHelper.isTokenExpired(token)) {
-                reconnect().then(function(password) {
-                    var userData = {username: username, password: password, isLogin: false};
-                    
-                    // Get a new api token
-                    $http.post('/auth', userData).then(function(response) {
-                        $window.localStorage.setItem('apiToken', response.data.apiToken);
-                        token = response.data.apiToken;
-                        deferred.resolve();
-                    },
-                    function(response) {
-                        // Show error
-                        $mdDialog.show(
-                            $mdDialog.alert()
-                                .parent(angular.element(document.body))
-                                .clickOutsideToClose(true)
-                                .title('התחברות מחדש כשלה')
-                                .textContent(response.data)
-                                .ariaLabel('Failed Login')
-                                .ok('אוקיי')
-                        );
-
-                        // Reject promise
-                        deferred.reject();
-                    });
-                }, function() {});
+                passReconnectProc().then(function() {deferred.resolve();},
+                                         function() {deferred.reject();});
             } else { // Normal refresh
                 $http({
                     method: 'POST',
@@ -61,6 +76,9 @@ angular.module('marshalApp')
                     $window.localStorage.setItem('apiToken', response.data.apiToken);
                     token = response.data.apiToken;
                     deferred.resolve();
+                }, function() { // Handle unverified tokens - login again
+                    passReconnectProc().then(function() {deferred.resolve();},
+                                             function() {deferred.reject();});
                 });
             }
 
