@@ -1,5 +1,6 @@
 module.exports = {
             registerationTokenId : String,
             hardwareId : String,
-            lastModified : String
+            lastModified : String,
+            channels : [String]
         }
