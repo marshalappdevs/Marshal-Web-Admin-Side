@@ -493,7 +493,7 @@ router.delete('/api/gcm/unregister/:hardwareId',  passport.authenticate('jwt', {
 
 ////////////// Send Push ///////////////////////////
 router.post('/api/gcm/sendpush/', function(req, res) {
-    registerations.find({channels : { $elemMatch: req.body.channels}},function (err, registerations) {
+    registerations.find({channels : { $in : req.body.channels}},function (err, registerations) {
         if (err)
             return console.error(err);
         else if (registerations.length > 0) {
