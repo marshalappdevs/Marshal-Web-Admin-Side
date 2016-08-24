@@ -15,6 +15,7 @@ var User = require('../Database/Models/UserSchema');
 var bouncer =  require ('express-bouncer')(25000, 1000000, 3);
 var crypto = require('crypto');
 var emitter = require('../config/emitter');
+var linkPreviewHelper=require('link-preview');  
 
 /* 
 *
@@ -224,6 +225,10 @@ router.post('/api/authapp', function(req, res) {
     }
 });
 
+
+router.post('/api/preview/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+    linkPreviewHelper.parse(req.body.urlToDigest).then(function (obj) {res.json(obj)},function(err) {});
+});
 
 // Courses
 var coursesSchema = mongoose.Schema(require('../Database/Models/CourseSchema'));
