@@ -15,7 +15,7 @@ var User = require('../Database/Models/UserSchema');
 var bouncer =  require ('express-bouncer')(25000, 1000000, 3);
 var crypto = require('crypto');
 var emitter = require('../config/emitter');
-var linkPreviewHelper=require('link-preview');  
+var linkPreviewHelper=require('link-preview');
 
 /* 
 *
@@ -481,6 +481,34 @@ router.delete('/api/gcm/unregister/:hardwareId',  passport.authenticate('jwt', {
         } else {
             console.log(err);
             res.json({ code: 400, message: 'Couldn\'t unregister' });
+        }
+    });
+});
+
+// Add course subscription
+router.post('/api/gcm/subscribe/course/:hardwareId/:courseCode', function(req, res) {
+    registrations.update({hardwareId : req.params.hardwareId},
+                    {$addToSet : {courses : req.params.courseCode}}, function(err, result) {
+        if (!err) {
+            console.log(result);
+            res.json({ code: 201, message: 'Subscribed successfully!' });
+        } else {
+            console.log(err);
+            res.json({ code: 400, message: 'Couldn\'t subscribe' });
+        }
+    });
+});
+
+// Remove course subscription
+router.delete('/api/gcm/subscribe/course/:hardwareId/:courseCode', function(req, res) {
+    registrations.update({hardwareId : req.params.hardwareId},
+                    {$pull : {courses : req.params.courseCode}}, function(err, result) {
+        if (!err) {
+            console.log(result);
+            res.json({ code: 201, message: 'Unsubscribed successfully!' });
+        } else {
+            console.log(err);
+            res.json({ code: 400, message: 'Couldn\'t unsubscribe' });
         }
     });
 });
