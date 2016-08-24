@@ -486,7 +486,7 @@ router.delete('/api/gcm/unregister/:hardwareId',  passport.authenticate('jwt', {
 });
 
 // Add course subscription
-router.post('/api/gcm/subscribe/course/:hardwareId/:courseCode', function(req, res) {
+router.post('/api/gcm/subscription/course/:hardwareId/:courseCode', function(req, res) {
     registrations.update({hardwareId : req.params.hardwareId},
                     {$addToSet : {courses : req.params.courseCode}}, function(err, result) {
         if (!err) {
@@ -500,7 +500,7 @@ router.post('/api/gcm/subscribe/course/:hardwareId/:courseCode', function(req, r
 });
 
 // Remove course subscription
-router.delete('/api/gcm/subscribe/course/:hardwareId/:courseCode', function(req, res) {
+router.delete('/api/gcm/subscription/course/:hardwareId/:courseCode', function(req, res) {
     registrations.update({hardwareId : req.params.hardwareId},
                     {$pull : {courses : req.params.courseCode}}, function(err, result) {
         if (!err) {
