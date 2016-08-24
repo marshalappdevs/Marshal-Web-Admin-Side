@@ -519,6 +519,39 @@ router.post('/api/gcm/sendpush/', function(req, res) {
     });
 });
 
+router.post('/api/gcm/sendpush/global', function(req, res) {
+    registrations.find(function (err, registrations) {
+        if (err)
+            return console.error(err);
+        else if (registrations.length > 0) {
+                // Set up the sender with marshaldevs@gmail.com API key
+            var sender = new gcm.Sender(config.serverApi);
+
+            // Initialize Message object
+            var message = new gcm.Message();
+            message.addData('message', decodeURI(req.body.messageContent));
+            
+            // Add the registration tokens of the devices you want to send to
+            var registrationTokens = [];
+            registrations.forEach(function(registration){
+                registrationTokens.push(registration.registrationTokenId);
+            });
+
+            // Send the message
+            // ... trying only once
+            sender.send(message, { registrationTokens: registrationTokens },10, function(err, response) {
+                if(err) console.error(err);
+                else {
+                    console.log(response);
+                    // res.json(response);
+                }
+            });
+        } else
+            console.log('No GCM Registrations');
+            // res.json({noGcmRegistrations:true});
+    });
+});
+
 // Settings
 var settingsSchema = mongoose.Schema(require('../Database/Models/SettingsSchema'));
 var settings = mongoose.model('Settings', settingsSchema);
