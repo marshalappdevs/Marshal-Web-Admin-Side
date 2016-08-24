@@ -442,23 +442,12 @@ router.put('/api/ratings',  passport.authenticate('jwt', { session: false }), fu
 });
 
 // GCM
-// Registerations
-var GcmRegisterationSchema = mongoose.Schema(require('../Database/Models/GcmRegisterationSchema'));
-var registerations = mongoose.model('gcmregisterations', GcmRegisterationSchema);
+// Registrations
+var GcmRegistrationSchema = mongoose.Schema(require('../Database/Models/GcmRegistrationSchema'));
+var registrations = mongoose.model('gcmregistrations', GcmRegistrationSchema);
 
 router.post('/api/gcm/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
-    // dbGcmRegisterations
-    // .then(function(registerations) {
-    //     registerations.create(req.body, function(err, registeration) {
-    //         if (err) {
-    //             res.json({ code: 400, message: "Couldn't create new registeration.."});
-    //             console.log(err);
-    //         } else {
-    //             res.json({ code: 201, message: "Created successfuly" });
-    //         }
-    //     });
-    // });
-    registerations.update({hardwareId : req.body.hardwareId},
+    registrations.update({hardwareId : req.body.hardwareId},
          req.body, {upsert:true}, function(err, result) {
              if(!err) {
                  console.log(result);
@@ -470,9 +459,9 @@ router.post('/api/gcm/register',  passport.authenticate('jwt', { session: false 
          });
 });
 
-// Update registeration (tokenId only) ////////////////////
+// Update registration (tokenId only) ////////////////////
 router.put('/api/gcm/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
-    registerations.update({hardwareId : req.body.hardwareId}, req.body, function(err, result) {
+    registrations.update({hardwareId : req.body.hardwareId}, req.body, function(err, result) {
             // If everything's alright
         if (!err && result.ok === 1) {
             res.json({ code: 200});
@@ -483,9 +472,9 @@ router.put('/api/gcm/register',  passport.authenticate('jwt', { session: false }
     });
 });
 
-// Delete registeration ////////////////////////////////
+// Delete registration ////////////////////////////////
 router.delete('/api/gcm/unregister/:hardwareId',  passport.authenticate('jwt', { session: false }), function(req, res) {
-    registerations.remove({hardwareId : req.params.hardwareId}, function(err, result) {
+    registrations.remove({hardwareId : req.params.hardwareId}, function(err, result) {
         if (!err) {
             console.log(result);
             res.json({ code: 201, message: 'UnRegistered!' });
@@ -498,10 +487,10 @@ router.delete('/api/gcm/unregister/:hardwareId',  passport.authenticate('jwt', {
 
 ////////////// Send Push ///////////////////////////
 router.post('/api/gcm/sendpush/', function(req, res) {
-    registerations.find({channels : { $in : req.body.channels}},function (err, registerations) {
+    registrations.find({channels : { $in : req.body.channels}},function (err, registrations) {
         if (err)
             return console.error(err);
-        else if (registerations.length > 0) {
+        else if (registrations.length > 0) {
                 // Set up the sender with marshaldevs@gmail.com API key
             var sender = new gcm.Sender(config.serverApi);
 
@@ -511,8 +500,8 @@ router.post('/api/gcm/sendpush/', function(req, res) {
             
             // Add the registration tokens of the devices you want to send to
             var registrationTokens = [];
-            registerations.forEach(function(registeration){
-                registrationTokens.push(registeration.registerationTokenId);
+            registrations.forEach(function(registration){
+                registrationTokens.push(registration.registrationTokenId);
             });
 
             // Send the message
@@ -525,8 +514,8 @@ router.post('/api/gcm/sendpush/', function(req, res) {
                 }
             });
         } else
-            console.log('No GCM Registerations');
-            // res.json({noGcmRegisterations:true});
+            console.log('No GCM Registrations');
+            // res.json({noGcmRegistrations:true});
     });
 });
 
