@@ -528,11 +528,6 @@ $scope.rowsize = function(){
 return new Array(3);
 }
 
-httpService.get("/api/images/:courseId").then(function (response){
- //$scope.allcoursesreal = response.data;
-});
-
-
 }]);
 
 function DialogController($scope, $mdDialog) {

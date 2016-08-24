@@ -10,6 +10,9 @@ var routes = require('./routes/index');
 
 var app = express();
 
+// Just checking
+var a =3;
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -25,13 +28,6 @@ app.use('/', routes);
 require('./config/passport')(passport);
 require('./config/passportAdmin')(passport);
 require('./config/passportLogin')(passport);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
 
 
 routes.get('/', passport.authenticate('jwtLogin', { session: false, failureRedirect: '/login#?msg=np' }), function(req, res, next) {

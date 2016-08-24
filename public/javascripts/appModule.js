@@ -1,4 +1,4 @@
-var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute', 'angular-jwt']);
+var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute', 'angular-jwt', 'bsLoadingOverlay']);
 
 app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', 'httpService', '$window', 'jwtHelper', function($scope, $mdSidenav, $location, httpService, $window, jwtHelper){
 
