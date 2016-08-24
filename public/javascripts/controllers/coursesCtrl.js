@@ -30,6 +30,95 @@ angular.module('marshalApp')
   };
 
   $scope.currpicurl;
+
+$scope.addNewCourse = function(event, item) {
+  swal({   title: "הוספה!",   text: "הוספת קורס חדש",   imageUrl:"https://inception-app-prod.s3.amazonaws.com/YmE4ZDY5MmUtNTU4Mi00NGI5LTk2YTMtY2Y4YWQ2MjgwNGZj/content/2016/06/recommend.png" });
+   $mdDialog.show({
+                  clickOutsideToClose: true,
+                  hasBackdrop: false,
+                  targetEvent: event,
+                  scope: $scope,        
+                  preserveScope: true,           
+                  template: '<md-dialog aria-label="item.Name"  ng-cloak class="animated zoomIn">'+
+                            '      <form>'+
+                            '      <md-toolbar>'+
+                            '      <div class="md-toolbar-tools">'+
+                            '        <h2>' +item.Name + '</h2>'+
+                            '        <span flex></span>'+
+                            '        <md-button class="md-icon-button" ng-click="cancel()">'+
+                            '        <md-iconmd-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog">'+
+                            '        </md-icon>            X           </md-button>'+
+                            '       </div>'+
+                            '        </md-toolbar>'+
+                            '        <md-dialog-content>'+
+                            '        <div class="md-dialog-content">'+
+                            '        <center><img class="md-card-image-dialog" ng-src="http://marshalweb.azurewebsites.net/api/images/'+item.CourseCode+'" alt="Washed Out">'+
+                            '</center>'+
+                            '        <p>'+
+                            '            <b>סימול:</b>' + item.CourseCode + 
+                            '        </p>'+
+                            '        <p>'+
+                            '            <b>תיאור כללי:</b>' +item.Description + 
+                            '        </p>'+
+                            '        <p>'+
+                            '            <b>סילבוס:</b>' + item.Syllabus + 
+                            '        </p>'+
+                            '        <p>' +
+                            '            <b>אוכלוסיית יעד:</b>' + item.TargetPopulation + 
+                            '        </p>'+
+                            '         <p>'+
+                            '            <b>זמן ביום:</b>' + item.DayTime + 
+                            '        </p>'+
+                            '       <p>'+
+                            '            <b>מספר ימים:</b>' + item.DurationInDays + 
+                            '        </p>'+
+                            '         <p>'+
+                            '            <b>ציון מעבר:</b>' + item.PassingGrade + 
+                            '        </p>'+
+                            '         <p>'+
+                            '            <b>מחיר:</b>' + item.Price + 
+                            '        </p>'+
+                            '         <p>'+
+                            '            <b>מינימום שתתפים:</b>' + item.MinimumPeople + 
+                            '        </p>'+
+                            '         <p>'+
+                            '            <b>מקסימום משתתפים:</b>' + item.MaximumPeople + 
+                            '        </p>'+
+                            '         <p>'+
+                            '            <b>תגובות:</b>' + item.Comments + 
+                            '        </p>'+
+                            '         <p>'+
+                            '            <b>קטגוריה:</b>' + item.Category +       
+                            '</p>'+
+                            '         <p>'+
+                            '            <b>האם מיטאפ:</b>' + item.IsMeetup + 
+                            '        </p>'+
+                            '         <p>'+
+                            '            <b>רשימת מחזורים:</b>' +
+                            '<select>'+
+                                  '<option ng-repeat="course in currcyclelist">{{convertdate(course.StartDate)}}       ->       {{convertdate(course.EndDate)}}</option>'+
+                            '</select>'+
+                            '        </p>'+
+                            '     </div>'+
+                            '        </md-dialog-content>'+
+                            '        <md-dialog-actions layout="row">'+
+                            '        <md-button href="https://www.google.co.il/?gfe_rd=cr&ei=2buVV9j7B4_b8Ae6lqm4Cg#q='+ item.Name+ '" target="_blank" md-autofocus><ng-md-icon icon="school"></ng-md-icon>'+
+                            '            More on google           </md-button>'+
+                            '       <span flex></span>'+
+                            '       <md-button ng-click="cancelthis()"><ng-md-icon icon="cancel"></ng-md-icon>                  ביטול            </md-button>'+
+                            '      <md-button ng-click="save()"><ng-md-icon icon="save"></ng-md-icon>                   שמור            </md-button>'+
+                            '   <md-button ng-click="edit()"><ng-md-icon icon="border_color"></ng-md-icon>    ערוך  </md-button>'+
+                            '   </md-dialog-actions>'+
+                            '      </form>'+
+                            '</md-dialog>',                           
+                 controller: function DialogController($scope, $mdDialog) {
+                              $scope.hide = function(answer) {
+                                $mdDialog.hide(answer);
+                              };
+                            }
+               });
+}
+
   $scope.showCustom = function(event, item) {
     $scope.currcyclelist = item.cycleList;
                $mdDialog.show({
@@ -38,7 +127,7 @@ angular.module('marshalApp')
                   targetEvent: event,
                   scope: $scope,        
                   preserveScope: true,           
-                  template: '<md-dialog aria-label="item.Name"  ng-cloak class="animated zoomInDown">'+
+                  template: '<md-dialog aria-label="item.Name"  ng-cloak class="animated zoomIn">'+
                             '      <form>'+
                             '      <md-toolbar>'+
                             '      <div class="md-toolbar-tools">'+

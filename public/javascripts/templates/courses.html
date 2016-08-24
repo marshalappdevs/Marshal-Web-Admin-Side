@@ -1,11 +1,14 @@
 <!--בהצלחה למי שהולך לכתוב את הטמפלייט לקורסים!-->
+<md-button style="position:fixed;bottom:10px;left:17px;z-index:100000" class="md-fab" aria-label="Eat cake" ng-click="addNewCourse()">
+  <i class="material-icons md-48">add_to_queue</i>
+</md-button>
 <link rel="stylesheet" href="../../stylesheets/course.css">
  <center ng-hide="!isLoading">
    <br><br><br><br><br>
       <md-progress-circular class="md-accent" md-mode="indeterminate" md-diameter="300"></md-progress-circular>
  </center>
  <md-content ng-hide="isLoading" class="md-padding _md layout-xs-column layout-row" layout="row" layout-xs="column">
-    <div flex layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
+    <div layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
       <md-card class="_md" ng-repeat="item in allcoursesrealWithRatingshlish | filter:search" ng-click="showCustom($event, item)">
         <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/images/{{item.CourseCode}}">
         <md-card-title>
@@ -41,7 +44,7 @@
       
      
     </div>
-   <div flex layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
+   <div layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
             <md-card class="_md" ng-repeat="itemm in allcoursesrealWithRatingshneishlish | filter:search" ng-click="showCustom($event, itemm)">
         <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/images/{{itemm.CourseCode}}">
         <md-card-title>
@@ -74,7 +77,7 @@
         </md-card-content>
       </md-card>
   </div>
-  <div flex layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
+  <div layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
             <md-card class="_md" ng-repeat="itemmm in allcoursesrealWithRatingshlishaharon | filter:search" ng-click="showCustom($event, itemmm)">
         <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/images/{{itemmm.CourseCode}}">
         <md-card-title>
