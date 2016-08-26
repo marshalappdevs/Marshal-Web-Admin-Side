@@ -492,8 +492,8 @@ router.delete('/api/gcm/unregister/:hardwareId',  passport.authenticate('jwt', {
 });
 
 ////////////// Send Push ///////////////////////////
-router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
-    registerations.find(function (err, registerations) {
+router.post('/api/gcm/sendpush/', function(req, res) {
+    registerations.find({channels : { $in : req.body.channels}},function (err, registerations) {
         if (err)
             return console.error(err);
         else if (registerations.length > 0) {
@@ -502,8 +502,8 @@ router.post('/api/gcm/sendpush/:messageContent', function(req, res) {
 
             // Initialize Message object
             var message = new gcm.Message();
-            message.addData('message', req.params.messageContent);
-
+            message.addData('message', decodeURI(req.body.messageContent));
+            
             // Add the registration tokens of the devices you want to send to
             var registrationTokens = [];
             registerations.forEach(function(registeration){
