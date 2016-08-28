@@ -485,6 +485,35 @@ router.delete('/api/gcm/unregister/:hardwareId',  passport.authenticate('jwt', {
     });
 });
 
+// Add channel
+router.post('/api/gcm/channels/:hardwareId/:channel', function(req, res) {
+    registrations.update({hardwareId : req.params.hardwareId},
+                    {$addToSet : {channels : req.params.channel}}, function(err, result) {
+        if (!err) {
+            console.log(result);
+            res.json({ code: 201, message: 'channel added successfully!' });
+        } else {
+            console.log(err);
+            res.json({ code: 400, message: 'Couldn\'t add channel' });
+        }
+    });
+});
+
+// Remove channel
+router.delete('/api/gcm/channels/:hardwareId/:channel', function(req, res) {
+    registrations.update({hardwareId : req.params.hardwareId},
+                    {$pull : {channels : req.params.channel}}, function(err, result) {
+        if (!err) {
+            console.log(result);
+            res.json({ code: 201, message: 'channel removed successfully!' });
+        } else {
+            console.log(err);
+            res.json({ code: 400, message: 'Couldn\'t remove channel' });
+        }
+    });
+});
+
+
 // Add course subscription
 router.post('/api/gcm/subscription/course/:hardwareId/:courseCode', function(req, res) {
     registrations.update({hardwareId : req.params.hardwareId},
