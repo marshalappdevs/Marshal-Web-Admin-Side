@@ -542,6 +542,15 @@ router.delete('/api/gcm/subscription/course/:hardwareId/:courseCode', function(r
     });
 });
 
+// Get registration
+router.get('/api/gcm/registrations/:hardwareId', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+    registrations.findOne({hardwareId : req.params.hardwareId},function (err, registration) {
+        if (err) return console.error(err);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(registration);
+    });
+});
+
 ////////////// Send Push ///////////////////////////
 router.post('/api/gcm/sendpush/', function(req, res) {
     registrations.find({channels : { $in : req.body.channels}},function (err, registrations) {
