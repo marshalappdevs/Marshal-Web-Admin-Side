@@ -10,6 +10,15 @@
     <span class="md-headline">{{preview.title}}</span>
     <span class="md-subhead">{{preview.description}}</span>
     </md-card-title-text>
+    <md-card-actions layout="row" layout-align="start center">
+    <md-card-icon-actions ng-show="index >= 0">
+    <md-button class="md-icon-button" aria-label="Edit" ng-click="edit({index: index})">
+        <ng-md-icon icon="edit"></ng-md-icon>
+    </md-button>
+    <md-button class="md-icon-button" aria-label="Share">
+        <ng-md-icon icon="delete"></ng-md-icon>
+    </md-button>
+    </md-card-icon-actions>
 </md-card-title>
 </md-card>
 </div>

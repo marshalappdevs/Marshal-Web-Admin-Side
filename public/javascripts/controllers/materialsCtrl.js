@@ -14,17 +14,19 @@ angular.module('marshalApp')
     $scope.addDialog = function(event, index) {
         $scope.index = index;
         var isFullScreen = $mdMedia('sm') || $mdMedia('xs');
-        $mdDialog.show({
+        return $mdDialog.show({
             controller: 'materialsCtrl',
             templateUrl: 'javascripts/templates/addMaterialsDialog.html',
             scope: $scope,
             targetEvent: event,
-            clickOutsideToClose:true,
+            clickOutsideToClose:false,
             fullScreen: isFullScreen
         });
     }
     
-    $scope.doCancel = function() {$mdDialog.cancel();};
+    $scope.doCancel = function() {
+        $scope.preview = null;
+        $mdDialog.hide();};
 
     /**
      * This function is called on the dialog initialization
