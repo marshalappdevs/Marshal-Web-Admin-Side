@@ -16,6 +16,8 @@ var bouncer =  require ('express-bouncer')(25000, 1000000, 3);
 var crypto = require('crypto');
 var emitter = require('../config/emitter');
 var linkPreviewHelper=require('link-preview');
+var URLCheck = require('../config/urlCheck');
+
 
 /* 
 *
@@ -225,10 +227,15 @@ router.post('/api/authapp', function(req, res) {
     }
 });
 
-
-router.post('/api/preview/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-    linkPreviewHelper.parse(req.body.urlToDigest).then(function (obj) {res.json(obj)},function(err) {});
-});
+ router.post('/api/preview/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+      linkPreviewHelper.parse(req.body.urlToDigest).then(function (obj) {res.json(obj)},function(err) {});
+       URLCheck(req.body.urlToDigest, function(isValid) {
+         if(isValid) {
+             linkPreviewHelper.parse(req.body.urlToDigest).then(function (obj) {res.json(obj)},function(err) {});
+        }
+         else {res.status(400).send("Bad Request"); }
+     });
+  });
 
 // Courses
 var coursesSchema = mongoose.Schema(require('../Database/Models/CourseSchema'));
