@@ -1,0 +1,47 @@
+
+.md-card-image {
+      position: relative;
+      width:100%;
+      height:290px!important;
+}
+
+.layout-gt-xs-row>.flex-gt-xs-50, .layout-row>.flex-gt-xs-50 {
+    -webkit-flex: 1 1 70%;
+    -ms-flex: 1 1 70%;
+    flex: 1 1 70%;
+    max-width: 70%;
+    max-height: 40000%;
+    box-sizing: border-box;
+}
+
+.md-title{
+      display: block; /* or inline-block */
+      text-overflow: clip;
+      word-wrap: break-word;
+      overflow: inherit;
+      max-height: 1.6em;
+      line-height: 1.8em;
+}
+
+md-card-actions {
+ float:left;
+}
+
+#left{
+    margin: -16px 0 0 0 !important;
+}
+
+
+#title{
+    margin: right;
+    float: right;
+    padding-right: 10px;
+}
+
+.md-button.md-fab.md-fab-bottom-right {
+top: auto;
+right: 20px;
+bottom: 20px;
+left: auto;
+position: fixed;
+}

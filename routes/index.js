@@ -134,7 +134,7 @@ router.post('/auth', bouncer.block, function(req, res) {
 
           // Create token if the password matched and no error was thrown
               var apiToken = jwt.sign(signUser, config.secret, {
-                expiresIn: 600
+                expiresIn: 60000
             });
 
           // For creating a login token when needed
@@ -170,7 +170,7 @@ router.post('/refresh', passport.authenticate('jwtAdmin', { session: false }) , 
 
     // Create token if the password matched and no error was thrown
         var apiToken = jwt.sign(signUser, config.secret, {
-          expiresIn: 600
+          expiresIn: 60000
       });
 
         res.json({success: true, apiToken: apiToken});
@@ -351,6 +351,34 @@ router.get('/api/malshabitems/', passport.authenticate('jwt', { session: false }
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
         res.json(malshabItems);
+    });
+});
+
+// Update malshab (any property)
+router.put('/api/malshabitems/:id', function(req, res) {
+    malshabItems.update({_id: req.params.id}, req.body, function(err, result) {
+            // If everything's alright
+        if (!err && result.ok === 1) {
+            setLastUpdateNow();
+            res.json({ code: 200});
+        } else {
+            res.code(400).send("אתה אפס שלא יודע לתכנת");
+            console.log(err, result);
+        }
+    });
+});
+
+// // Delete malshab
+router.delete('/api/malshabitems/:id', function(req, res) {
+    malshabItems.remove({ _id: req.params.id }, function(err, result) {
+        if (!err) {
+            console.log(result);
+            setLastUpdateNow();
+            res.json({ code: 201, message: 'Deleted course!' });
+        } else {
+            console.log(err);
+            res.json({ code: 400, message: 'Couldn\'t delete course' });
+        }
     });
 });
 
