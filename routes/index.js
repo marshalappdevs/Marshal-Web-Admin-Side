@@ -15,7 +15,7 @@ var User = require('../Database/Models/UserSchema');
 var bouncer =  require ('express-bouncer')(25000, 1000000, 3);
 var crypto = require('crypto');
 var emitter = require('../config/emitter');
-var linkPreviewHelper=require('link-preview');
+var MetaInspector = require('node-metainspector');
 var URLCheck = require('../config/urlCheck');
 
 
@@ -228,13 +228,36 @@ router.post('/api/authapp', function(req, res) {
 });
 
  router.post('/api/preview/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-      linkPreviewHelper.parse(req.body.urlToDigest).then(function (obj) {res.json(obj)},function(err) {});
-       URLCheck(req.body.urlToDigest, function(isValid) {
-         if(isValid) {
-             linkPreviewHelper.parse(req.body.urlToDigest).then(function (obj) {res.json(obj)},function(err) {});
-        }
-         else {res.status(400).send("Bad Request"); }
-     });
+       URLCheck(req.body.urlToDigest).then(function() {
+           var client = new MetaInspector(req.body.urlToDigest, { timeout: 5000 });
+           client.on("fetch", function(){
+               // Create basic preview
+               var lnkPreview = {
+                                    title: client.title,
+                                    url: client.url,
+                                    baseUrl: client.host,
+                                    description: client.description,
+                                    imageUrl: client.image,
+                                    keywords: client.keywords
+                                };
+             
+             // Check for OpenGraph
+             if(client.ogTitle) {lnkPreview.title = client.ogTitle};
+             if(client.ogDescription) {lnkPreview.description = client.ogDescription};
+             if(client.images.length > 0) {lnkPreview.images = client.images.slice(0,16); lnkPreview.images._root = null; lnkPreview.images.options=null; lnkPreview.images.prevObject = null;}
+
+             res.json(lnkPreview);
+            });
+
+            client.on("error", function(err){
+                res.status(400).send("Cannot preview link");
+            });
+
+            client.fetch();
+        },
+        function() {
+            res.status(400).send("Invalid URL");
+        })
   });
 
 // Courses
@@ -345,10 +368,10 @@ router.post('/api/materials', function(req, res) {
              if(!err) {
                  console.log(result);
                  setLastUpdateNow();
-                 res.json({ code: 201, message: 'material created successfully! :)' });
+                 res.status(201).send('V');
              } else {
                  console.log(err);
-                 res.json({ code: 400, message: 'Couldn\'t create material... :(' });
+                 res.status(400).send('X');
              }
          });
 });

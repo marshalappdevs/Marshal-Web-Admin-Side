@@ -1,3 +1,6 @@
-<md-button class="md-fab md-fab-bottom-left" aria-label="addMaterial" ng-click="addDialog()">
-    <ng-md-icon icon="add"></ng-md-icon>
-</md-button>
+<div layout="row" flex="100" ng-repeat="currMaterial in materials |  filter:search">
+        <link-card link="currMaterial" layout="column" flex="100" index="$index" ng-click="addDialog(ev, $index)"></link-card>
+    </div>
+    <md-button class="md-fab md-fab-bottom-left" aria-label="addMaterial" ng-click="addDialog()" style="position:fixed !important;">
+        <ng-md-icon icon="add"></ng-md-icon>
+    </md-button>
