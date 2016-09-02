@@ -3,6 +3,6 @@ module.exports = {
             hashTags : String,
             title : String,
             description : String,
-            mainUrl : String,
+            baseUrl : String,
             imageUrl : String
 }
