@@ -63,9 +63,9 @@ function GetDesTask(){
 			if (attrs != null) {
 				var isDes = false;
 				for (var j = 0; j < attrs.length; j++)
-					if (attrs[j].name == "property" && attrs[j].value!=null &&
+					if ((attrs[j].name == "property" || attrs[j].name == "name") && attrs[j].value!=null &&
 						(attrs[j].value.toLowerCase() == "description" 
-							||attrs[j].value.toLowerCase() == "og:description")) {
+							|| attrs[j].value.toLowerCase() == "og:description")) {
 						isDes = true;
 						break;
 					}
@@ -95,7 +95,7 @@ function GetTitleTask(){
 			if (attrs != null) {
 				var isDes = false;
 				for (var j = 0; j < attrs.length; j++)
-					if (attrs[j].name == "property" && attrs[j].value!=null &&
+					if ((attrs[j].name == "property" || attrs[j].name == "name") && attrs[j].value!=null &&
 						attrs[j].value.toLowerCase() == "og:title") {
 						isDes = true;
 						break;

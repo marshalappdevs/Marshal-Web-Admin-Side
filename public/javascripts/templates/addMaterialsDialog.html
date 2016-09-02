@@ -1,43 +1,59 @@
-<md-dialog aria-label="Reconnect"  ng-cloak>
+<md-dialog aria-label="AddMaterial"  ng-cloak>
  <form>
+      <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>הוספת חומר לימודי</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="doCancel()">
+          <ng-md-icon icon="clear" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
     <md-dialog-content>
-      <div class="md-dialog-content">
-        <h2 class="md-headline">הוסף חומר לימוד חדש</h2>
+      <div class="md-dialog-content" ng-init="checkEdit()">
         <p>
             רק זרוק את הלינק לאתר חומרי הלימוד שברצונך להוסיף, ואנחנו כבר נעשה את השאר!
         </p>
         <span flex></span>
-       <md-input-container class="md-icon-float md-block">
+    <md-input-container class="md-icon-float md-block">
         <label> URL </label>
-        <input type="text" ng-model="url" ng-change="urlDigest()" required>
-        </md-input-container>
-        <md-card>
-          <md-card-title>
-            <md-card-title-media>
-              <div class="md-media-md card-media" >
-                <img ng-src="{{preview.imgs[0]}}"/>
-              </div>
-            </md-card-title-media>
-            <md-card-title-text>
-              <span class="md-headline">{{preview.title}}</span>
-              <span class="md-subhead">{{preview.des}}</span>
-            </md-card-title-text>
-          </md-card-title>
-        </md-card>
-        <div layout="row" ng-show="preview">
-          <h2>ולכמה טאצ'ים אחרונים...</h2>
-          <div ng-repeat="image in preview.imgs">
-            <img ng-src="{{image}}" ng-click="changeImage($index)" height="128px" width="128px"/>
-          </div>
+        <input type="text" ng-model="url" ng-change="urlDigest()" required ng-disabled="isEdit">
+        </md-input-container>   
+
+        <link-card link="preview"></link-card>
+
+        <div ng-show="preview">
+          <h2>שנה את פירוט חומר הלימוד אשר הינך רוצה להוסיף</h2>
+          <p>היי, אנחנו יודעים שלא הצלחנו לקלוע לתיאור הלינק המדויק, אבל לפחות ניסנו לעזור. לא?</p>
+          <md-input-container class="md-block">
+          <label>כותרת</label>
+          <input ng-model="preview.title" type="text" ng-change="update()">
+          </md-input-container>
+
+          <md-input-container class="md-block">
+          <label>תיאור קצר</label>
+          <input ng-model="preview.description" type="text">
+          </md-input-container>
+
+          <md-input-container class="md-block">
+          <label>לינק לתמונה</label>
+          <input ng-model="preview.imageUrl" type="text">
+          </md-input-container>
+
+          <md-input-container class="md-block">
+          <label>השאטאגים (שים לב לשים לפחות האשטאג עם קוד הקורס)</label>
+          <input ng-model="preview.hashTags" type="text">
+          </md-input-container>
         </div>
+
         </div>
       </md-dialog-content>
     <md-dialog-actions layout="row">
       <span flex></span>
-      <md-button ng-click="doCancel()">
+      <md-button class="md-warn" ng-click="doCancel()">
        בטל
       </md-button>
-      <md-button class="md-raised md-primary" ng-click="doReconnect(pass)" ng-disabled="!pass">
+      <md-button class="md-raised md-primary" ng-click="addMaterial()" ng-disabled="!preview">
         נראה טוב!
       </md-button>
     </md-dialog-actions>
