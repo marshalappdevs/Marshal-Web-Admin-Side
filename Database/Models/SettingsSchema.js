@@ -1,3 +1,4 @@
 module.exports = {
-            lastUpdateAt : String
+            lastUpdateAt : String,
+            minVersion : Number
 }
