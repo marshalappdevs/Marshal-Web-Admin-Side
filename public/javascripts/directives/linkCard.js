@@ -5,7 +5,8 @@ angular.module('marshalApp')
         templateUrl: 'javascripts/templates/linkCard.html',
         scope: {
             preview: '=link',
-            index: '=index'
+            index: '=index',
+            edit: '&edit'
         }
     };
 })
