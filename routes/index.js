@@ -376,6 +376,17 @@ router.post('/api/materials', function(req, res) {
          });
 });
 
+router.delete('/api/materials/:urlToRemove', function(req, res) {
+    materials.remove({url: decodeURIComponent(req.params.urlToRemove)}, function(err, result) {
+        if (!err) {
+            setLastUpdateNow();
+            res.status(201).send("V");
+        } else {
+            res.status(400).send("X");
+        }
+    });
+});
+
 // Malshabs
 var malshabItemSchema = mongoose.Schema(require('../Database/Models/MalshabItemSchema'));
 var malshabItems = mongoose.model('malshabItems', malshabItemSchema);

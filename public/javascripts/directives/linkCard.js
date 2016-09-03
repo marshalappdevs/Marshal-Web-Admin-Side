@@ -6,7 +6,8 @@ angular.module('marshalApp')
         scope: {
             preview: '=link',
             index: '=index',
-            edit: '&edit'
+            edit: '&edit',
+            delete: '&delete'
         }
     };
 })

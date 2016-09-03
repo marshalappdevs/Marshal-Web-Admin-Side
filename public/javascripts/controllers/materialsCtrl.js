@@ -14,18 +14,45 @@ angular.module('marshalApp')
     $scope.addDialog = function(event, index) {
         $scope.index = index;
         var isFullScreen = $mdMedia('sm') || $mdMedia('xs');
-        return $mdDialog.show({
-            controller: 'materialsCtrl',
-            templateUrl: 'javascripts/templates/addMaterialsDialog.html',
+        $mdDialog.show({
+            controller: 'materialsEditCtrl',
             scope: $scope,
-            targetEvent: event,
+            preserveScope: true,
+            templateUrl: 'javascripts/templates/addMaterialsDialog.html',
             clickOutsideToClose:false,
             fullScreen: isFullScreen
-        });
+        }).then(function() {$scope.loadMaterials();});
     }
     
-    $scope.doCancel = function() {
+    $scope.removeMaterial = function(index) {
+        httpService.delete('/api/materials/' + encodeURIComponent($scope.materials[index].url)).then(function(res) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(true)
+                    .title('החומר הוסר!')
+                    .textContent('')
+                    .ariaLabel('DeleteSuccess')
+                    .ok('יש!')
+            );
+            $scope.loadMaterials();
+        }, function(err) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(true)
+                    .title('לא הצלחנו להסיר את החחומר')
+                    .textContent('')
+                    .ariaLabel('DeleteFail')
+                    .ok('איזה באסה..')
+            )});
+    }
+}])
+.controller('materialsEditCtrl', ['$scope', 'httpService','$mdDialog', '$mdMedia', function($scope, httpService, $mdDialog, $mdMedia){
+     $scope.doCancel = function() {
         $scope.preview = null;
+        $scope.url = null;
+        $scope.isEdit = false;
         $mdDialog.hide();};
 
     /**
@@ -39,6 +66,7 @@ angular.module('marshalApp')
             $scope.url = $scope.materials[$scope.index].url;
         };
     }
+
 
 
     $scope.addMaterial = function() {
@@ -73,7 +101,10 @@ angular.module('marshalApp')
             );
         });
 
-        $mdDialog.hide();
+        /**
+         * In order to close the dialog
+         */
+        $scope.doCancel();
     };
 
     /**
