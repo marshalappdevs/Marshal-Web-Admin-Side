@@ -25,7 +25,7 @@ angular.module('marshalApp')
     }
     
     $scope.removeMaterial = function(index) {
-        httpService.delete('/api/materials/' + encodeURIComponent($scope.materials[index].url)).then(function(res) {
+        httpService.delete('/api/materials/' + encodeURIComponent($scope.materials[index]._id)).then(function(res) {
             $mdDialog.show(
                 $mdDialog.alert()
                     .parent(angular.element(document.body))

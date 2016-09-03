@@ -17,6 +17,7 @@ var crypto = require('crypto');
 var emitter = require('../config/emitter');
 var MetaInspector = require('node-metainspector');
 var URLCheck = require('../config/urlCheck');
+var ObjectID = require('mongodb').ObjectID;
 
 
 /* 
@@ -377,9 +378,7 @@ router.post('/api/materials', function(req, res) {
 });
 
 router.delete('/api/materials/:urlToRemove', function(req, res) {
-    console.log(decodeURIComponent(req.params.urlToRemove));
-    var urlTo = decodeURIComponent(req.params.urlToRemove);
-    materials.remove({url: urlTo}, function(err) {
+    materials.remove({_id: ObjectID(req.params.urlToRemove)}, function(err) {
         if (!err) {
             setLastUpdateNow();
             res.status(201).send("V");
