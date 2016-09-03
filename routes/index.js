@@ -377,7 +377,9 @@ router.post('/api/materials', function(req, res) {
 });
 
 router.delete('/api/materials/:urlToRemove', function(req, res) {
-    materials.remove({url: decodeURIComponent(req.params.urlToRemove)}, function(err, result) {
+    console.log(decodeURIComponent(req.params.urlToRemove));
+    var urlTo = decodeURIComponent(req.params.urlToRemove);
+    materials.remove({url: urlTo}, function(err) {
         if (!err) {
             setLastUpdateNow();
             res.status(201).send("V");
