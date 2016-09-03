@@ -95,7 +95,7 @@ angular.module('marshalApp')
                     .parent(angular.element(document.body))
                     .clickOutsideToClose(true)
                     .title('לא הצלחנו להוסיף את החחומר')
-                    .textContent('')
+                    .textContent(err)
                     .ariaLabel('Alert Dialog Demo')
                     .ok('איזה באסה..')
             );

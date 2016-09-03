@@ -382,7 +382,8 @@ router.delete('/api/materials/:urlToRemove', function(req, res) {
             setLastUpdateNow();
             res.status(201).send("V");
         } else {
-            res.status(400).send("X");
+            console.log(err);
+            res.status(400).send(err);
         }
     });
 });
