@@ -367,8 +367,7 @@ router.post('/api/courses/ratings/:courseCode', function(req, res) {
 router.put('/api/courses/ratings/:courseCode', function(req, res) {
     courses.update({CourseCode : req.params.courseCode,
         'ratings.userMailAddress' : req.body.userMailAddress},
-                    {$set : {'ratings.$' : req.body}},{upsert : true},
-                     function(err, numAffected) {
+                    {$set : {'ratings.$' : req.body}}, function(err, numAffected) {
         if (!err) {
             console.log(result);
             res.json({ code: 201, message: 'rating updated successfully!' });
