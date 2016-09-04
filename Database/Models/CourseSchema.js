@@ -20,5 +20,8 @@ module.exports = {
     Comments : String,
     Category : String,
     IsMooc : Boolean,
-    IsMeetup : Boolean
+    IsMeetup : Boolean,
+    "ratings" : [ 
+        require('./RatingSchema')
+    ]
 }
