@@ -351,7 +351,7 @@ router.post('/api/images', function(req, res) {
 
 // Add rating
 router.post('/api/courses/ratings/:courseCode', function(req, res) {
-    courses.update({courseCode : req.params.courseCode},
+    courses.update({CourseCode : req.params.courseCode},
                     {$addToSet : {ratings : req.body}}, function(err, result) {
         if (!err) {
             console.log(result);
@@ -365,7 +365,7 @@ router.post('/api/courses/ratings/:courseCode', function(req, res) {
 
 // Update rating
 router.put('/api/courses/ratings/:courseCode', function(req, res) {
-    courses.update({courseCode : req.params.courseCode,
+    courses.update({CourseCode : req.params.courseCode,
         'ratings.userMailAddress' : req.body.userMailAddress},
                     {$set : {'ratings.$' : req.body}},{upsert : true},
                      function(err, numAffected) {
@@ -381,7 +381,7 @@ router.put('/api/courses/ratings/:courseCode', function(req, res) {
 
 // Remove rating
 router.delete('/api/courses/ratings/:courseCode', function(req, res) {
-    courses.update({courseCode : req.params.courseCode,
+    courses.update({CourseCode : req.params.courseCode,
         'ratings.userMailAddress' : req.body.userMailAddress},
                     {$pull : {ratings : req.body}}, function(err, result) {
         if (!err) {
