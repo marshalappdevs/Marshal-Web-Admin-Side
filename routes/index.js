@@ -462,72 +462,72 @@ router.post('/api/malshabitems', function(req, res) {
     });
 });
 
-// // Ratings
-// var ratingsSchema = mongoose.Schema(require('../Database/Models/RatingSchema'));
-// var ratings = mongoose.model('ratings', ratingsSchema);
+// Ratings
+var ratingsSchema = mongoose.Schema(require('../Database/Models/RatingSchema'));
+var ratings = mongoose.model('ratings', ratingsSchema);
 
-// // Get all ratings
-// router.get('/api/ratings/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-//     ratings.find(function (err, ratings) {
-//         if (err) return console.error(err);
-//         res.setHeader('Content-Type', 'application/json');
-//         res.json(ratings);
-//     });
-// });
+// Get all ratings
+router.get('/api/ratings/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+    ratings.find(function (err, ratings) {
+        if (err) return console.error(err);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(ratings);
+    });
+});
 
-// // Create rating
-// router.post('/api/ratings', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function(req, res) {
-//     ratings.create(req.body, function(err, rating) {
-//         if (err) {
-//             res.json({ code: 400, message: 'Couldn\'t create new rating..'});
-//             console.log(err);
-//         } else {
-//             setLastUpdateNow();
-//             res.json({ code: 201, message: 'Created successfuly' });
-//         }
-//     });
-// });
+// Create rating
+router.post('/api/ratings', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function(req, res) {
+    ratings.create(req.body, function(err, rating) {
+        if (err) {
+            res.json({ code: 400, message: 'Couldn\'t create new rating..'});
+            console.log(err);
+        } else {
+            setLastUpdateNow();
+            res.json({ code: 201, message: 'Created successfuly' });
+        }
+    });
+});
 
-// // Get rating by course id
-// router.get('/api/ratings/:courseId', passport.authenticate('jwt', { session: false }), function (req, res, next) {
-//     ratings.find({ courseId: req.params.courseId } , function(err, ratings) {
-//         if (err) return console.error(err);
-//         setLastUpdateNow();
-//         res.setHeader('Content-Type', 'application/json');
-//         res.json(ratings);
-//     });
-// });
-// /////////////////////////////////////////////////
+// Get rating by course id
+router.get('/api/ratings/:courseId', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+    ratings.find({ courseId: req.params.courseId } , function(err, ratings) {
+        if (err) return console.error(err);
+        setLastUpdateNow();
+        res.setHeader('Content-Type', 'application/json');
+        res.json(ratings);
+    });
+});
+/////////////////////////////////////////////////
 
-// // Delete rating
-// router.delete('/api/ratings/:courseCode/:userMailAddress',  passport.authenticate('jwt', { session: false }), function(req, res) {
-//     ratings.remove({ courseCode : req.params.courseCode,
-//         userMailAddress : req.params.userMailAddress}, function(err, result) {
-//         if (!err) {
-//             console.log(result);
-//             setLastUpdateNow();
-//             res.json({ code: 201, message: 'Deleted rating!' });
-//         } else {
-//             console.log(err);
-//             res.json({ code: 400, message: 'Couldn\'t delete rating' });
-//         }
-//     });
-// });
+// Delete rating
+router.delete('/api/ratings/:courseCode/:userMailAddress',  passport.authenticate('jwt', { session: false }), function(req, res) {
+    ratings.remove({ courseCode : req.params.courseCode,
+        userMailAddress : req.params.userMailAddress}, function(err, result) {
+        if (!err) {
+            console.log(result);
+            setLastUpdateNow();
+            res.json({ code: 201, message: 'Deleted rating!' });
+        } else {
+            console.log(err);
+            res.json({ code: 400, message: 'Couldn\'t delete rating' });
+        }
+    });
+});
 
-// // // Update rating (any property)
-// router.put('/api/ratings',  passport.authenticate('jwt', { session: false }), function(req, res) {
-//     ratings.update({ courseCode : req.body.courseCode,
-//             userMailAddress : req.body.userMailAddress}, req.body, function(err, result) {
-//         // If everything's alright
-//                 if (!err && result.ok === 1) {
-//                     setLastUpdateNow();
-//                     res.json({ code: 200});
-//                 } else {
-//                     res.json({error: 'something went wrong..'});
-//                     console.log(err, result);
-//                 }
-//             });
-// });
+// // Update rating (any property)
+router.put('/api/ratings',  passport.authenticate('jwt', { session: false }), function(req, res) {
+    ratings.update({ courseCode : req.body.courseCode,
+            userMailAddress : req.body.userMailAddress}, req.body, function(err, result) {
+        // If everything's alright
+                if (!err && result.ok === 1) {
+                    setLastUpdateNow();
+                    res.json({ code: 200});
+                } else {
+                    res.json({error: 'something went wrong..'});
+                    console.log(err, result);
+                }
+            });
+});
 
 // GCM
 // Registrations
