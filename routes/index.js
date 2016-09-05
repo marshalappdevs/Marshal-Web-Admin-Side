@@ -263,7 +263,7 @@ router.post('/api/authapp', function(req, res) {
 
 // Courses
 var coursesSchema = mongoose.Schema(require('../Database/Models/CourseSchema'));
-var courses = mongoose.model('Courses', coursesSchema);
+var courses = mongoose.model('courses', coursesSchema);
 
 // Get all courses
 router.get('/api/courses', passport.authenticate('jwt', { session: false }), function(req, res, next) {
@@ -369,7 +369,7 @@ router.put('/api/courses/ratings/:courseCode', function(req, res) {
         'ratings.userMailAddress' : req.body.userMailAddress},
                     {$set : {'ratings.$' : req.body}}, function(err, numAffected) {
         if (!err) {
-            console.log(result);
+            console.log(numAffected);
             res.json({ code: 201, message: 'rating updated successfully!' });
         } else {
             console.log(err);
