@@ -352,7 +352,7 @@ router.post('/api/images', function(req, res) {
 // Add rating
 router.post('/api/courses/ratings/:courseCode', function(req, res) {
     courses.update({CourseCode : req.params.courseCode},
-                    {$addToSet : {ratings : req.body}}, function(err, result) {
+                    {$addToSet : {Ratings : req.body}}, function(err, result) {
         if (!err) {
             console.log(result);
             res.json({ code: 201, message: 'rating added successfully!' });
@@ -366,10 +366,10 @@ router.post('/api/courses/ratings/:courseCode', function(req, res) {
 // Update rating
 router.put('/api/courses/ratings/:courseCode', function(req, res) {
     courses.update({CourseCode : req.params.courseCode,
-        'ratings.userMailAddress' : req.body.userMailAddress},
-                    {$set : {'ratings.$.rating' : req.body.rating,
-                'ratings.$.comment' : req.body.comment,
-                'ratings.$.lastModified' : req.body.lastModified}}, function(err, numAffected) {
+        'Ratings.userMailAddress' : req.body.userMailAddress},
+                    {$set : {'Ratings.$.rating' : req.body.rating,
+                'Ratings.$.comment' : req.body.comment,
+                'Ratings.$.lastModified' : req.body.lastModified}}, function(err, numAffected) {
         if (!err) {
             console.log(numAffected);
             res.json({ code: 201, message: 'rating updated successfully!' });
@@ -383,8 +383,8 @@ router.put('/api/courses/ratings/:courseCode', function(req, res) {
 // Remove rating
 router.delete('/api/courses/ratings/:courseCode', function(req, res) {
     courses.update({CourseCode : req.params.courseCode,
-        'ratings.userMailAddress' : req.body.userMailAddress},
-                    {$pull : {ratings : req.body.userMailAddress}}, function(err, result) {
+        'Ratings.userMailAddress' : req.body.userMailAddress},
+                    {$pull : {Ratings : req.body.userMailAddress}}, function(err, result) {
         if (!err) {
             console.log(result);
             res.json({ code: 201, message: 'rating removed successfully!' });
