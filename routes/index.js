@@ -384,7 +384,7 @@ router.put('/api/courses/ratings/:courseCode', function(req, res) {
 router.delete('/api/courses/ratings/:courseCode', function(req, res) {
     courses.update({CourseCode : req.params.courseCode,
         'Ratings.userMailAddress' : req.body.userMailAddress},
-                    {$pull : {Ratings : req.body.userMailAddress}}, function(err, result) {
+                    {$pull : {Ratings : {userMailAddress : req.body.userMailAddress}}}, function(err, result) {
         if (!err) {
             console.log(result);
             res.json({ code: 201, message: 'rating removed successfully!' });
