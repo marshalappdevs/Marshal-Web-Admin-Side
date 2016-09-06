@@ -367,7 +367,9 @@ router.post('/api/courses/ratings/:courseCode', function(req, res) {
 router.put('/api/courses/ratings/:courseCode', function(req, res) {
     courses.update({CourseCode : req.params.courseCode,
         'ratings.userMailAddress' : req.body.userMailAddress},
-                    {$set : {'ratings.$' : req.body}}, function(err, numAffected) {
+                    {$set : {'ratings.$.rating' : req.body.rating,
+                'ratings.$.comment' : req.body.comment,
+                'ratings.$.lastModified' : req.body.lastModified}}, function(err, numAffected) {
         if (!err) {
             console.log(numAffected);
             res.json({ code: 201, message: 'rating updated successfully!' });
@@ -382,7 +384,7 @@ router.put('/api/courses/ratings/:courseCode', function(req, res) {
 router.delete('/api/courses/ratings/:courseCode', function(req, res) {
     courses.update({CourseCode : req.params.courseCode,
         'ratings.userMailAddress' : req.body.userMailAddress},
-                    {$pull : {ratings : req.body}}, function(err, result) {
+                    {$pull : {ratings : req.body.userMailAddress}}, function(err, result) {
         if (!err) {
             console.log(result);
             res.json({ code: 201, message: 'rating removed successfully!' });
