@@ -6,11 +6,14 @@ angular.module('marshalApp')
         var username = jwtHelper.decodeToken(token)._doc.username;
 
         // Showing dialog to reconnect when apiToken is expired
-        var reconnect = function() {
+        var reconnect = function(url) {
+            if(!url) {
+                url = 'javascripts/templates/passDialog.html';
+            }
             var isFullScreen = $mdMedia('sm') || $mdMedia('xs');
             return $mdDialog.show({
                 controller: 'passDialogController',
-                templateUrl: 'javascripts/templates/passDialog.html',
+                templateUrl: url,
                 parent: angular.element(document.body),
                 clickOutsideToClose:true,
                 fullScreen: isFullScreen
@@ -20,9 +23,9 @@ angular.module('marshalApp')
         /**
          * This function handles all reconnection procedure
         */
-        var passReconnectProc = function() {
+        var passReconnectProc = function(url) {
             var deferredReconnect = $q.defer();
-            reconnect().then(function(password) {
+            reconnect(url).then(function(password) {
                 var userData = {username: username, password: password, isLogin: false};
                 
                 // Get a new api token
@@ -41,10 +44,7 @@ angular.module('marshalApp')
                             .textContent(response.data)
                             .ariaLabel('Failed Login')
                             .ok('אוקיי')
-                    );
-
-                    // Reject promise
-                    deferredReconnect.reject();
+                    ).then(function() {deferredReconnect.reject();});
                 });
             });
 
@@ -140,19 +140,23 @@ angular.module('marshalApp')
             },
             delete: function(urlToGet, reqData) {
                 var defrredHttp = $q.defer();
-                refresh().then(function() {
-                    var httpPromise =   $http({
+
+                // To ask for password
+                passReconnectProc('javascripts/templates/passDialogDel.html').then(function() {
+                    refresh().then(function() {
+                    var httpPromise = $http({
                                         method: 'DELETE',
                                          url: urlToGet,
                                          data: reqData,
                                          headers: {
                                             'Authorization': 'JWT ' + $window.localStorage.getItem('apiToken')
                                             }
-                                        });
-
+                                      });
+                    
                     defrredHttp.resolve(httpPromise);
+                    }, function() {defrredHttp.reject();});
                 }, function() {defrredHttp.reject();});
-
+                
                 return defrredHttp.promise;
             },
             update: function(urlToGet, reqData) {
