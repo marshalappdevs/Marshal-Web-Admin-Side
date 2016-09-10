@@ -263,7 +263,7 @@ router.post('/api/authapp', function(req, res) {
 
 // Courses
 var coursesSchema = mongoose.Schema(require('../Database/Models/CourseSchema'));
-var courses = mongoose.model('Courses', coursesSchema);
+var courses = mongoose.model('courses', coursesSchema);
 
 // Get all courses
 router.get('/api/courses', passport.authenticate('jwt', { session: false }), function(req, res, next) {
@@ -349,6 +349,53 @@ router.post('/api/images', function(req, res) {
     }
 });
 
+// Add rating
+router.post('/api/courses/ratings/:courseCode', function(req, res) {
+    courses.update({CourseCode : req.params.courseCode},
+                    {$addToSet : {Ratings : req.body}}, function(err, result) {
+        if (!err) {
+            console.log(result);
+            res.json({ code: 201, message: 'rating added successfully!' });
+        } else {
+            console.log(err);
+            res.json({ code: 400, message: 'Couldn\'t add rating' });
+        }
+    });
+});
+
+// Update rating
+router.put('/api/courses/ratings/:courseCode', function(req, res) {
+    courses.update({CourseCode : req.params.courseCode,
+        'Ratings.userMailAddress' : req.body.userMailAddress},
+                    {$set : {'Ratings.$.rating' : req.body.rating,
+                'Ratings.$.comment' : req.body.comment,
+                'Ratings.$.lastModified' : req.body.lastModified}}, function(err, numAffected) {
+        if (!err) {
+            console.log(numAffected);
+            res.json({ code: 201, message: 'rating updated successfully!' });
+        } else {
+            console.log(err);
+            res.json({ code: 400, message: 'Couldn\'t update rating' });
+        }
+    });
+});
+
+// Remove rating
+router.delete('/api/courses/ratings/:courseCode', function(req, res) {
+    courses.update({CourseCode : req.params.courseCode,
+        'Ratings.userMailAddress' : req.body.userMailAddress},
+                    {$pull : {Ratings : {userMailAddress : req.body.userMailAddress}}}, function(err, result) {
+        if (!err) {
+            console.log(result);
+            res.json({ code: 201, message: 'rating removed successfully!' });
+        } else {
+            console.log(err);
+            res.json({ code: 400, message: 'Couldn\'t remove rating' });
+        }
+    });
+});
+
+//////////////////////////////////////////////////////////////////////////////////
 // Materials
 var materialsSchema = mongoose.Schema(require('../Database/Models/MaterialSchema'));
 var materials = mongoose.model('materials', materialsSchema);

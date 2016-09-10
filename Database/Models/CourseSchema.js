@@ -4,7 +4,7 @@ module.exports = {
     ],
     ID : Number,
     Name : String,
-    CourseCode : Number,
+    CourseCode : String,
     Description : String,
     TargetPopulation : String,
     ProfessionalDomain : String,
@@ -20,5 +20,8 @@ module.exports = {
     Comments : String,
     Category : String,
     IsMooc : Boolean,
-    IsMeetup : Boolean
+    IsMeetup : Boolean,
+    "Ratings" : [ 
+        require('./RatingSchema')
+    ]
 }
