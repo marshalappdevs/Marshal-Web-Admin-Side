@@ -12,7 +12,7 @@
     <div layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
       <md-card class="_md" ng-repeat="item in allcoursesrealWithRatingshlish | filter:search" >
         <span ng-click="showCustom($event, item)">
-        <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/images/{{item.CourseCode}}">
+        <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/courses/images/{{item.CourseCode}}">
         <md-card-title>
           <md-card-title-text>
             <span class="koteret"><b>{{item.Name}}</b></span>
@@ -50,7 +50,7 @@
    <div layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
             <md-card class="_md" ng-repeat="itemm in allcoursesrealWithRatingshneishlish | filter:search">
         <span ng-click="showCustom($event, itemm)">
-        <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/images/{{itemm.CourseCode}}">
+        <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/courses/images/{{itemm.CourseCode}}">
         <md-card-title>
           <md-card-title-text>
             <span class="koteret"><b>{{itemm.Name}}</b></span>
@@ -88,7 +88,7 @@
   <div layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
             <md-card class="_md" ng-repeat="itemmm in allcoursesrealWithRatingshlishaharon | filter:search">
         <span ng-click="showCustom($event, itemmm)">
-        <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/images/{{itemmm.CourseCode}}">
+        <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/courses/images/{{itemmm.CourseCode}}">
         <md-card-title>
           <md-card-title-text>
             <span class="koteret"><b>{{itemmm.Name}}</b></span>

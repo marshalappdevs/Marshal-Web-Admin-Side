@@ -487,9 +487,9 @@ $scope.categories = [
 
 // Deletes the course from the db
 $scope.deletecoursefromdb = function(event, item) {
-  // httpService.delete('/api/courses/:'+item._id, item._id).then(function (response){
-  //                         alert("WHOOOOOHOOOOOOO!!!!!");
-  //                       });
+  httpService.delete('/api/courses/'+item.ID).then(function (response){
+                          alert("WHOOOOOHOOOOOOO!!!!!");
+                        });
     alert("You deleted the course! the id of the course is: " +item._id);
 } 
 
@@ -667,7 +667,7 @@ $scope.addNewCourse = function(event) {
                         // }
                         if ($scope.canIsave){
                             $scope.addnewnow = {Name:document.getElementById("cnameinp").value,
-                                                  PictureUrl:document.getElementById("cpicurlinp").value,
+                                                  imageUrl:document.getElementById("cpicurlinp").value,
                                                   CourseCode:document.getElementById("ccoursecodeinp").value,
                                                   Description:document.getElementById("cdescinp").value,
                                                   Syllabus:document.getElementById("csyllinp").value,
@@ -679,7 +679,7 @@ $scope.addNewCourse = function(event) {
                                                   MinimumPeople:document.getElementById("cminpeopleinp").value,
                                                   MaximumPeople:document.getElementById("cmaxpeopleinp").value,
                                                   Comments:document.getElementById("ccommentsinp").value,
-                                                  Category:$scope.categoryofcourse,
+                                                  Category:$scope.categoryofcourse.toLowerCase(),
                                                   IsMeetup:$scope.meetuprnot};
                         httpService.post('/api/courses', $scope.addnewnow).then(function (response){
                           alert("WHOOOOOHOOOOOOO!!!!!");
