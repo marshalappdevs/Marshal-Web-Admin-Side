@@ -281,14 +281,14 @@ router.post('/api/courses', function(req, res) {
     https.get(req.body.imageUrl, function(result) {
         result.pipe(file);
         // setLastUpdateNow();
-        req.body.PictureUrl = fileName;
+        req.body.PictureUrl = "http://marshalweb.azurewebsites.net/images/" + fileName;
         courses.create(req.body, function(err, course) {
             if (err) {
-                res.json({ code: 400, message: 'Couldn\'t create new course..'});
+                res.status(400).json({message: 'Couldn\'t create new course..'});
                 console.log(err);
             } else {
                 setLastUpdateNow();
-                res.json({ code: 201, message: 'Created successfuly' });
+                res.status(201).json({ message: 'Created successfuly' });
             }
         });
         // res.json({ error_code : 0, err_desc : null, filename : fileName });
