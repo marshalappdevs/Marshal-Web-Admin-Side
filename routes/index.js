@@ -276,20 +276,28 @@ router.get('/api/courses', passport.authenticate('jwt', { session: false }), fun
 
 // Create course
 router.post('/api/courses', function(req, res) {
-    courses.create(req.body, function(err, course) {
-        if (err) {
-            res.json({ code: 400, message: 'Couldn\'t create new course..'});
-            console.log(err);
-        } else {
-            setLastUpdateNow();
-            res.json({ code: 201, message: 'Created successfuly' });
-        }
+    var fileName = req.body.CourseCode + '.' + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
+    var file = fs.createWriteStream(path.join(__dirname, '../public/images/') + fileName);
+    https.get(req.body.imageUrl, function(result) {
+        result.pipe(file);
+        // setLastUpdateNow();
+        req.body.PictureUrl = fileName;
+        courses.create(req.body, function(err, course) {
+            if (err) {
+                res.json({ code: 400, message: 'Couldn\'t create new course..'});
+                console.log(err);
+            } else {
+                setLastUpdateNow();
+                res.json({ code: 201, message: 'Created successfuly' });
+            }
+        });
+        // res.json({ error_code : 0, err_desc : null, filename : fileName });
     });
 });
 
 // Update courses (any property)
-router.put('/api/courses/:id', function(req, res) {
-    courses.update({ ID: req.params.id}, req.body, function(err, result) {
+router.put('/api/courses/:courseCode', function(req, res) {
+    courses.update({ CourseCode: req.params.courseCode}, req.body, function(err, result) {
             // If everything's alright
         if (!err && result.ok === 1) {
             setLastUpdateNow();
@@ -302,8 +310,8 @@ router.put('/api/courses/:id', function(req, res) {
 });
 
 // // Delete courses
-router.delete('/api/courses/:courseId', function(req, res) {
-    courses.remove({ ID: req.params.courseId }, function(err, result) {
+router.delete('/api/courses/:courseCode', function(req, res) {
+    courses.remove({ CourseCode: req.params.courseCode }, function(err, result) {
         if (!err) {
             console.log(result);
             setLastUpdateNow();
@@ -316,9 +324,8 @@ router.delete('/api/courses/:courseId', function(req, res) {
 });
 
 // // Images
-
-router.get('/api/images/:courseId', function (req, res, next) {
-    courses.findOne({ CourseCode: req.params.courseId }, 'PictureUrl', function(err, picUrl) {
+router.get('/api/courses/images/:courseCode', function (req, res, next) {
+    courses.findOne({ CourseCode: req.params.courseCode }, 'PictureUrl', function(err, picUrl) {
         // If there's no error
         if (!err) {
             res.sendFile('images/' + picUrl._doc.PictureUrl, { root: path.join(__dirname, '../public') });
@@ -326,25 +333,15 @@ router.get('/api/images/:courseId', function (req, res, next) {
     });
 });
 
-router.post('/api/images', function(req, res) {
+router.post('/api/courses/images/:courseCode', function(req, res) {
     // Checks if only url has been sent
     if (req.body.imageUrl) {
-        var datetimestamp = Date.now();
-        var fileName = 'file-' + datetimestamp + '.' + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
+        var fileName = req.params.courseCode + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
         var file = fs.createWriteStream(path.join(__dirname, '../public/images/') + fileName);
         https.get(req.body.imageUrl, function(result) {
             result.pipe(file);
-            setLastUpdateNow();
+            // setLastUpdateNow();
             res.json({ error_code : 0, err_desc : null, filename : fileName });
-        });
-    } else {
-        // If not only url, then the user want to upload from his local disk
-        upload(req, res, function(err) {
-            if (err) {
-                res.json({ error_code : 1, err_desc : err });
-                return;
-            }
-            res.json({ error_code : 0, err_desc : null, filename : req.file.filename });
         });
     }
 });
@@ -491,8 +488,8 @@ router.post('/api/ratings', passport.authenticate('jwt', { session: false, failu
 });
 
 // Get rating by course id
-router.get('/api/ratings/:courseId', passport.authenticate('jwt', { session: false }), function (req, res, next) {
-    ratings.find({ courseId: req.params.courseId } , function(err, ratings) {
+router.get('/api/ratings/:courseCode', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+    ratings.find({ courseCode: req.params.courseCode } , function(err, ratings) {
         if (err) return console.error(err);
         setLastUpdateNow();
         res.setHeader('Content-Type', 'application/json');

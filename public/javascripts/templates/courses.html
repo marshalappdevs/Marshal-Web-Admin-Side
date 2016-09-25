@@ -1,29 +1,38 @@
+
 <!--בהצלחה למי שהולך לכתוב את הטמפלייט לקורסים!-->
+<md-button style="position:fixed;bottom:10px;left:17px;z-index:100000" class="md-fab" aria-label="Eat cake" ng-click="addNewCourse($event)">
+  <i class="material-icons md-48">add_to_queue</i>
+</md-button>
 <link rel="stylesheet" href="../../stylesheets/course.css">
  <center ng-hide="!isLoading">
    <br><br><br><br><br>
       <md-progress-circular class="md-accent" md-mode="indeterminate" md-diameter="300"></md-progress-circular>
  </center>
- <md-content ng-hide="isLoading" class="md-padding _md layout-xs-column layout-row" layout="row" layout-xs="column">
-    <div flex layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
-      <md-card class="_md" ng-repeat="item in allcoursesrealWithRatingshlish | filter:search" ng-click="showCustom($event, item)">
-        <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/images/{{item.CourseCode}}">
+ <md-content ng-hide="isLoading" >
+    
+
+     <md-grid-list
+        md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+        md-row-height-gt-md="1:1" md-row-height="2:2"
+        md-gutter="12px" md-gutter-gt-sm="8px" >
+
+        <md-grid-tile class="gray"
+        md-rowspan="3" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1" ng-repeat="item in allcoursesreal | filter:search">
+
+      <md-card class="_md">
+        <span ng-click="showCustom($event, item)">
+        <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/courses/images/{{item.CourseCode}}">
         <md-card-title>
           <md-card-title-text>
             <span class="koteret"><b>{{item.Name}}</b></span>
           </md-card-title-text>
         </md-card-title>
-        <md-card-content>
+        <md-card-content class="koteret">
             <md-card-actions dir="ltr" layout="row" layout-align="start center" class="layout-align-start-center layout-row">
 
-          <span  ng-if="item.rating == 0" class="md-ink-ripple"   aria-label="Action 1">
-              <span class="ng-scope">Rating: none</span> 
-              <ng-md-icon icon="star_rate"></ng-md-icon>
-              <div class="md-ripple-container"></div>
-          </span>
-          <span  ng-if="item.rating != 0" class="md-ink-ripple"   aria-label="Action 1">
-              <span class="ng-scope">Rating: {{item.rating}}</span> 
-              <ng-md-icon ng-repeat="a in ratingrange(item.rating) track by $index" icon="star_rate"></ng-md-icon>
+          <span class="md-ink-ripple"   aria-label="Action 1">
+              <span class="ng-scope">Rating: {{calcmyrating(item)}}</span> 
+              <ng-md-icon ng-repeat="a in ratingrange(calcmyrating(item)) track by $index" icon="star_rate"></ng-md-icon>
               
               <div class="md-ripple-container"></div>
           </span>
@@ -36,75 +45,17 @@
               <div class="md-ripple-container"></div>
           </span>
         </md-card-actions>
+        </md-card-actions>
+          
         </md-card-content>
+        </span>
+        <center><md-button class="mdl-button--mini-fab" aria-label="Eat cake" ng-click="deletecoursefromdb($event, item)">
+            <i class="material-icons md-30">delete_sweep</i>
+          </md-button></center>
       </md-card>
       
-     
-    </div>
-   <div flex layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
-            <md-card class="_md" ng-repeat="itemm in allcoursesrealWithRatingshneishlish | filter:search" ng-click="showCustom($event, itemm)">
-        <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/images/{{itemm.CourseCode}}">
-        <md-card-title>
-          <md-card-title-text>
-            <span class="koteret"><b>{{itemm.Name}}</b></span>
-          </md-card-title-text>
-        </md-card-title>
-        <md-card-content>
-            <md-card-actions dir="ltr" layout="row" layout-align="start center" class="layout-align-start-center layout-row">
-
-         <span  ng-if="itemm.rating == 0" class="md-ink-ripple"   aria-label="Action 1">
-              <span class="ng-scope">Rating: none</span> 
-              <ng-md-icon icon="star_rate"></ng-md-icon>
-              <div class="md-ripple-container"></div>
-          </span>
-          <span  ng-if="itemm.rating != 0" class="md-ink-ripple"   aria-label="Action 1">
-              <span class="ng-scope">Rating: {{itemm.rating}}</span> 
-              <ng-md-icon ng-repeat="a in ratingrange(itemm.rating) track by $index" icon="star_rate"></ng-md-icon>
-              <div class="md-ripple-container"></div>
-          </span>
-
-        </md-card-actions>
-        <md-card-actions dir="ltr" layout="row" layout-align="start center" class="layout-align-start-center layout-row">
-          
-          <span class="md-ink-ripple"   aria-label="Action 2">
-              <span class="ng-scope">Date: {{convertdate(itemm.cycleList[0].StartDate)}}</span>
-              <div class="md-ripple-container"></div>
-          </span>
-        </md-card-actions>
-        </md-card-content>
-      </md-card>
-  </div>
-  <div flex layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
-            <md-card class="_md" ng-repeat="itemmm in allcoursesrealWithRatingshlishaharon | filter:search" ng-click="showCustom($event, itemmm)">
-        <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/images/{{itemmm.CourseCode}}">
-        <md-card-title>
-          <md-card-title-text>
-            <span class="koteret"><b>{{itemmm.Name}}</b></span>
-          </md-card-title-text>
-        </md-card-title>
-        <md-card-content>
-            <md-card-actions dir="ltr" layout="row" layout-align="start center" class="layout-align-start-center layout-row">
-
-          <span  ng-if="itemmm.rating == 0" class="md-ink-ripple"   aria-label="Action 1">
-              <span class="ng-scope">Rating: none</span> 
-              <ng-md-icon icon="star_rate"></ng-md-icon>
-              <div class="md-ripple-container"></div>
-          </span>
-          <span  ng-if="itemmm.rating != 0" class="md-ink-ripple"   aria-label="Action 1">
-              <span class="ng-scope">Rating: {{itemmm.rating}}</span> 
-              <ng-md-icon ng-repeat="a in ratingrange(itemmm.rating) track by $index" icon="star_rate"></ng-md-icon>
-              <div class="md-ripple-container"></div>
-          </span>
-
-        </md-card-actions>
-        <md-card-actions dir="ltr" layout="row" layout-align="start center" class="layout-align-start-center layout-row">
-          
-          <span class="md-ink-ripple"   aria-label="Action 2">
-              <span class="ng-scope">Date: {{convertdate(itemmm.cycleList[0].StartDate)}}</span>
-              <div class="md-ripple-container"></div>
-          </span>
-        </md-card-actions>
-        </md-card-content>
-      </md-card>
-  </div>
+      </md-grid-tile>
+      </md-grid-list>
+   
+  
   </md-content>
