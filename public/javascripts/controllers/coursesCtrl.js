@@ -89,8 +89,11 @@ angular.module('marshalApp')
                             '         <p>'+
                             '            <b>זמן ביום:</b>' + item.DayTime + 
                             '        </p>'+
-                            '       <p>'+
+                            '        <p>'+
                             '            <b>מספר ימים:</b>' + item.DurationInDays + 
+                            '        </p>'+
+                            '        <p>'+
+                            '            <b>מספר שעות:</b>' + item.DurationInHours + 
                             '        </p>'+
                             '         <p>'+
                             '            <b>ציון מעבר:</b>' + item.PassingGrade + 
@@ -112,6 +115,9 @@ angular.module('marshalApp')
                             '</p>'+
                             '         <p>'+
                             '            <b>האם מיטאפ:</b>' + item.IsMeetup + 
+                            '        </p>'+
+                            '         <p>'+
+                            '            <b>האם מיטאפ:</b>' + item.ismooc + 
                             '        </p>'+
                             '         <p>'+
                             '            <b>רשימת מחזורים:</b>' +
@@ -175,9 +181,31 @@ angular.module('marshalApp')
                               //   $mdDialog.hide(answer);
                               // };
                               $scope.save = function(answer) {
-                                swal("נשמר", "פרטי הקורס נשמרו!", "success")
-                                $mdDialog.hide(answer);
-                              };
+                                  swal("נשמר", "פרטי הקורס נשמרו!", "success");
+
+                                  $scope.updatecourse = {Name:document.getElementById("cnameinp").value,
+                                                            imageUrl:document.getElementById("cpicurlinp").value,
+                                                            CourseCode:document.getElementById("ccoursecodeinp").value,
+                                                            Description:document.getElementById("cdescinp").value,
+                                                            Syllabus:document.getElementById("csyllinp").value,
+                                                            TargetPopulation:document.getElementById("ctatpopinp").value,
+                                                            DayTime:document.getElementById("cdtimeinp").value,
+                                                            DurationInDays:document.getElementById("cdurationindays").value,
+                                                            DurationInHours:document.getElementById("cdurationinhours").value,
+                                                            PassingGrade:document.getElementById("cpassgradeinp").value,
+                                                            Price:document.getElementById("cpriceinp").value,
+                                                            MinimumPeople:document.getElementById("cminpeopleinp").value,
+                                                            MaximumPeople:document.getElementById("cmaxpeopleinp").value,
+                                                            Comments:document.getElementById("ccommentsinp").value,
+                                                            Category:$scope.categoryofcourse.toLowerCase(),
+                                                            IsMeetup:$scope.meetuprnot,
+                                                            IsMooc:$scope.ismooc};
+                                  httpService.put('/api/courses', $scope.updatecourse).then(function (response){
+                                    alert(response);
+                                    $mdDialog.hide(answer);
+                                  });
+                                
+                                };
                               $scope.edit = function(answer) {
                                 //swal({   title: "עריכה!",   text: "<span style='color:#F8BB86'><h3>ברוך הבא למסך העריכה</h3><span>",   html: true });
                                 swal({   title: "עריכה!",   text: "ברוך הבא למסך העריכה",   imageUrl:"http://dialogcivic.gov.ro/wp-content/uploads/2016/01/icon-sign-up.png" });
@@ -258,7 +286,13 @@ $scope.funca = function (stridofcourse){
                         '<p>'+
                         '<br><md-input-container class="md-block" flex-gt-sm>'+
                         '<label class="boldwords">מספר ימים:</label>'+
-                        '<input id="cdurationinp" value="'+ item.DurationInDays +'">'+
+                        '<input id="cdurationinhours" value="'+ item.DurationInHours +'">'+
+                        '</md-input-container>'+  
+                        '        </p>'+
+                        '<p>'+
+                        '<br><md-input-container class="md-block" flex-gt-sm>'+
+                        '<label class="boldwords">מספר ימים:</label>'+
+                        '<input id="cdurationindays" value="'+ item.DurationInDays +'">'+
                         '</md-input-container>'+  
                         '        </p>'+
                         '<p>'+
@@ -309,13 +343,22 @@ $scope.funca = function (stridofcourse){
                               '</md-select>'+
                               '</md-input-container>'+ 
                               '        </p>'+
+                              '<p>'+
+                              '<md-input-container style="margin-right: 10px;">'+
+                              '<label class="boldwords">האם רשתי:</label>'+
+                              '<md-select ng-model="ismooc" id="cismeetupinp" value="'+ item.IsMooc +'">'+
+                              '<md-option value="true">כן</md-option>'+
+                              '<md-option value="false">לא</md-option>'+
+                              '</md-select>'+
+                              '</md-input-container>'+ 
+                              '        </p>'+
                               '</div>'+
                               '</md-dialog-content>'+
                               '<md-dialog-actions layout="row">'+
                               '<md-button href="https://www.google.co.il/?gfe_rd=cr&ei=2buVV9j7B4_b8Ae6lqm4Cg#q='+ item.Name+ '" target="_blank" md-autofocus><ng-md-icon icon="school"></ng-md-icon>            More on google           </md-button>'+
                               '<span flex></span>'+
                               '<md-button ng-click="cancelthis()"><ng-md-icon icon="cancel"></ng-md-icon>                  ביטול            </md-button>'+
-                              '<md-button ng-click="savenew()"><ng-md-icon icon="save"></ng-md-icon>                   שמור            </md-button>'+
+                              '<md-button ng-click="save()"><ng-md-icon icon="save"></ng-md-icon>                   שמור            </md-button>'+
                               '</md-dialog-actions>'+
                               '</form>'+
                               '</md-dialog>',                           
@@ -331,8 +374,31 @@ $scope.funca = function (stridofcourse){
                       // };
                       $scope.save = function(answer) {
                         swal("נשמר", "פרטי הקורס נשמרו!", "success");
-                        $mdDialog.hide(answer);
+
+                        $scope.updatecourse = {Name:document.getElementById("cnameinp").value,
+                                                  imageUrl:document.getElementById("cpicurlinp").value,
+                                                  CourseCode:document.getElementById("ccoursecodeinp").value,
+                                                  Description:document.getElementById("cdescinp").value,
+                                                  Syllabus:document.getElementById("csyllinp").value,
+                                                  TargetPopulation:document.getElementById("ctatpopinp").value,
+                                                  DayTime:document.getElementById("cdtimeinp").value,
+                                                  DurationInDays:document.getElementById("cdurationindays").value,
+                                                  DurationInHours:document.getElementById("cdurationinhours").value,
+                                                  PassingGrade:document.getElementById("cpassgradeinp").value,
+                                                  Price:document.getElementById("cpriceinp").value,
+                                                  MinimumPeople:document.getElementById("cminpeopleinp").value,
+                                                  MaximumPeople:document.getElementById("cmaxpeopleinp").value,
+                                                  Comments:document.getElementById("ccommentsinp").value,
+                                                  Category:$scope.categoryofcourse.toLowerCase(),
+                                                  IsMeetup:$scope.meetuprnot,
+                                                  IsMooc:$scope.ismooc};
+                        httpService.put('/api/courses', $scope.updatecourse).then(function (response){
+                          alert(response);
+                          $mdDialog.hide(answer);
+                        });
+                      
                       };
+
                       $scope.cancel = function() {
                         swal({   title: "חזרנו!",   text: "",   timer: 1000,   showConfirmButton: false, imageUrl:"http://admissions.colostate.edu/media/sites/19/2014/07/icon_books-011-1024x1024.png"});
                         $mdDialog.hide();
@@ -346,31 +412,17 @@ $scope.funca = function (stridofcourse){
                                                   Syllabus:document.getElementById("csyllinp").value,
                                                   TargetPopulation:document.getElementById("ctatpopinp").value,
                                                   DayTime:document.getElementById("cdtimeinp").value,
-                                                  DurationInHours:document.getElementById("cdurationinp").value,
+                                                  DurationInDays:document.getElementById("cdurationindays").value,
+                                                  DurationInHours:document.getElementById("cdurationinhours").value,
                                                   PassingGrade:document.getElementById("cpassgradeinp").value,
                                                   Price:document.getElementById("cpriceinp").value,
                                                   MinimumPeople:document.getElementById("cminpeopleinp").value,
                                                   MaximumPeople:document.getElementById("cmaxpeopleinp").value,
                                                   Comments:document.getElementById("ccommentsinp").value,
                                                   Category:$scope.categoryofeditcourse,
-                                                  IsMeetup:$scope.meetuprnotedit};
+                                                  IsMeetup:$scope.meetuprnotedit,
+                                                  IsMooc:$scope.ismooc};
                         $mdDialog.hide(answer);
-                        alert("The course added is: \n" +
-                              document.getElementById("cnameinp").value + "\n" + 
-                              document.getElementById("cpicurlinp").value + "\n" + 
-                              document.getElementById("ccoursecodeinp").value + "\n" + 
-                              document.getElementById("cdescinp").value + "\n" + 
-                              document.getElementById("csyllinp").value + "\n" + 
-                              document.getElementById("ctatpopinp").value + "\n" + 
-                              document.getElementById("cdtimeinp").value + "\n" + 
-                              document.getElementById("cdurationinp").value + "\n" + 
-                              document.getElementById("cpassgradeinp").value + "\n" + 
-                              document.getElementById("cpriceinp").value + "\n" + 
-                              document.getElementById("cminpeopleinp").value + "\n" + 
-                              document.getElementById("cmaxpeopleinp").value + "\n" + 
-                              document.getElementById("ccommentsinp").value + "\n" + 
-                              $scope.categoryofeditcourse + "\n" + 
-                              $scope.meetuprnotedit);
                       };
                       // $scope.edit = function(answer) {
                       //   swal({   title: "עריכה!",   text: "<span style='color:#F8BB86'><h3>ברוך הבא למסך העריכה</h3><span>",   html: true });
@@ -462,7 +514,13 @@ $scope.addNewCourse = function(event) {
                       '<p>'+
                     '<br><md-input-container class="md-block" flex-gt-sm>'+
                     '<label class="boldwords">מספר ימים:</label>'+
-                    '<input id="cdurationinp">'+
+                    '<input id="cdurationindays">'+
+        	          '</md-input-container>'+  
+                        '        </p>'+
+                        '<p>'+
+                    '<br><md-input-container class="md-block" flex-gt-sm>'+
+                    '<label class="boldwords">מספר בשעות:</label>'+
+                    '<input id="cdurationinhours">'+
         	          '</md-input-container>'+  
                         '        </p>'+
                         '<p>'+
@@ -513,12 +571,22 @@ $scope.addNewCourse = function(event) {
                     '</md-select>'+
                     '</md-input-container>'+ 
                               '        </p>'+
+                              '<p>'+
+                    '<br>'+ 
+                    '<md-input-container style="margin-right: 10px;">'+
+                    '<label class="boldwords">האם רשתי:</label>'+
+                    '<md-select ng-model="ismooc" id="cismeetupinp">'+
+                    '<md-option value="{{truevar}}">כן</md-option>'+
+                    '<md-option value="{{falsevar}}" selected="selected">לא</md-option>'+
+                    '</md-select>'+
+                    '</md-input-container>'+ 
+                              '        </p>'+
                               '</div>'+
                               '</md-dialog-content>'+
                               '<md-dialog-actions layout="row">'+
                               '<span flex></span>'+
                               '<md-button ng-click="cancelthis()"><ng-md-icon icon="cancel"></ng-md-icon>                  ביטול            </md-button>'+
-                              '<md-button ng-click="savenew()"><ng-md-icon icon="save"></ng-md-icon>                   שמור            </md-button>'+
+                              '<md-button ng-click="save()"><ng-md-icon icon="save"></ng-md-icon>                   שמור            </md-button>'+
                               '</md-dialog-actions>'+
                               '</form>'+
                               '</md-dialog>',                           
@@ -526,10 +594,34 @@ $scope.addNewCourse = function(event) {
                       $scope.hide = function() {
                         $mdDialog.hide();
                       };
+
                       $scope.save = function(answer) {
                         swal("נשמר", "פרטי הקורס נשמרו!", "success");
-                        $mdDialog.hide(answer);
+
+                        $scope.updatecourse = {Name:document.getElementById("cnameinp").value,
+                                                  imageUrl:document.getElementById("cpicurlinp").value,
+                                                  CourseCode:document.getElementById("ccoursecodeinp").value,
+                                                  Description:document.getElementById("cdescinp").value,
+                                                  Syllabus:document.getElementById("csyllinp").value,
+                                                  TargetPopulation:document.getElementById("ctatpopinp").value,
+                                                  DayTime:document.getElementById("cdtimeinp").value,
+                                                  DurationInDays:document.getElementById("cdurationindays").value,
+                                                  DurationInHours:document.getElementById("cdurationinhours").value,
+                                                  PassingGrade:document.getElementById("cpassgradeinp").value,
+                                                  Price:document.getElementById("cpriceinp").value,
+                                                  MinimumPeople:document.getElementById("cminpeopleinp").value,
+                                                  MaximumPeople:document.getElementById("cmaxpeopleinp").value,
+                                                  Comments:document.getElementById("ccommentsinp").value,
+                                                  Category:$scope.categoryofcourse.toLowerCase(),
+                                                  IsMeetup:$scope.meetuprnot,
+                                                  IsMooc:$scope.ismooc};
+                        httpService.put('/api/courses', $scope.updatecourse).then(function (response){
+                          alert(response);
+                          $mdDialog.hide(answer);
+                        });
+                      
                       };
+
                       $scope.cancel = function() {
                         swal({   title: "חזרנו!",   text: "",   timer: 1000,   showConfirmButton: false, imageUrl:"http://admissions.colostate.edu/media/sites/19/2014/07/icon_books-011-1024x1024.png"});
                         $mdDialog.hide();
@@ -550,11 +642,18 @@ $scope.addNewCourse = function(event) {
                             swal("שגיאה!", "סימול הקורס לא תקין, אנא הכנס מספר", "error");
                         }
 
-                        $scope.cdurationinp = document.getElementById("cdurationinp").value;
+                        $scope.cdurationindays = document.getElementById("cdurationindays").value;
                         // Check if duration in days input is valid
-                        if ((isNaN(document.getElementById("cdurationinp").value) || ($scope.cdurationinp == null) || ($scope.cdurationinp == ""))){
+                        if ((isNaN(document.getElementById("cdurationindays").value) || ($scope.cdurationindays == null) || ($scope.cdurationindays == ""))){
                             $scope.canIsave = false;
                             swal("שגיאה!", "משך הקורס בימים לא תקין, אנא הכנס מספר", "error");
+                        }
+
+                        $scope.cdurationinhours = document.getElementById("cdurationinhours").value;
+                        // Check if duration in hours input is valid
+                        if ((isNaN(document.getElementById("cdurationinhours").value) || ($scope.cdurationinhours == null) || ($scope.cdurationinhours == ""))){
+                            $scope.canIsave = false;
+                            swal("שגיאה!", "משך הקורס בשעות לא תקין, אנא הכנס מספר", "error");
                         }
 
                         $scope.cpassgradeinp = document.getElementById("cpassgradeinp").value;
@@ -574,35 +673,20 @@ $scope.addNewCourse = function(event) {
                                                   Syllabus:document.getElementById("csyllinp").value,
                                                   TargetPopulation:document.getElementById("ctatpopinp").value,
                                                   DayTime:document.getElementById("cdtimeinp").value,
-                                                  DurationInHours:document.getElementById("cdurationinp").value,
+                                                  DurationInDays:document.getElementById("cdurationindays").value,
+                                                  DurationInHours:document.getElementById("cdurationinhours").value,
                                                   PassingGrade:document.getElementById("cpassgradeinp").value,
                                                   Price:document.getElementById("cpriceinp").value,
                                                   MinimumPeople:document.getElementById("cminpeopleinp").value,
                                                   MaximumPeople:document.getElementById("cmaxpeopleinp").value,
                                                   Comments:document.getElementById("ccommentsinp").value,
                                                   Category:$scope.categoryofcourse.toLowerCase(),
-                                                  IsMeetup:$scope.meetuprnot};
+                                                  IsMeetup:$scope.meetuprnot,
+                                                  IsMooc:$scope.ismooc};
                         httpService.post('/api/courses', $scope.addnewnow).then(function (response){
                           alert("WHOOOOOHOOOOOOO!!!!!");
                         });
-                        //$mdDialog.hide(answer);
-                        alert("The course added is: \n" +
-                              
-                              document.getElementById("cnameinp").value + "\n" + 
-                              document.getElementById("cpicurlinp").value + "\n" + 
-                              document.getElementById("ccoursecodeinp").value + "\n" + 
-                              document.getElementById("cdescinp").value + "\n" + 
-                              document.getElementById("csyllinp").value + "\n" + 
-                              document.getElementById("ctatpopinp").value + "\n" + 
-                              document.getElementById("cdtimeinp").value + "\n" + 
-                              document.getElementById("cdurationinp").value + "\n" + 
-                              document.getElementById("cpassgradeinp").value + "\n" + 
-                              document.getElementById("cpriceinp").value + "\n" + 
-                              document.getElementById("cminpeopleinp").value + "\n" + 
-                              document.getElementById("cmaxpeopleinp").value + "\n" + 
-                              document.getElementById("ccommentsinp").value + "\n" + 
-                              $scope.categoryofcourse + "\n" + 
-                              $scope.meetuprnot);
+                        
                         }
                         
                       };
@@ -633,9 +717,9 @@ $scope.convertdate = function(millsecondsstring){
     return (theDate.getDate() + "/" + (theDate.getMonth()+1) + "/" + theDate.getFullYear());
 }
 
-$scope.ratingrange = function(number){
-return new Array(number);
-}
+// $scope.ratingrange = function(number){
+//   return new Array(number);
+// }
 
 $scope.rowsize = function(){
 return new Array(3);
