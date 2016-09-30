@@ -7,6 +7,7 @@ var path = require('path');
 var https = require('https');
 var fs = require('fs');
 var gcm = require('node-gcm');
+var FCMLib = require('fcm-node');
 var mongoose = require('mongoose');
 var passport  = require('passport');
 var jwt = require('jsonwebtoken');
@@ -25,6 +26,9 @@ var ObjectID = require('mongodb').ObjectID;
 * Definitions and initiallization
 *
 */
+
+// Initialize FCM
+var fcm = new FCMLib(config.serverApi);
 
 // Loading both passport strategies
 require('../config/passport')(passport);
@@ -282,15 +286,26 @@ router.post('/api/courses', function(req, res) {
         result.pipe(file);
         // setLastUpdateNow();
         req.body.PictureUrl = "http://marshalweb.azurewebsites.net/images/" + fileName;
-        courses.create(req.body, function(err, course) {
-            if (err) {
-                res.status(400).json({message: 'Couldn\'t create new course..'});
-                console.log(err);
-            } else {
-                setLastUpdateNow();
-                res.status(201).json({ message: 'Created successfuly' });
-            }
-        });
+        // courses.create(req.body, function(err, course) {
+        //     if (err) {
+        //         res.status(400).json({message: 'Couldn\'t create new course..'});
+        //         console.log(err);
+        //     } else {
+        //         setLastUpdateNow();
+        //         res.status(201).json({ message: 'Created successfuly' });
+        //     }
+        // });
+        courses.update({ID : req.body.ID},
+         req.body, {upsert:true}, function(err, result) {
+             if(!err) {
+                 console.log(result);
+                 setLastUpdateNow();
+                 res.status(201).json({ message: 'Created successfuly' });
+             } else {
+                 console.log(err);
+                 res.status(400).json({message: 'Couldn\'t create new course..'});
+             }
+         });
         // res.json({ error_code : 0, err_desc : null, filename : fileName });
     });
 });
@@ -528,12 +543,12 @@ router.put('/api/ratings',  passport.authenticate('jwt', { session: false }), fu
             });
 });
 
-// GCM
+// FCM
 // Registrations
-var GcmRegistrationSchema = mongoose.Schema(require('../Database/Models/GcmRegistrationSchema'));
-var registrations = mongoose.model('gcmregistrations', GcmRegistrationSchema);
+var FcmRegistrationSchema = mongoose.Schema(require('../Database/Models/FcmRegistrationSchema'));
+var registrations = mongoose.model('fcmregistrations', FcmRegistrationSchema);
 
-router.post('/api/gcm/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
+router.post('/api/fcm/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
     registrations.update({hardwareId : req.body.hardwareId},
          req.body, {upsert:true}, function(err, result) {
              if(!err) {
@@ -547,7 +562,7 @@ router.post('/api/gcm/register',  passport.authenticate('jwt', { session: false 
 });
 
 // Update registration (tokenId only) ////////////////////
-router.put('/api/gcm/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
+router.put('/api/fcm/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
     registrations.update({hardwareId : req.body.hardwareId}, req.body, function(err, result) {
             // If everything's alright
         if (!err && result.ok === 1) {
@@ -560,7 +575,7 @@ router.put('/api/gcm/register',  passport.authenticate('jwt', { session: false }
 });
 
 // Delete registration ////////////////////////////////
-router.delete('/api/gcm/unregister/:hardwareId',  passport.authenticate('jwt', { session: false }), function(req, res) {
+router.delete('/api/fcm/unregister/:hardwareId',  passport.authenticate('jwt', { session: false }), function(req, res) {
     registrations.remove({hardwareId : req.params.hardwareId}, function(err, result) {
         if (!err) {
             console.log(result);
@@ -573,7 +588,7 @@ router.delete('/api/gcm/unregister/:hardwareId',  passport.authenticate('jwt', {
 });
 
 // Add channel
-router.post('/api/gcm/channels/:hardwareId/:channel', function(req, res) {
+router.post('/api/fcm/channels/:hardwareId/:channel', function(req, res) {
     registrations.update({hardwareId : req.params.hardwareId},
                     {$addToSet : {channels : req.params.channel}}, function(err, result) {
         if (!err) {
@@ -587,7 +602,7 @@ router.post('/api/gcm/channels/:hardwareId/:channel', function(req, res) {
 });
 
 // Remove channel
-router.delete('/api/gcm/channels/:hardwareId/:channel', function(req, res) {
+router.delete('/api/fcm/channels/:hardwareId/:channel', function(req, res) {
     registrations.update({hardwareId : req.params.hardwareId},
                     {$pull : {channels : req.params.channel}}, function(err, result) {
         if (!err) {
@@ -602,9 +617,9 @@ router.delete('/api/gcm/channels/:hardwareId/:channel', function(req, res) {
 
 
 // Add course subscription
-router.post('/api/gcm/subscription/course/:hardwareId/:courseCode', function(req, res) {
+router.post('/api/fcm/subscription/course/:hardwareId/:course_id', function(req, res) {
     registrations.update({hardwareId : req.params.hardwareId},
-                    {$addToSet : {courses : req.params.courseCode}}, function(err, result) {
+                    {$addToSet : {courses : req.params.course_id}}, function(err, result) {
         if (!err) {
             console.log(result);
             res.json({ code: 201, message: 'Subscribed successfully!' });
@@ -616,9 +631,9 @@ router.post('/api/gcm/subscription/course/:hardwareId/:courseCode', function(req
 });
 
 // Remove course subscription
-router.delete('/api/gcm/subscription/course/:hardwareId/:courseCode', function(req, res) {
+router.delete('/api/fcm/subscription/course/:hardwareId/:course_id', function(req, res) {
     registrations.update({hardwareId : req.params.hardwareId},
-                    {$pull : {courses : req.params.courseCode}}, function(err, result) {
+                    {$pull : {courses : req.params.course_id}}, function(err, result) {
         if (!err) {
             console.log(result);
             res.json({ code: 201, message: 'Unsubscribed successfully!' });
@@ -630,7 +645,7 @@ router.delete('/api/gcm/subscription/course/:hardwareId/:courseCode', function(r
 });
 
 // Get registration
-router.get('/api/gcm/registrations/:hardwareId', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.get('/api/fcm/registrations/:hardwareId', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     registrations.findOne({hardwareId : req.params.hardwareId},function (err, registration) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
@@ -639,40 +654,124 @@ router.get('/api/gcm/registrations/:hardwareId', passport.authenticate('jwt', { 
 });
 
 ////////////// Send Push ///////////////////////////
-router.post('/api/gcm/sendpush/', function(req, res) {
-    registrations.find({channels : { $in : req.body.channels}},function (err, registrations) {
-        if (err)
-            return console.error(err);
-        else if (registrations.length > 0) {
-                // Set up the sender with marshaldevs@gmail.com API key
-            var sender = new gcm.Sender(config.serverApi);
+function sendPush(registrations, dataObject) {
 
-            // Initialize Message object
-            var message = new gcm.Message();
-            message.addData('message', decodeURI(req.body.messageContent));
-            
-            // Add the registration tokens of the devices you want to send to
-            var registrationTokens = [];
-            registrations.forEach(function(registration){
-                registrationTokens.push(registration.registrationTokenId);
-            });
-
-            // Send the message
-            // ... trying only once
-            sender.send(message, { registrationTokens: registrationTokens },10, function(err, response) {
-                if(err) console.error(err);
-                else {
-                    console.log(response);
-                    // res.json(response);
-                }
-            });
-        } else
-            console.log('No GCM Registrations');
-            // res.json({noGcmRegistrations:true});
+    // Add the registration tokens of the devices you want to send to
+    var registrationIds = [];
+    registrations.forEach(function(registration){
+        registrationIds.push(registration.registrationTokenId);
     });
+
+    var message = {
+        registration_ids: registrationIds, 
+        data: dataObject
+    };
+
+    fcm.send(message, function(err, response){
+        if (err) {
+            console.log("Something has gone wrong!", err);
+            // res.json({ code: 400, message: err });
+        } else {
+            console.log("Successfully sent with response: ", response);
+            // res.json({ code: 201, message: response });
+        }
+    });
+}
+
+router.post('/api/fcm/sendpush/', function(req, res) {
+    if (req.body.channels != undefined && req.body.courses != undefined) {
+        registrations.find({$or: [{channels: { $in : req.body.channels}},
+                        {courses: { $in : req.body.courses}}]},'registrationTokenId',function (err, registrations) {
+            if (err) {
+                console.error(err);
+                res.json({ code: 400, message: err });
+            }
+            else if (registrations.length > 0) {
+                res.json({ code: 201, message: registrations });
+                sendPush(registrations, req.body.data);
+            } else {
+                console.log('No GCM Registrations');
+                res.json({ code: 201, message: "No GCM Registrations" });
+            }
+        });
+    } else if (req.body.channels == undefined && req.body.courses != undefined) {
+        registrations.find({courses: { $in : req.body.courses}}
+                    ,'registrationTokenId',function (err, registrations) {
+            if (err) {
+                console.error(err);
+                res.json({ code: 400, message: err });
+            }
+            else if (registrations.length > 0) {
+                res.json({ code: 201, message: registrations });
+            } else {
+                console.log('No GCM Registrations');
+                res.json({ code: 201, message: "No GCM Registrations" });
+            }
+        });
+    } else if (req.body.channels != undefined && req.body.courses == undefined) {
+        registrations.find({channels: { $in : req.body.channels}}
+                    ,'registrationTokenId',function (err, registrations) {
+            if (err) {
+                console.error(err);
+                res.json({ code: 400, message: err });
+            }
+            else if (registrations.length > 0) {
+                res.json({ code: 201, message: registrations });
+            } else {
+                console.log('No GCM Registrations');
+                res.json({ code: 201, message: "No GCM Registrations" });
+            }
+        });
+    } else {
+        registrations.find({},'registrationTokenId',function (err, registrations) {
+            if (err) {
+                console.error(err);
+                res.json({ code: 400, message: err });
+            }
+            else if (registrations.length > 0) {
+                res.json({ code: 201, message: registrations });
+            } else {
+                console.log('No GCM Registrations');
+                res.json({ code: 201, message: "No GCM Registrations" });
+            }
+        });
+    }
 });
 
-router.post('/api/gcm/sendpush/global', function(req, res) {
+// router.post('/api/fcm/sendpush/', function(req, res) {
+//     registrations.find({channels : { $in : req.body.channels}},function (err, registrations) {
+//         if (err)
+//             return console.error(err);
+//         else if (registrations.length > 0) {
+//                 // Set up the sender with marshaldevs@gmail.com API key
+//             var sender = new gcm.Sender(config.serverApi);
+
+//             // Initialize Message object
+//             var message = new gcm.Message();
+//             message.addData('message', decodeURI(req.body.messageContent));
+            
+//             // Add the registration tokens of the devices you want to send to
+//             var registrationTokens = [];
+//             registrations.forEach(function(registration){
+//                 registrationTokens.push(registration.registrationTokenId);
+//             });
+
+//             // Send the message
+//             // ... trying only once
+//             sender.send(message, { registrationTokens: registrationTokens },10, function(err, response) {
+//                 if(err) console.error(err);
+//                 else {
+//                     console.log(response);
+//                     // res.json(response);
+//                 }
+//             });
+//         } else
+//             console.log('No GCM Registrations');
+//             // res.json({noGcmRegistrations:true});
+//     });
+// });
+
+router.post('/api/fcm/sendpush/global', function(req, res) {
     registrations.find(function (err, registrations) {
         if (err)
             return console.error(err);
