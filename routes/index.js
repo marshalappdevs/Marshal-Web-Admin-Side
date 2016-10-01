@@ -6,12 +6,11 @@ var upload = require('../image_upload/image-upload');
 var path = require('path');
 var https = require('https');
 var fs = require('fs');
-var gcm = require('node-gcm');
-var FCMLib = require('fcm-node');
 var mongoose = require('mongoose');
 var passport  = require('passport');
 var jwt = require('jsonwebtoken');
 var config = require('../config/main');
+var FCMLib = require('fcm-node');
 var User = require('../Database/Models/UserSchema');
 var bouncer =  require ('express-bouncer')(25000, 1000000, 3);
 var crypto = require('crypto');
@@ -703,6 +702,7 @@ router.post('/api/fcm/sendpush/', function(req, res) {
             }
             else if (registrations.length > 0) {
                 res.json({ code: 201, message: registrations });
+                sendPush(registrations, req.body.data);
             } else {
                 console.log('No GCM Registrations');
                 res.json({ code: 201, message: "No GCM Registrations" });
@@ -717,6 +717,7 @@ router.post('/api/fcm/sendpush/', function(req, res) {
             }
             else if (registrations.length > 0) {
                 res.json({ code: 201, message: registrations });
+                sendPush(registrations, req.body.data);
             } else {
                 console.log('No GCM Registrations');
                 res.json({ code: 201, message: "No GCM Registrations" });
@@ -730,78 +731,13 @@ router.post('/api/fcm/sendpush/', function(req, res) {
             }
             else if (registrations.length > 0) {
                 res.json({ code: 201, message: registrations });
+                sendPush(registrations, req.body.data);
             } else {
                 console.log('No GCM Registrations');
                 res.json({ code: 201, message: "No GCM Registrations" });
             }
         });
     }
-});
-
-// router.post('/api/fcm/sendpush/', function(req, res) {
-//     registrations.find({channels : { $in : req.body.channels}},function (err, registrations) {
-//         if (err)
-//             return console.error(err);
-//         else if (registrations.length > 0) {
-//                 // Set up the sender with marshaldevs@gmail.com API key
-//             var sender = new gcm.Sender(config.serverApi);
-
-//             // Initialize Message object
-//             var message = new gcm.Message();
-//             message.addData('message', decodeURI(req.body.messageContent));
-            
-//             // Add the registration tokens of the devices you want to send to
-//             var registrationTokens = [];
-//             registrations.forEach(function(registration){
-//                 registrationTokens.push(registration.registrationTokenId);
-//             });
-
-//             // Send the message
-//             // ... trying only once
-//             sender.send(message, { registrationTokens: registrationTokens },10, function(err, response) {
-//                 if(err) console.error(err);
-//                 else {
-//                     console.log(response);
-//                     // res.json(response);
-//                 }
-//             });
-//         } else
-//             console.log('No GCM Registrations');
-//             // res.json({noGcmRegistrations:true});
-//     });
-// });
-
-router.post('/api/fcm/sendpush/global', function(req, res) {
-    registrations.find(function (err, registrations) {
-        if (err)
-            return console.error(err);
-        else if (registrations.length > 0) {
-                // Set up the sender with marshaldevs@gmail.com API key
-            var sender = new gcm.Sender(config.serverApi);
-
-            // Initialize Message object
-            var message = new gcm.Message();
-            message.addData('message', decodeURI(req.body.messageContent));
-            
-            // Add the registration tokens of the devices you want to send to
-            var registrationTokens = [];
-            registrations.forEach(function(registration){
-                registrationTokens.push(registration.registrationTokenId);
-            });
-
-            // Send the message
-            // ... trying only once
-            sender.send(message, { registrationTokens: registrationTokens },10, function(err, response) {
-                if(err) console.error(err);
-                else {
-                    console.log(response);
-                    // res.json(response);
-                }
-            });
-        } else
-            console.log('No GCM Registrations');
-            // res.json({noGcmRegistrations:true});
-    });
 });
 
 // Settings
