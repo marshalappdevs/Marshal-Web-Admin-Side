@@ -8,9 +8,18 @@
    <br><br><br><br><br>
       <md-progress-circular class="md-accent" md-mode="indeterminate" md-diameter="300"></md-progress-circular>
  </center>
- <md-content ng-hide="isLoading" class="md-padding _md layout-xs-column layout-row" layout="row" layout-xs="column">
-    <div layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
-      <md-card class="_md" ng-repeat="item in allcoursesrealWithRatingshlish | filter:search" >
+ <md-content ng-hide="isLoading" >
+    
+
+     <md-grid-list
+        md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+        md-row-height-gt-md="1:1" md-row-height="2:2"
+        md-gutter="12px" md-gutter-gt-sm="8px" >
+
+        <md-grid-tile class="gray"
+        md-rowspan="3" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1" ng-repeat="item in allcoursesreal | filter:search">
+
+      <md-card class="_md">
         <span ng-click="showCustom($event, item)">
         <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/courses/images/{{item.CourseCode}}">
         <md-card-title>
@@ -45,83 +54,8 @@
           </md-button></center>
       </md-card>
       
-     
-    </div>
-   <div layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
-            <md-card class="_md" ng-repeat="itemm in allcoursesrealWithRatingshneishlish | filter:search">
-        <span ng-click="showCustom($event, itemm)">
-        <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/courses/images/{{itemm.CourseCode}}">
-        <md-card-title>
-          <md-card-title-text>
-            <span class="koteret"><b>{{itemm.Name}}</b></span>
-          </md-card-title-text>
-        </md-card-title>
-        <md-card-content class="koteret">
-            <md-card-actions dir="ltr" layout="row" layout-align="start center" class="layout-align-start-center layout-row">
-
-         <!--<span  ng-if="itemm.rating == 0" class="md-ink-ripple"   aria-label="Action 1">
-              <span class="ng-scope">Rating: none</span> 
-              <ng-md-icon icon="star_rate"></ng-md-icon>
-              <div class="md-ripple-container"></div>
-          </span>-->
-          <span class="md-ink-ripple"   aria-label="Action 1">
-              <span class="ng-scope">Rating: {{calcmyrating(itemm)}}</span> 
-              <ng-md-icon ng-repeat="a in ratingrange(calcmyrating(itemm)) track by $index" icon="star_rate"></ng-md-icon>
-              <div class="md-ripple-container"></div>
-          </span>
-
-        </md-card-actions>
-        <md-card-actions dir="ltr" layout="row" layout-align="start center" class="layout-align-start-center layout-row">
-          
-          <span class="md-ink-ripple"   aria-label="Action 2">
-              <span class="ng-scope">Date: {{convertdate(itemm.cycleList[0].StartDate)}}</span>
-              <div class="md-ripple-container"></div>
-          </span>
-        </md-card-actions>
-        </md-card-content>
-        </span>
-               <center><md-button class="mdl-button--mini-fab" aria-label="Eat cake" ng-click="deletecoursefromdb($event, itemm)">
-                  <i class="material-icons md-30">delete_sweep</i>
-                </md-button></center>
-      </md-card>
-  </div>
-  <div layout="column" layout-xs="column" class="layout-column flex-xs flex-gt-xs-40">
-            <md-card class="_md" ng-repeat="itemmm in allcoursesrealWithRatingshlishaharon | filter:search">
-        <span ng-click="showCustom($event, itemmm)">
-        <img class="md-card-image" ng-src="http://marshalweb.azurewebsites.net/api/courses/images/{{itemmm.CourseCode}}">
-        <md-card-title>
-          <md-card-title-text>
-            <span class="koteret"><b>{{itemmm.Name}}</b></span>
-          </md-card-title-text>
-        </md-card-title>
-        <md-card-content class="koteret"> 
-            <md-card-actions dir="ltr" layout="row" layout-align="start center" class="layout-align-start-center layout-row">
-
-          <!--<span  ng-if="itemmm.rating == 0" class="md-ink-ripple"   aria-label="Action 1">
-              <span class="ng-scope">Rating: none</span> 
-              <ng-md-icon icon="star_rate"></ng-md-icon>
-              <div class="md-ripple-container"></div>
-          </span>-->
-          <span class="md-ink-ripple"   aria-label="Action 1">
-              <span class="ng-scope">Rating: {{calcmyrating(itemmm)}}</span> 
-              <ng-md-icon ng-repeat="a in ratingrange(calcmyrating(itemmm)) track by $index" icon="star_rate"></ng-md-icon>
-              <div class="md-ripple-container"></div>
-          </span>
-
-        </md-card-actions>
-        <md-card-actions dir="ltr" layout="row" layout-align="start center" class="layout-align-start-center layout-row">
-          
-          <span class="md-ink-ripple"   aria-label="Action 2">
-              <span class="ng-scope">Date: {{convertdate(itemmm.cycleList[0].StartDate)}}</span>
-              <div class="md-ripple-container"></div>
-          </span>
-        </md-card-actions>
-        </md-card-content>
-        </span>
-               <center><md-button class="mdl-button--mini-fab" aria-label="Eat cake" ng-click="deletecoursefromdb($event, itemmm)">
-                  <i class="material-icons md-30">delete_sweep</i>
-                </md-button></center>
-      </md-card>
-  </div>
+      </md-grid-tile>
+      </md-grid-list>
+   
+  
   </md-content>
-

@@ -32,94 +32,6 @@ angular.module('marshalApp')
 
   $scope.currpicurl;
 
-// $scope.addNewCourse = function(event, item) {
-//   swal({   title: "הוספה!",   text: "הוספת קורס חדש",   imageUrl:"https://inception-app-prod.s3.amazonaws.com/YmE4ZDY5MmUtNTU4Mi00NGI5LTk2YTMtY2Y4YWQ2MjgwNGZj/content/2016/06/recommend.png" });
-//    $mdDialog.show({
-//                   clickOutsideToClose: true,
-//                   hasBackdrop: false,
-//                   targetEvent: event,
-//                   scope: $scope,        
-//                   preserveScope: true,           
-//                   template: '<md-dialog aria-label="item.Name"  ng-cloak class="animated zoomIn">'+
-//                             '      <form>'+
-//                             '      <md-toolbar>'+
-//                             '      <div class="md-toolbar-tools">'+
-//                             '        <h2>' +item.Name + '</h2>'+
-//                             '        <span flex></span>'+
-//                             '        <md-button class="md-icon-button" ng-click="cancel()">'+
-//                             '        <md-iconmd-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog">'+
-//                             '        </md-icon>            X           </md-button>'+
-//                             '       </div>'+
-//                             '        </md-toolbar>'+
-//                             '        <md-dialog-content>'+
-//                             '        <div class="md-dialog-content">'+
-//                             '        <center><img class="md-card-image-dialog" ng-src="http://marshalweb.azurewebsites.net/api/images/'+item.CourseCode+'" alt="Washed Out">'+
-//                             '</center>'+
-//                             '        <p>'+
-//                             '            <b>סימול:</b>' + item.CourseCode + 
-//                             '        </p>'+
-//                             '        <p>'+
-//                             '            <b>תיאור כללי:</b>' +item.Description + 
-//                             '        </p>'+
-//                             '        <p>'+
-//                             '            <b>סילבוס:</b>' + item.Syllabus + 
-//                             '        </p>'+
-//                             '        <p>' +
-//                             '            <b>אוכלוסיית יעד:</b>' + item.TargetPopulation + 
-//                             '        </p>'+
-//                             '         <p>'+
-//                             '            <b>זמן ביום:</b>' + item.DayTime + 
-//                             '        </p>'+
-//                             '       <p>'+
-//                             '            <b>מספר ימים:</b>' + item.DurationInDays + 
-//                             '        </p>'+
-//                             '         <p>'+
-//                             '            <b>ציון מעבר:</b>' + item.PassingGrade + 
-//                             '        </p>'+
-//                             '         <p>'+
-//                             '            <b>מחיר:</b>' + item.Price + 
-//                             '        </p>'+
-//                             '         <p>'+
-//                             '            <b>מינימום שתתפים:</b>' + item.MinimumPeople + 
-//                             '        </p>'+
-//                             '         <p>'+
-//                             '            <b>מקסימום משתתפים:</b>' + item.MaximumPeople + 
-//                             '        </p>'+
-//                             '         <p>'+
-//                             '            <b>תגובות:</b>' + item.Comments + 
-//                             '        </p>'+
-//                             '         <p>'+
-//                             '            <b>קטגוריה:</b>' + item.Category +       
-//                             '</p>'+
-//                             '         <p>'+
-//                             '            <b>האם מיטאפ:</b>' + item.IsMeetup + 
-//                             '        </p>'+
-//                             '         <p>'+
-//                             '            <b>רשימת מחזורים:</b>' +
-//                             '<select>'+
-//                                   '<option ng-repeat="course in currcyclelist">{{convertdate(course.StartDate)}}       ->       {{convertdate(course.EndDate)}}</option>'+
-//                             '</select>'+
-//                             '        </p>'+
-//                             '     </div>'+
-//                             '        </md-dialog-content>'+
-//                             '        <md-dialog-actions layout="row">'+
-//                             '        <md-button href="https://www.google.co.il/?gfe_rd=cr&ei=2buVV9j7B4_b8Ae6lqm4Cg#q='+ item.Name+ '" target="_blank" md-autofocus><ng-md-icon icon="school"></ng-md-icon>'+
-//                             '            More on google           </md-button>'+
-//                             '       <span flex></span>'+
-//                             '       <md-button ng-click="cancelthis()"><ng-md-icon icon="cancel"></ng-md-icon>                  ביטול            </md-button>'+
-//                             '      <md-button ng-click="save()"><ng-md-icon icon="save"></ng-md-icon>                   שמור            </md-button>'+
-//                             '   <md-button ng-click="edit()"><ng-md-icon icon="border_color"></ng-md-icon>    ערוך  </md-button>'+
-//                             '   </md-dialog-actions>'+
-//                             '      </form>'+
-//                             '</md-dialog>',                           
-//                  controller: function DialogController($scope, $mdDialog) {
-//                               $scope.hide = function(answer) {
-//                                 $mdDialog.hide(answer);
-//                               };
-//                             }
-//                });
-// }
-
   // Calculating rating for each course and shows on the card on main course page
   $scope.calcmyrating = function(item) {
       $scope.ratingsofcurrcourse = item.Ratings;
@@ -160,7 +72,7 @@ angular.module('marshalApp')
                             '        </md-toolbar>'+
                             '        <md-dialog-content>'+
                             '        <div class="md-dialog-content">'+
-                            '        <center><img class="md-card-image-dialog" ng-src="http://marshalweb.azurewebsites.net/api/images/'+item.CourseCode+'" alt="Washed Out">'+
+                            '        <center><img class="md-card-image-dialog" ng-src="http://marshalweb.azurewebsites.net/api/courses/images/'+item.CourseCode+'" alt="Washed Out">'+
                             '</center>'+
                             '        <p>'+
                             '            <b>סימול:</b>' + item.CourseCode + 
@@ -308,10 +220,10 @@ $scope.funca = function (stridofcourse){
                     '</md-toolbar>'+
                     '<md-dialog-content>'+
                     '<div class="md-dialog-content">'+
-                    '<center><img class="md-card-image-dialog" ng-src="http://marshalweb.azurewebsites.net/api/images/'+item.CourseCode+'" alt="Washed Out"></center>'+
+                    '<center><img class="md-card-image-dialog" ng-src="http://marshalweb.azurewebsites.net/api/courses/images/'+item.CourseCode+'" alt="Washed Out"></center>'+
                     '<br><md-input-container class="md-block" flex-gt-sm>'+
                     '<label class="boldwords">URL של תמונת הקורס</label>'+
-                    '<input id="cpicurlinp" value="http://marshalweb.azurewebsites.net/api/images/'+item.CourseCode+'">'+
+                    '<input id="cpicurlinp" value="http://marshalweb.azurewebsites.net/api/courses/images/'+item.CourseCode+'">'+
         	          '</md-input-container>'+
                     '<p>'+
                      '<br><md-input-container class="md-block" flex-gt-sm>'+
@@ -487,7 +399,7 @@ $scope.categories = [
 
 // Deletes the course from the db
 $scope.deletecoursefromdb = function(event, item) {
-  httpService.delete('/api/courses/'+item.ID).then(function (response){
+  httpService.delete('/api/courses/'+item.CourseCode).then(function (response){
                           alert("WHOOOOOHOOOOOOO!!!!!");
                         });
     alert("You deleted the course! the id of the course is: " +item._id);
@@ -504,7 +416,7 @@ $scope.addNewCourse = function(event) {
                     '<md-toolbar>'    +    
                     '<div class="md-toolbar-tools">'  +      
                     '<h2>שם הקורס:</h2>'+
-                    '<input input-clear="black" id="cnameinp" type="text" name="FirstName" value="">'+  
+                    '<input ng-model="savename" input-clear="black" id="cnameinp" type="text" name="FirstName" value="">'+  
                     '<md-button class="md-icon-button" ng-click="cancel()">' +        
                     '<md-iconmd-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog">' + 
                     '</md-icon>            X           </md-button>'+
@@ -614,12 +526,6 @@ $scope.addNewCourse = function(event) {
                       $scope.hide = function() {
                         $mdDialog.hide();
                       };
-                      // $scope.cancel = function() {
-                      //   $mdDialog.cancel();
-                      // };
-                      // $scope.answer = function(answer) {
-                      //   $mdDialog.hide(answer);
-                      // };
                       $scope.save = function(answer) {
                         swal("נשמר", "פרטי הקורס נשמרו!", "success");
                         $mdDialog.hide(answer);
@@ -660,11 +566,6 @@ $scope.addNewCourse = function(event) {
                             swal("שגיאה!", "ציון המעבר של הקורס לא תקין, אנא הכנס מספר בין 0 ל-100", "error");
                         }
 
-                        
-
-                        // else{
-                        //     alert("ok...");                          
-                        // }
                         if ($scope.canIsave){
                             $scope.addnewnow = {Name:document.getElementById("cnameinp").value,
                                                   imageUrl:document.getElementById("cpicurlinp").value,
@@ -706,12 +607,6 @@ $scope.addNewCourse = function(event) {
                         
                       };
 
-
-
-                      // $scope.edit = function(answer) {
-                      //   swal({   title: "עריכה!",   text: "<span style='color:#F8BB86'><h3>ברוך הבא למסך העריכה</h3><span>",   html: true });
-                      //   $mdDialog.hide(answer);
-                      // };
                       $scope.cancelthis = function(answer) {
                         sweetAlert("בוטל", "השינויים בוטלו!", "error");
                         $mdDialog.hide(answer);
@@ -723,99 +618,10 @@ $scope.addNewCourse = function(event) {
         };
 
 
-
-
-
-
-     $scope.showAdvanced = function(ev) {
-    $mdDialog.show({
-      controller: 'DialogController',
-      templateUrl: 'dialog1.html',
-      parent: angular.element(document.body),
-      targetEvent: ev,
-      clickOutsideToClose:true,
-      fullscreen: true
-    });
-    // .then(function(answer) {
-    //   $scope.status = 'You said the information was "' + answer + '".';
-    // }, function() {
-    //   $scope.status = 'You cancelled the dialog.';
-    // });
-    // $scope.$watch(function() {
-    //   return $mdMedia('xs') || $mdMedia('sm');
-    // }, function(wantsFullScreen) {
-    //   $scope.customFullscreen = (wantsFullScreen === true);
-    // });
-  };
-$scope.allcoursesrealWithRating;
-$scope.allcoursesrealWithRatingdivided = [];
-var somemagic = [];
-var moremagic = [];
-
  // Gets all courses 
 httpService.get("/api/courses").then(function (response){
  $scope.isLoading = false;
  $scope.allcoursesreal = response.data;
- $scope.allcoursesrealWithRating = response.data;
- 
-    // Gets all ratings 
-    httpService.get("/api/ratings/").then(function (response){
-    //$scope.isLoading = false;
-    $scope.allratings = response.data;
-    var ratigfound = false;
-      for ( var i = 0; i <  $scope.allcoursesreal.length; i++) {
-        ratigfound = false;
-        for ( var j = 0; j <  $scope.allratings.length; j++) {
-              if ($scope.allcoursesreal[i].CourseCode ==  $scope.allratings[j].courseCode) {
-                  $scope.allcoursesrealWithRating[i].rating = response.data[j].rating;
-                  ratigfound = true;
-// TODO: this makes tooooooooons of http requests
-//                   httpService.get("/api/images/"+$scope.allcoursesrealWithRating[i].CourseCode).then(function (response){
-//                       $scope.allcoursesrealWithRating[i].imgurlofpic = response.data;
-// }                 );
-              }
-        }
-        if (!ratigfound){
-          $scope.allcoursesrealWithRating[i].rating = 0;
-        }
-    }
-    });
-
-$scope.countmee = 0;
-      for ( var i = 0; i <  $scope.allcoursesrealWithRating.length; i++) {
-          somemagic.push($scope.allcoursesrealWithRating[i]); 
-          somemagic.push($scope.allcoursesrealWithRating[i+1]);
-          somemagic.push($scope.allcoursesrealWithRating[i+2]); 
-          moremagic.push(somemagic);
-          $scope.allcoursesrealWithRatingdivided.push(somemagic);
-          somemagic = [];
-          //$scope.allcoursesrealWithRatingdivided.push(',');
-          $scope.countmee = $scope.countmee + 1;
-          i = i + 2;
-    }
-
-    var stophere = 1;
-
-$scope.allcoursesrealWithRatingshlish = [];
-$scope.allcoursesrealWithRatingshneishlish = [];
-$scope.allcoursesrealWithRatingshlishaharon = [];
-var indexfirst = 0;
-var indexsecond = 0;
-var indexthird = 0;
-for ( var i = 0; i <  $scope.allcoursesrealWithRating.length; i++) {
-          if (i <= ($scope.allcoursesrealWithRating.length / 3)) {
-                $scope.allcoursesrealWithRatingshlish.push($scope.allcoursesrealWithRating[i]);
-                indexfirst++;
-          }
-          else if ((i < (($scope.allcoursesrealWithRating.length / 3)*2)) && (i > ($scope.allcoursesrealWithRating.length / 3))) {
-              $scope.allcoursesrealWithRatingshneishlish.push($scope.allcoursesrealWithRating[i]);
-                indexsecond++;
-          }
-          else {
-                $scope.allcoursesrealWithRatingshlishaharon.push($scope.allcoursesrealWithRating[i]);
-                indexthird++;
-          }
-    }
 
 
 });
@@ -848,40 +654,3 @@ function DialogController($scope, $mdDialog) {
     $mdDialog.hide(answer);
   };
 }
-
-// angular.module('marshalApp').directive('inputClear', inputClear)
-//         .directive('inputClearNoMaterial', inputClearNoMaterial);
-
-//         function inputClear() {
-//         return {
-//             restrict: 'A',
-//             compile: function (element, attrs) {
-//                 var color = attrs.inputClear;
-//                 var style = color ? "color:" + color + ";" : "";
-//                 var action = attrs.ngModel + " = ''";
-//                 element.after(
-//                     '<md-button class="animate-show md-icon-button md-accent"' +
-//                     'ng-show="' + attrs.ngModel + '" ng-click="' + action + '"' +
-//                     'style="position: absolute; top: 0px; left: -1px; margin: 13px 0px;">' +
-//                     '<div style="' + style + '">x</div>' +
-//                     '</md-button>');
-//             }
-//         };
-//     }
-    
-//     function inputClearNoMaterial() {
-//         return {
-//             restrict: 'A',
-//             compile: function (element, attrs) {
-//                 var color = attrs.inputClearNoMaterial;
-//                 var style = color ? "color:" + color + ";" : "";
-//                 var action = attrs.ngModel + " = ''";
-//                 element.after(
-//                     '<span class="animate-show"' +
-//                     'ng-show="' + attrs.ngModel + '" ng-click="' + action + '"' +
-//                     'style="position: absolute; margin: 3px -20px; cursor: pointer;">' +
-//                     '<div style="' + style + '">x</div>' +
-//                     '</span>');
-//             }
-//         };
-//     }
