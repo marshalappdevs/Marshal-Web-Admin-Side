@@ -56,16 +56,17 @@ app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', 'httpService', '$
       link : '/malshabs',
       title: 'מידע למלש"בים',
       icon: 'person'
+    },
+    {
+      link : '/push',
+      title: 'שליחת התראת פוש',
+      icon: 'message'
     }
   ];
 
   /* JSON of the submenu */
   $scope.settings = [
-    {
-      link : '',
-      title: 'הגדרות',
-      icon: 'settings'
-    }
+
   ];
 
   $scope.alert = '';
@@ -121,6 +122,10 @@ app.config(function($mdThemingProvider, $routeProvider) {
       when('/meetups', {
         templateUrl: 'javascripts/templates/meetups.html',
         controller: 'meetupsCtrl'
+      }).
+      when('/push', {
+        templateUrl: 'javascripts/templates/push.html',
+        controller: 'pushCtrl'
       }).
       otherwise({
         redirectTo: '/'
