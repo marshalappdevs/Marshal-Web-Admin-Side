@@ -1,1 +1,70 @@
-aaaaaaaaaaaaaaaaa
+
+<div layout="row" flex="100">
+    <md-card layout="column" flex="100">
+        <md-card-title>
+            <md-card-title-text ng-click="openLink()">
+            <span class="md-headline">שליחת התראות פוש</span>
+            <span class="md-subhead">
+                כאן תוכל/י לשלוח התראה על שינויים בקורסים, הוספת קורס חדש וכו'. יש לבחור באוכלוסיית היעד הרצויה ולוודא את הנוסח של ההודעה<b>  </b>
+                <span style="color: red; font-weight: bold">לאחר השליחה לא ניתן לבטל את הפעולה!</span>
+            </span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <div layout="row">
+            <form name="userForm" flex="100">
+                <div layout="row">
+                    <md-input-container class="md-block" flex="100">
+                    <label>כותרת ההתראה</label>
+                    <input type="text" ng-model="user.name" md-maxlength="50" placeholder="תמצות ברור של תוכן ההתראה" required>
+                    </md-input-container>
+                </div>
+                <div layout="row">
+                    <md-input-container class="md-block" flex="100">
+                    <label>תוכן ההתראה</label>
+                    <input type="text" ng-model="user.name" md-maxlength="100" placeholder="כאן רצוי לפרט" required>
+                    </md-input-container>
+                </div>
+                <div layout="row">
+                    <div layout="column" flex="50">
+                    <md-autocomplete flex 
+                            md-input-name="autocompleteField"
+                            md-selected-item="selectedItem"
+                            md-search-text="courseChoose"
+                            md-selected-item-change="selectedItemChange(item)" 
+                            md-items="item in querySearch(courseChoose)"
+                            md-item-text="item.text"
+                            md-no-cache	= "true"
+                            md-require-match
+                            md-floating-label="הפץ לקורסים מסוימים (אופציונלי)">
+                        <md-item-template>
+                            <span md-highlight-text="courseChoose" flags="^i">{{item.text}}</span>
+                        </md-item-template>
+                        </md-autocomplete>
+
+                        <md-list>
+                            <md-subheader class="md-no-sticky">הקורסים שנבחרו: (במידה ואף קורס לא נבחר, שולח לכולם)</md-subheader>
+                            <md-list-item class="md-2-line" ng-repeat="course in selectedCourses">
+                                <div class="secondary-button-padding">
+                                <md-button class="md-icon-button" aria-label="Delete" ng-click="removeCourse(course.id)">
+                                    <ng-md-icon icon="delete"></ng-md-icon>
+                                </md-button>
+                                {{course.text}}
+                                </div>
+                            </md-list-item>
+                        </md-list>
+                    </div>
+                    <div layout="column" flex="5">
+                    </div>
+                    <div layout="column" flex="55">
+                        <div ng-repeat="channel in channels">
+                            <md-checkbox ng-checked="exists(channel, selected)" ng-click="toggle(channel, selected)">
+                            {{ channel }}
+                        </md-checkbox>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </md-card-content>
+    </md-card>
+</div>
