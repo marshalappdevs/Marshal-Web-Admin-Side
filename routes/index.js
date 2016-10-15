@@ -690,7 +690,8 @@ function sendPush(registrations, dataObject) {
 }
 
 router.post('/api/fcm/sendpush/', function(req, res) {
-    if (req.body.channels != undefined && req.body.courses != undefined) {
+    if (req.body.channels != undefined && req.body.channels.length > 0
+             && req.body.courses != undefined && req.body.courses.length > 0) {
         registrations.find({$or: [{channels: { $in : req.body.channels}},
                         {courses: { $in : req.body.courses}}]},'registrationTokenId',function (err, registrations) {
             if (err) {
@@ -705,7 +706,8 @@ router.post('/api/fcm/sendpush/', function(req, res) {
                 res.json({ code: 201, message: "No GCM Registrations" });
             }
         });
-    } else if (req.body.channels == undefined && req.body.courses != undefined) {
+    } else if ((req.body.channels == undefined || req.body.channels.length == 0) 
+                    && (req.body.courses != undefined && req.body.courses.length > 0)) {
         registrations.find({courses: { $in : req.body.courses}}
                     ,'registrationTokenId',function (err, registrations) {
             if (err) {
@@ -720,7 +722,8 @@ router.post('/api/fcm/sendpush/', function(req, res) {
                 res.json({ code: 201, message: "No GCM Registrations" });
             }
         });
-    } else if (req.body.channels != undefined && req.body.courses == undefined) {
+    } else if ((req.body.courses == undefined || req.body.courses.length == 0) 
+                    && (req.body.channels != undefined && req.body.channels.length > 0)) {
         registrations.find({channels: { $in : req.body.channels}}
                     ,'registrationTokenId',function (err, registrations) {
             if (err) {
