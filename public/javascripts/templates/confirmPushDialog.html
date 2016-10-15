@@ -42,7 +42,7 @@
       <md-button ng-click="doCancel()">
        בטל
       </md-button>
-      <md-button class="md-raised md-warn" ng-click="doReconnect(pass)" ng-disabled="wait > 0">
+      <md-button class="md-raised md-warn" ng-click="sendPush()" ng-disabled="wait > 0">
           <span ng-show="wait > 0"> המתן ({{wait}}) </span>
           <span ng-hide="wait > 0"> שלח! </span>
       </md-button>

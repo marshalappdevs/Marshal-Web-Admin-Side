@@ -140,4 +140,10 @@ angular.module('marshalApp')
         $mdDialog.cancel();
         $scope.finishCount();
     }
+
+    $scope.sendPush = function() {
+        httpService.postSecure('/api/fcm/sendpush/', $scope.notification).then((res) => {
+            console.log(res);
+        })
+    }
 }]);
