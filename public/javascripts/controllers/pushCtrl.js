@@ -1,19 +1,27 @@
 angular.module('marshalApp')
-.controller('pushCtrl', ['$scope', '$filter' , 'httpService', function($scope, $filter, httpService){
+.controller('pushCtrl', ['$scope', '$filter' , 'httpService', '$mdDialog', function($scope, $filter, httpService, $mdDialog){
     // Emitting current feature to parent scope
     $scope.$emit('currFeatureChange', "שליחת התראות");
     
+
+    // Entities
     $scope.selectedCourses = [];
+    $scope.notification = {
+        "data": {"type": "notification", "title": "", "content": ""},
+        "channels": [],
+        "courses": []
+    };
 
     /**
      * Get information needed 
      */
     httpService.get('/api/courses?light=true').then((res) => {
         $scope.courses = res.data;
-    });
-
-    httpService.get('/api/channels').then((res) => {
-        $scope.channels = res.data;
+        
+        // To prevent two reconnection dialogs
+        httpService.get('/api/channels').then((res) => {
+            $scope.channels = res.data;
+        });
     });
 
 
@@ -41,7 +49,9 @@ angular.module('marshalApp')
             // If it doesnt exist on the array, add it!
             if(!bExists) {
                 $scope.selectedCourses.push(item);
+                $scope.notification.courses.push(item.id);
                 console.log($scope.selectedCourses);
+                console.log($scope.notification.courses);
             }
 
             $scope.courseChoose = '';
@@ -50,11 +60,16 @@ angular.module('marshalApp')
     }
 
     /**
-     * Removes a course from the list
+     * Updates the notification entity when removing a course from the list
      */
-    $scope.removeCourse = function(id) {
-          var idToRemove = $scope.selectedCourses.map(function(e) { return e.id; }).indexOf(id);
-          $scope.selectedCourses.splice(idToRemove, 1);
+    $scope.updateNotification = function() {
+        var currIndex = 0;
+        $scope.notification.courses.forEach((id) => {
+            if($scope.selectedCourses.map(function(e) { return e.id; }).indexOf(id) == -1) {
+                $scope.notification.courses.splice(currIndex, 1);
+            }
+            currIndex++;
+        });
     }
 
     /* --------------Channels------------------ */
@@ -62,13 +77,11 @@ angular.module('marshalApp')
     $scope.toggle = function (item, list) {
         var idx = list.indexOf(item);
         if (idx > -1) {
-        list.splice(idx, 1);
+            list.splice(idx, 1);
         }
         else {
-        list.push(item);
+            list.push(item);
         }
-
-        console.log($scope.selected);
     };
 
     $scope.exists = function (item, list) {
@@ -76,19 +89,55 @@ angular.module('marshalApp')
     };
 
     $scope.isIndeterminate = function() {
-        return ($scope.selected.length !== 0 &&
-            $scope.selected.length !== $scope.channels.length);
+        return ($scope.notification.channels.length !== 0 &&
+            $scope.notification.channels.length !== $scope.channels.length);
     };
 
     $scope.isChecked = function() {
-        return $scope.selected.length === $scope.channels.length;
+        return $scope.notification.channels.length === $scope.channels.length;
     };
 
     $scope.toggleAll = function() {
-        if ($scope.selected.length === $scope.channels.length) {
-        $scope.selected = [];
-        } else if ($scope.selected.length === 0 || $scope.selected.length > 0) {
-        $scope.selected = $scope.channels.slice(0);
+        if ($scope.notification.channels.length === $scope.channels.length) {
+        $scope.notification.channels = [];
+        } else if ($scope.notification.channels.length === 0 || $scope.notification.channels.length > 0) {
+        $scope.notification.channels = $scope.channels.slice(0);
         }
     };
+
+    /** Confirmation */
+
+    $scope.confirm = function(event) {
+        var isFullScreen = false;
+        $mdDialog.show({
+            parent: angular.element(document.body),
+            controller: 'comfirmPushCtrl',
+            scope: $scope,
+            preserveScope: true,
+            templateUrl: 'javascripts/templates/confirmPushDialog.html',
+            clickOutsideToClose:false,
+            fullScreen: isFullScreen,
+            autoWrap: false
+        }).then(function() {});
+    }
+}])
+.controller('comfirmPushCtrl', ['$scope', 'httpService', '$interval', '$mdDialog', function($scope, httpService, $interval, $mdDialog) {
+    $scope.wait = 10;
+    var stop = $interval(function(){
+         $scope.wait--;
+
+        if($scope.wait == 0) {
+            $scope.finishCount();
+        }
+    }, 1000);
+
+    $scope.finishCount = function() {
+        $interval.cancel(stop);
+        stop = undefined;
+    }
+
+    $scope.doCancel = function() {
+        $mdDialog.cancel();
+        $scope.finishCount();
+    }
 }]);

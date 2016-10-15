@@ -1,0 +1,51 @@
+<md-dialog aria-label="Reconnect" flex="50">
+<md-toolbar class="md-accent">
+    <h2 class="md-toolbar-tools">
+        <span>Hold your horses!</span>
+    </h2>
+    </md-toolbar>
+ <form>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <p>
+            האם ההתראה אמורה להשלח ככה?
+        </p>
+        <div layout="column">
+            <md-card>
+                <md-card-title>
+                <md-card-title-media>
+                    <div class="md-media-md card-media" layout-padding>
+                        <img src="/images/basmapplogo.png" height="128px" width="128px"/>
+                    </div>
+                </md-card-title-media>
+                <md-card-title-text>
+                    <span class="md-headline">{{notification.data.title}}</span>
+                    <span class="md-subhead">{{notification.data.content}}</span>
+                </md-card-title-text>
+                </md-card-title>
+            </md-card>
+            <p ng-show="notification.channels.length > 0">ההתראה תשלח לקטגוריות:
+                <span ng-repeat="channel in notification.channels" style="font-weight: bold"> {{channel}} <span ng-hide="$last">, </span> </span>
+            </p>
+            <p ng-hide="notification.channels.length > 0" style="color: #b71f1e">לא נבחר סינון קטגוריות
+            </p>
+            <p ng-show="selectedCourses.length > 0">ההתראה תשלח לקורסים: <br/>
+                <span ng-repeat="course in selectedCourses" style="font-weight: bold"> {{course.text}} <span ng-hide="$last">, <br/></span> </span>
+            </p>
+            <p ng-hide="selectedCourses.length > 0" style="color: #b71f1e">לא נבחר סינון קורסים
+            </p>
+                <span flex></span>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="doCancel()">
+       בטל
+      </md-button>
+      <md-button class="md-raised md-warn" ng-click="doReconnect(pass)" ng-disabled="wait > 0">
+          <span ng-show="wait > 0"> המתן ({{wait}}) </span>
+          <span ng-hide="wait > 0"> שלח! </span>
+      </md-button>
+    </md-dialog-actions>
+ </form>
+</md-dialog>
