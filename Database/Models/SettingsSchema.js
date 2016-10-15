@@ -4,5 +4,6 @@ module.exports = {
             _id : { type: mongoose.Schema.ObjectId, auto: true },
             updated_at: { type: Date, default: Date.now },
             lastUpdateAt : String,
-            minVersion : Number
+            minVersion : Number,
+            channels: Array
 }

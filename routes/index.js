@@ -185,7 +185,7 @@ router.post('/refresh', passport.authenticate('jwtAdmin', { session: false }) , 
   
 });
 
-router.post('/api/authapp', function(req, res) {
+router.post('/api/authapp',  function(req, res) {
     var hashedAuthReq = req.body.authReq;
     var currDate = new Date();
     var nHours, nMinutes;
@@ -273,12 +273,24 @@ router.get('/api/courses', passport.authenticate('jwt', { session: false }), fun
     courses.find(function (err, courses) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
-        res.json(courses);
+
+        if(req.query.light) {
+            var lightArr = [];
+            courses.forEach(function(currCourse) {
+                lightArr.push({"text": currCourse._doc.CourseCode + " - " + currCourse._doc.Name, "id": currCourse._doc.CourseCode});
+             });
+
+            res.json(lightArr);
+        } else {
+            res.json(courses);
+        }
     });
 });
 
+
+
 // Create course
-router.post('/api/courses', function(req, res) {
+router.post('/api/courses', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     var fileName = req.body.CourseCode + '.' + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
     var file = fs.createWriteStream(path.join(__dirname, '../public/images/') + fileName);
     https.get(req.body.imageUrl, function(result) {
@@ -310,7 +322,7 @@ router.post('/api/courses', function(req, res) {
 });
 
 // Update courses (any property)
-router.put('/api/courses/:courseCode', function(req, res) {
+router.put('/api/courses/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     courses.update({ CourseCode: req.params.courseCode}, req.body, function(err, result) {
             // If everything's alright
         if (!err && result.ok === 1) {
@@ -324,7 +336,7 @@ router.put('/api/courses/:courseCode', function(req, res) {
 });
 
 // // Delete courses
-router.delete('/api/courses/:courseCode', function(req, res) {
+router.delete('/api/courses/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     courses.remove({ CourseCode: req.params.courseCode }, function(err, result) {
         if (!err) {
             console.log(result);
@@ -338,7 +350,7 @@ router.delete('/api/courses/:courseCode', function(req, res) {
 });
 
 // // Images
-router.get('/api/courses/images/:courseCode', function (req, res, next) {
+router.get('/api/courses/images/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function (req, res, next) {
     courses.findOne({ CourseCode: req.params.courseCode }, 'PictureUrl', function(err, picUrl) {
         // If there's no error
         if (!err) {
@@ -347,7 +359,7 @@ router.get('/api/courses/images/:courseCode', function (req, res, next) {
     });
 });
 
-router.post('/api/courses/images/:courseCode', function(req, res) {
+router.post('/api/courses/images/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     // Checks if only url has been sent
     if (req.body.imageUrl) {
         var fileName = req.params.courseCode + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
@@ -361,7 +373,7 @@ router.post('/api/courses/images/:courseCode', function(req, res) {
 });
 
 // Add rating
-router.post('/api/courses/ratings/:courseCode', function(req, res) {
+router.post('/api/courses/ratings/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     courses.update({CourseCode : req.params.courseCode},
                     {$addToSet : {Ratings : req.body}}, function(err, result) {
         if (!err) {
@@ -375,7 +387,7 @@ router.post('/api/courses/ratings/:courseCode', function(req, res) {
 });
 
 // Update rating
-router.put('/api/courses/ratings/:courseCode', function(req, res) {
+router.put('/api/courses/ratings/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     courses.update({CourseCode : req.params.courseCode,
         'Ratings.userMailAddress' : req.body.userMailAddress},
                     {$set : {'Ratings.$.rating' : req.body.rating,
@@ -392,7 +404,7 @@ router.put('/api/courses/ratings/:courseCode', function(req, res) {
 });
 
 // Remove rating
-router.delete('/api/courses/ratings/:courseCode', function(req, res) {
+router.delete('/api/courses/ratings/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     courses.update({CourseCode : req.params.courseCode,
         'Ratings.userMailAddress' : req.body.userMailAddress},
                     {$pull : {Ratings : {userMailAddress : req.body.userMailAddress}}}, function(err, result) {
@@ -421,7 +433,7 @@ router.get('/api/materials/', passport.authenticate('jwt', { session: false }), 
 });
 
 // Create material TODO: Ask Ido wtf is going on here
-router.post('/api/materials', function(req, res) {
+router.post('/api/materials', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     materials.update({url : req.body.url},
          req.body, {upsert:true}, function(err, result) {
              if(!err) {
@@ -435,7 +447,7 @@ router.post('/api/materials', function(req, res) {
          });
 });
 
-router.delete('/api/materials/:urlToRemove', function(req, res) {
+router.delete('/api/materials/:urlToRemove', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     materials.remove({_id: ObjectID(req.params.urlToRemove)}, function(err) {
         if (!err) {
             setLastUpdateNow();
@@ -461,7 +473,7 @@ router.get('/api/malshabitems/', passport.authenticate('jwt', { session: false }
 });
 
 // Create malshab item
-router.post('/api/malshabitems', function(req, res) {
+router.post('/api/malshabitems', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     malshabItems.update({url : req.body.url},
     req.body, {upsert:true}, function(err, result) {
         if(!err) {
@@ -750,6 +762,14 @@ router.get('/api/settings/', passport.authenticate('jwt', { session: false }), f
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
         res.json(settings);
+    });
+});
+
+router.get('/api/channels/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+    settings.findOne(function (err, settings) {
+        if (err) return console.error(err);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(settings._doc.channels);
     });
 });
 
