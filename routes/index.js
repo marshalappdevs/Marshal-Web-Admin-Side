@@ -42,7 +42,7 @@ emitter.on('secretChange', function() {
 
 
 // DB connection
-mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal', {user: config.dbUser, pass: config.dbPass});
+mongoose.connect(config.database);
 
 function setLastUpdateNow() {
     console.log('setLastUpdateNow');
