@@ -175,6 +175,27 @@ angular.module('marshalApp')
                 }, function() {defrredHttp.reject();});
 
                 return defrredHttp.promise;
+            },
+            postSecure: function(urlToGet, reqData) {
+                var defrredHttp = $q.defer();
+
+                // To ask for password
+                passReconnectProc('javascripts/templates/passDialogDel.html').then(function() {
+                    refresh().then(function() {
+                    var httpPromise = $http({
+                                        method: 'POST',
+                                         url: urlToGet,
+                                         data: reqData,
+                                         headers: {
+                                            'Authorization': 'JWT ' + $window.localStorage.getItem('apiToken')
+                                            }
+                                      });
+                    
+                    defrredHttp.resolve(httpPromise);
+                    }, function() {defrredHttp.reject();});
+                }, function() {defrredHttp.reject();});
+                
+                return defrredHttp.promise;
             }
         }
         }])
