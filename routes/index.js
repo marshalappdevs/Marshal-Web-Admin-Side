@@ -404,7 +404,7 @@ router.put('/api/courses/ratings/:courseObjectId', passport.authenticate('jwt', 
 });
 
 // Remove rating
-router.delete('/api/courses/ratings/:courseCode', passport.authenticate('jwt', { session: false }), function(req, res) {
+router.delete('/api/courses/ratings/:courseObjectId', passport.authenticate('jwt', { session: false }), function(req, res) {
     courses.update({_id : req.params.courseObjectId,
         'Ratings.userMailAddress' : req.body.userMailAddress},
                     {$pull : {Ratings : {userMailAddress : req.body.userMailAddress}}}, function(err, result) {
