@@ -373,7 +373,7 @@ router.post('/api/courses/images/:courseCode', passport.authenticate('jwtAdmin',
 });
 
 // Add rating
-router.post('/api/courses/ratings/:courseObjectId', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
+router.post('/api/courses/ratings/:courseObjectId', passport.authenticate('jwt', { session: false }), function(req, res) {
     courses.update({_id : req.params.courseObjectId},
                     {$addToSet : {Ratings : req.body}}, function(err, result) {
         if (!err) {
@@ -387,7 +387,7 @@ router.post('/api/courses/ratings/:courseObjectId', passport.authenticate('jwtAd
 });
 
 // Update rating
-router.put('/api/courses/ratings/:courseObjectId', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
+router.put('/api/courses/ratings/:courseObjectId', passport.authenticate('jwt', { session: false }), function(req, res) {
     courses.update({_id : req.params.courseObjectId,
         'Ratings.userMailAddress' : req.body.userMailAddress},
                     {$set : {'Ratings.$.rating' : req.body.rating,
@@ -404,7 +404,7 @@ router.put('/api/courses/ratings/:courseObjectId', passport.authenticate('jwtAdm
 });
 
 // Remove rating
-router.delete('/api/courses/ratings/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
+router.delete('/api/courses/ratings/:courseCode', passport.authenticate('jwt', { session: false }), function(req, res) {
     courses.update({_id : req.params.courseObjectId,
         'Ratings.userMailAddress' : req.body.userMailAddress},
                     {$pull : {Ratings : {userMailAddress : req.body.userMailAddress}}}, function(err, result) {
