@@ -42,7 +42,7 @@ emitter.on('secretChange', function() {
 
 
 // DB connection
-mongoose.connect('mongodb://marshalmongo.cloudapp.net/Marshal', {user: config.dbUser, pass: config.dbPass});
+mongoose.connect(config.database);
 
 function setLastUpdateNow() {
     console.log('setLastUpdateNow');
@@ -373,8 +373,8 @@ router.post('/api/courses/images/:courseCode', passport.authenticate('jwtAdmin',
 });
 
 // Add rating
-router.post('/api/courses/ratings/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
-    courses.update({CourseCode : req.params.courseCode},
+router.post('/api/courses/ratings/:courseObjectId', passport.authenticate('jwt', { session: false }), function(req, res) {
+    courses.update({_id : req.params.courseObjectId},
                     {$addToSet : {Ratings : req.body}}, function(err, result) {
         if (!err) {
             console.log(result);
@@ -387,8 +387,8 @@ router.post('/api/courses/ratings/:courseCode', passport.authenticate('jwtAdmin'
 });
 
 // Update rating
-router.put('/api/courses/ratings/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
-    courses.update({CourseCode : req.params.courseCode,
+router.put('/api/courses/ratings/:courseObjectId', passport.authenticate('jwt', { session: false }), function(req, res) {
+    courses.update({_id : req.params.courseObjectId,
         'Ratings.userMailAddress' : req.body.userMailAddress},
                     {$set : {'Ratings.$.rating' : req.body.rating,
                 'Ratings.$.comment' : req.body.comment,
@@ -404,8 +404,8 @@ router.put('/api/courses/ratings/:courseCode', passport.authenticate('jwtAdmin',
 });
 
 // Remove rating
-router.delete('/api/courses/ratings/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
-    courses.update({CourseCode : req.params.courseCode,
+router.delete('/api/courses/ratings/:courseObjectId', passport.authenticate('jwt', { session: false }), function(req, res) {
+    courses.update({_id : req.params.courseObjectId,
         'Ratings.userMailAddress' : req.body.userMailAddress},
                     {$pull : {Ratings : {userMailAddress : req.body.userMailAddress}}}, function(err, result) {
         if (!err) {
@@ -690,7 +690,8 @@ function sendPush(registrations, dataObject) {
 }
 
 router.post('/api/fcm/sendpush/', function(req, res) {
-    if (req.body.channels != undefined && req.body.courses != undefined) {
+    if (req.body.channels != undefined && req.body.channels.length > 0
+             && req.body.courses != undefined && req.body.courses.length > 0) {
         registrations.find({$or: [{channels: { $in : req.body.channels}},
                         {courses: { $in : req.body.courses}}]},'registrationTokenId',function (err, registrations) {
             if (err) {
@@ -705,7 +706,8 @@ router.post('/api/fcm/sendpush/', function(req, res) {
                 res.json({ code: 201, message: "No GCM Registrations" });
             }
         });
-    } else if (req.body.channels == undefined && req.body.courses != undefined) {
+    } else if ((req.body.channels == undefined || req.body.channels.length == 0) 
+                    && (req.body.courses != undefined && req.body.courses.length > 0)) {
         registrations.find({courses: { $in : req.body.courses}}
                     ,'registrationTokenId',function (err, registrations) {
             if (err) {
@@ -720,7 +722,8 @@ router.post('/api/fcm/sendpush/', function(req, res) {
                 res.json({ code: 201, message: "No GCM Registrations" });
             }
         });
-    } else if (req.body.channels != undefined && req.body.courses == undefined) {
+    } else if ((req.body.courses == undefined || req.body.courses.length == 0) 
+                    && (req.body.channels != undefined && req.body.channels.length > 0)) {
         registrations.find({channels: { $in : req.body.channels}}
                     ,'registrationTokenId',function (err, registrations) {
             if (err) {

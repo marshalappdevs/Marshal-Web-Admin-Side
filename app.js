@@ -57,5 +57,4 @@ app.use(function(err, req, res, next) {
   console.log(err.message, err, req.originalUrl);
 });
 
-app.listen(4242);
 module.exports = app;
