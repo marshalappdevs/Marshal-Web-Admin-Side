@@ -116,10 +116,11 @@ angular.module('marshalApp')
         if(!urlRegEx.exec($scope.url)) {
             $scope.warning = "הכנס URL נכון";
         } else {
-            httpService.post('/api/preview/', {urlToDigest: $scope.url}).then(function(res) {
+            httpService.post('/api/materials/preview/', {urlToDigest: $scope.url}).then(function(res) {
                 $scope.preview = res.data;
                 console.log(res.data);
             })
         }
     }
 }]);
+

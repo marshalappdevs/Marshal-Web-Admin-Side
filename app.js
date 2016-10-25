@@ -11,7 +11,6 @@ var routes = require('./routes/index');
 var app = express();
 
 // Just checking
-var a =3;
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

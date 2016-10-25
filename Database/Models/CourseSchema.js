@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 
-module.exports = {
+var courseSchema = new mongoose.Schema({
     _id : { type: mongoose.Schema.ObjectId, auto: true },
     updated_at: { type: Date, default: Date.now },
     "cycleList" : [ 
-        require('./CycleSchema')
+        {type: mongoose.Schema.ObjectId, ref: 'Cycles'}
     ],
     ID : Number,
     Name : String,
@@ -26,6 +26,8 @@ module.exports = {
     IsMooc : Boolean,
     IsMeetup : Boolean,
     "Ratings" : [ 
-        require('./RatingSchema')
+        {type: mongoose.Schema.ObjectId, ref: 'Ratings'}
     ]
-}
+});
+
+module.exports = mongoose.model('Courses', courseSchema);

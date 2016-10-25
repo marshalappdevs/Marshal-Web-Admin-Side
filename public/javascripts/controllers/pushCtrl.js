@@ -19,7 +19,7 @@ angular.module('marshalApp')
         $scope.courses = res.data;
         
         // To prevent two reconnection dialogs
-        httpService.get('/api/channels').then((res) => {
+        httpService.get('/api/fcm/channels').then((res) => {
             $scope.channels = res.data;
         });
     });
