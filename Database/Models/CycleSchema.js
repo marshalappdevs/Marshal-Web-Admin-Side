@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-module.exports = {
+var cycles = new mongoose.Schema({
             _id : { type: mongoose.Schema.ObjectId, auto: true },
             updated_at: { type: Date, default: Date.now },  
             ID : Number,
@@ -9,4 +9,6 @@ module.exports = {
             Description : String,
             StartDate : String,
             EndDate : String
-}
+});
+
+module.exports = mongoose.model('Cycles', cycles);
