@@ -2,22 +2,14 @@
 
 var express = require('express');
 var router = express.Router();
-var upload = require('../image_upload/image-upload');
-var path = require('path');
-var https = require('https');
-var fs = require('fs');
 var mongoose = require('mongoose');
 var passport  = require('passport');
 var jwt = require('jsonwebtoken');
 var config = require('../config/main');
-var FCMLib = require('fcm-node');
 var User = require('../Database/Models/UserSchema');
 var bouncer =  require ('express-bouncer')(25000, 1000000, 3);
 var crypto = require('crypto');
 var emitter = require('../config/emitter');
-var MetaInspector = require('node-metainspector');
-var URLCheck = require('../config/urlCheck');
-var ObjectID = require('mongodb').ObjectID;
 var setLastUpdateNow = require('./utility');
 
 
