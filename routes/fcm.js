@@ -32,7 +32,6 @@ router.get('/channels/', passport.authenticate('jwt', { session: false }), funct
     });
 });
 
-
 router.post('/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
     registrations.update({hardwareId : req.body.hardwareId},
         req.body, {upsert:true}, function(err, result) {
@@ -49,7 +48,7 @@ router.post('/register',  passport.authenticate('jwt', { session: false }), func
 // Update registration (tokenId only) ////////////////////
 router.put('/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
     registrations.update({hardwareId : req.body.hardwareId}, req.body, function(err, result) {
-            // If everything's alright
+        // If everything's alright
         if (!err && result.ok === 1) {
             res.json({ code: 200});
         } else {
@@ -154,11 +153,9 @@ function sendPush(registrations, dataObject) {
 
     fcm.send(message, function(err, response){
         if (err) {
-            console.log("Something has gone wrong!", err);
-            // res.json({ code: 400, message: err });
+            res.status(400).send("Something went wrong..")
         } else {
-            console.log("Successfully sent with response: ", response);
-            // res.json({ code: 201, message: response });
+            res.status(200).send("V");
         }
     });
 }
