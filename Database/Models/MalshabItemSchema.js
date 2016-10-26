@@ -8,4 +8,5 @@ var malshab =  new mongoose.Schema({
             imageUrl : String
 });
 
+malshab.plugin(require('mongoose-paginate'));
 module.exports = mongoose.model('MalshabItems', malshab);

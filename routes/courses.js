@@ -27,17 +27,15 @@ emitter.on('secretChange', function() {
 var courses = require('../Database/Models/CourseSchema');
 
 // Get all courses
-router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.get('/', function(req, res, next) {
     courses.find(function (err, courses) {
-        if (err) return console.error(err);
+        if (err) { res.status(500).send(""); }
         res.setHeader('Content-Type', 'application/json');
-
         if(req.query.light) {
             var lightArr = [];
             courses.forEach(function(currCourse) {
                 lightArr.push({"text": currCourse._doc.CourseCode + " - " + currCourse._doc.Name, "id": currCourse._doc.CourseCode});
-             });
-
+            });
             res.json(lightArr);
         } else {
             res.json(courses);
@@ -45,6 +43,15 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
     });
 });
 
+// Get page
+router.get('/:page', function(req, res, next) {
+    // If paging was requesting, sending chronically added courses
+    courses.paginate({}, { page: parseInt(req.params.page), limit: 10, sort: {_id: -1}}, function(err, result) {
+        if (err) { res.status(500).send(""); }
+        res.setHeader('Content-Type', 'application/json');
+        res.json(result);
+    });
+});
 
 
 // Create course

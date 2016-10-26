@@ -11,4 +11,5 @@ var material =  new mongoose.Schema({
             imageUrl : String
 });
 
+material.plugin(require('mongoose-paginate'));
 module.exports = mongoose.model('Materials', material);

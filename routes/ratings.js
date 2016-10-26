@@ -33,6 +33,16 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
     });
 });
 
+// Get page
+router.get('/:page', function(req, res, next) {
+    // If paging was requesting, sending chronically added courses
+    materials.paginate({}, { page: parseInt(req.params.page), limit: 10, sort: {_id: -1}}, function(err, result) {
+        if (err) { res.status(500).send(""); }
+        res.setHeader('Content-Type', 'application/json');
+        res.json(result);
+    });
+});
+
 // Create rating
 router.post('/', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function(req, res) {
     ratings.create(req.body, function(err, rating) {

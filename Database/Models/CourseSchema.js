@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-
+var mongoosePaginate = require('mongoose-paginate');
+ 
 var courseSchema = new mongoose.Schema({
     _id : { type: mongoose.Schema.ObjectId, auto: true },
     updated_at: { type: Date, default: Date.now },
@@ -30,4 +31,5 @@ var courseSchema = new mongoose.Schema({
     ]
 });
 
+courseSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model('Courses', courseSchema);
