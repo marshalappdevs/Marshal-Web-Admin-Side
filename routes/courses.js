@@ -43,23 +43,6 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
     });
 });
 
-// Get all courses
-router.get('/meetups', function(req, res, next) {
-    courses.find({IsMeetup: true}, function (err, courses) {
-        if (err) { res.status(500).send(""); }
-        res.setHeader('Content-Type', 'application/json');
-        if(req.query.light) {
-            var lightArr = [];
-            courses.forEach(function(currCourse) {
-                lightArr.push({"text": currCourse._doc.CourseCode + " - " + currCourse._doc.Name, "id": currCourse._doc.CourseCode});
-            });
-            res.json(lightArr);
-        } else {
-            res.json(courses);
-        }
-    });
-});
-
 // Get page
 router.get('/:page', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     // If paging was requesting, sending chronically added courses
