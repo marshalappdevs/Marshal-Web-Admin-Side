@@ -80,6 +80,11 @@ router.get('/dashboard2', passport.authenticate('jwtAdmin', { session: false }),
     res.send('It worked! User id role: ' + req.user.role + '.');
 });
 
+router.get('/update', passport.authenticate('jwtAdmin', { session: false, failureRedirect: '/' }), function(req, res) {
+    setLastUpdateNow();
+    res.status(200).send("K");
+});
+
 // Authentication
 
 router.post('/auth', bouncer.block, function(req, res) {

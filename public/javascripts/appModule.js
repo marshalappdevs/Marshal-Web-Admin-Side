@@ -30,6 +30,12 @@ app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', 'httpService', '$
     $window.location.href = '/login';
   }
 
+  $scope.setLastUpdateNow = function () {
+    httpService.get("/update").then(() => {
+      alert("עודכן");
+    });
+  }
+
   /* JSON of the menu offered on the sidebar */
  	$scope.menu = [
     {
