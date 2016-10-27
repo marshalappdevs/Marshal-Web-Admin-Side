@@ -5,7 +5,7 @@ var courseSchema = new mongoose.Schema({
     _id : { type: mongoose.Schema.ObjectId, auto: true },
     updated_at: { type: Date, default: Date.now },
     "cycleList" : [ 
-        {type: mongoose.Schema.ObjectId, ref: 'Cycles'}
+        {type: mongoose.Schema, ref: 'Cycles'}
     ],
     ID : Number,
     Name : String,
@@ -26,7 +26,7 @@ var courseSchema = new mongoose.Schema({
     Category : String,
     IsMooc : Boolean,
     "Ratings" : [ 
-        {type: mongoose.Schema.ObjectId, ref: 'Ratings'}
+        {type: mongoose.Schema, ref: 'Ratings'}
     ]
 });
 
