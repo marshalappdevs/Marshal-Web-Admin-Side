@@ -26,6 +26,7 @@ emitter.on('secretChange', function() {
 
 // Routing
 router.use('/api/courses', require('./courses'));
+router.use('/api/meetups', require('./meetups'));
 router.use('/api/materials', require('./materials'));
 router.use('/api/malshabitems', require('./malshabs'));
 router.use('/api/ratings', require('./ratings'));

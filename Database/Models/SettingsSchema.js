@@ -8,4 +8,5 @@ var settingsSchema = new mongoose.Schema({
             channels: Array
 });
 
+settingsSchema.plugin(require('mongoose-paginate'));
 module.exports = mongoose.model('Settings', settingsSchema);

@@ -23,47 +23,30 @@ emitter.on('secretChange', function() {
     require('../config/passportAdmin')(passport);
 });
 
-// Courses
-var courses = require('../Database/Models/CourseSchema');
+// meetups
+var meetups = require('../Database/Models/MeetupSchema');
 
-// Get all courses
+// Get all meetups
 router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-    courses.find(function (err, courses) {
+    meetups.find(function (err, meetups) {
         if (err) { res.status(500).send(""); }
         res.setHeader('Content-Type', 'application/json');
         if(req.query.light) {
             var lightArr = [];
-            courses.forEach(function(currCourse) {
-                lightArr.push({"text": currCourse._doc.CourseCode + " - " + currCourse._doc.Name, "id": currCourse._doc.CourseCode});
+            meetups.forEach(function(currCourse) {
+                lightArr.push({"text": currCourse._doc.meetupCode + " - " + currCourse._doc.Name, "id": currCourse._doc.meetupCode});
             });
             res.json(lightArr);
         } else {
-            res.json(courses);
-        }
-    });
-});
-
-// Get all courses
-router.get('/meetups', function(req, res, next) {
-    courses.find({IsMeetup: true}, function (err, courses) {
-        if (err) { res.status(500).send(""); }
-        res.setHeader('Content-Type', 'application/json');
-        if(req.query.light) {
-            var lightArr = [];
-            courses.forEach(function(currCourse) {
-                lightArr.push({"text": currCourse._doc.CourseCode + " - " + currCourse._doc.Name, "id": currCourse._doc.CourseCode});
-            });
-            res.json(lightArr);
-        } else {
-            res.json(courses);
+            res.json(meetups);
         }
     });
 });
 
 // Get page
 router.get('/:page', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-    // If paging was requesting, sending chronically added courses
-    courses.paginate({}, { page: parseInt(req.params.page), limit: 10, sort: {_id: -1}}, function(err, result) {
+    // If paging was requesting, sending chronically added meetups
+    meetups.paginate({}, { page: parseInt(req.params.page), limit: 10, sort: {_id: -1}}, function(err, result) {
         if (err) { res.status(500).send(""); }
         res.setHeader('Content-Type', 'application/json');
         res.json(result);
@@ -73,13 +56,13 @@ router.get('/:page', passport.authenticate('jwt', { session: false }), function(
 
 // Create course
 router.post('/', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
-    var fileName = req.body.CourseCode + '.' + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
+    var fileName = req.body.meetupCode + '.' + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
     var file = fs.createWriteStream(path.join(__dirname, '../public/images/') + fileName);
     https.get(req.body.imageUrl, function(result) {
         result.pipe(file);
         // setLastUpdateNow();
         req.body.PictureUrl = "http://marshalweb.azurewebsites.net/images/" + fileName;
-        // courses.create(req.body, function(err, course) {
+        // meetups.create(req.body, function(err, course) {
         //     if (err) {
         //         res.status(400).json({message: 'Couldn\'t create new course..'});
         //         console.log(err);
@@ -88,7 +71,7 @@ router.post('/', passport.authenticate('jwtAdmin', { session: false }), function
         //         res.status(201).json({ message: 'Created successfuly' });
         //     }
         // });
-        courses.update({ID : req.body.ID},
+        meetups.update({ID : req.body.ID},
          req.body, {upsert:true}, function(err, result) {
              if(!err) {
                  console.log(result);
@@ -103,9 +86,9 @@ router.post('/', passport.authenticate('jwtAdmin', { session: false }), function
     });
 });
 
-// Update courses (any property)
-router.put('/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
-    courses.update({ CourseCode: req.params.courseCode}, req.body, function(err, result) {
+// Update meetups (any property)
+router.put('/:meetupCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
+    meetups.update({ meetupCode: req.params.meetupCode}, req.body, function(err, result) {
             // If everything's alright
         if (!err && result.ok === 1) {
             setLastUpdateNow();
@@ -117,9 +100,9 @@ router.put('/:courseCode', passport.authenticate('jwtAdmin', { session: false })
     });
 });
 
-// // Delete courses
-router.delete('/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
-    courses.remove({ CourseCode: req.params.courseCode }, function(err, result) {
+// // Delete meetups
+router.delete('/:meetupCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
+    meetups.remove({ meetupCode: req.params.meetupCode }, function(err, result) {
         if (!err) {
             console.log(result);
             setLastUpdateNow();
@@ -132,8 +115,8 @@ router.delete('/:courseCode', passport.authenticate('jwtAdmin', { session: false
 });
 
 // // Images
-router.get('/images/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function (req, res, next) {
-    courses.findOne({ CourseCode: req.params.courseCode }, 'PictureUrl', function(err, picUrl) {
+router.get('/images/:meetupCode', passport.authenticate('jwtAdmin', { session: false }), function (req, res, next) {
+    meetups.findOne({ meetupCode: req.params.meetupCode }, 'PictureUrl', function(err, picUrl) {
         // If there's no error
         if (!err) {
             res.sendFile('images/' + picUrl._doc.PictureUrl, { root: path.join(__dirname, '../public') });
@@ -141,10 +124,10 @@ router.get('/images/:courseCode', passport.authenticate('jwtAdmin', { session: f
     });
 });
 
-router.post('/images/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
+router.post('/images/:meetupCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     // Checks if only url has been sent
     if (req.body.imageUrl) {
-        var fileName = req.params.courseCode + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
+        var fileName = req.params.meetupCode + req.body.imageUrl.split('.')[req.body.imageUrl.split('.').length - 1];
         var file = fs.createWriteStream(path.join(__dirname, '../public/images/') + fileName);
         https.get(req.body.imageUrl, function(result) {
             result.pipe(file);
@@ -156,7 +139,7 @@ router.post('/images/:courseCode', passport.authenticate('jwtAdmin', { session: 
 
 // Add rating
 router.post('//ratings/:courseObjectId', passport.authenticate('jwt', { session: false }), function(req, res) {
-    courses.update({_id : req.params.courseObjectId},
+    meetups.update({_id : req.params.courseObjectId},
                     {$addToSet : {Ratings : req.body}}, function(err, result) {
         if (!err) {
             console.log(result);
@@ -170,7 +153,7 @@ router.post('//ratings/:courseObjectId', passport.authenticate('jwt', { session:
 
 // Update rating
 router.put('/ratings/:courseObjectId', passport.authenticate('jwt', { session: false }), function(req, res) {
-    courses.update({_id : req.params.courseObjectId,
+    meetups.update({_id : req.params.courseObjectId,
         'Ratings.userMailAddress' : req.body.userMailAddress},
                     {$set : {'Ratings.$.rating' : req.body.rating,
                 'Ratings.$.comment' : req.body.comment,
@@ -187,7 +170,7 @@ router.put('/ratings/:courseObjectId', passport.authenticate('jwt', { session: f
 
 // Remove rating
 router.delete('/ratings/:courseObjectId', passport.authenticate('jwt', { session: false }), function(req, res) {
-    courses.update({_id : req.params.courseObjectId,
+    meetups.update({_id : req.params.courseObjectId,
         'Ratings.userMailAddress' : req.body.userMailAddress},
                     {$pull : {Ratings : {userMailAddress : req.body.userMailAddress}}}, function(err, result) {
         if (!err) {

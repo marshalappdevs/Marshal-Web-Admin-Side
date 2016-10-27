@@ -11,4 +11,5 @@ var cycles = new mongoose.Schema({
             EndDate : String
 });
 
+cycles.plugin(require('mongoose-paginate'));
 module.exports = mongoose.model('Cycles', cycles);

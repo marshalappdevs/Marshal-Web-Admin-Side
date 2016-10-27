@@ -32,6 +32,16 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
     });
 });
 
+// Get page
+router.get('/:page', function(req, res, next) {
+    // If paging was requesting, sending chronically added courses
+    malshabItems.paginate({}, { page: parseInt(req.params.page), limit: 10, sort: {_id: -1}}, function(err, result) {
+        if (err) { res.status(500).send(""); }
+        res.setHeader('Content-Type', 'application/json');
+        res.json(result);
+    });
+});
+
 // Create malshab item
 router.post('/', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     malshabItems.update({url : req.body.url},

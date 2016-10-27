@@ -10,4 +10,5 @@ var fcm = new mongoose.Schema({
             courses : [String]
 });
 
+fcm.plugin(require('mongoose-paginate'));
 module.exports = mongoose.model('FcmRegistrations', fcm);

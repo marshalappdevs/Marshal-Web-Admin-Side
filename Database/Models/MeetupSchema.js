@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var mongoosePaginate = require('mongoose-paginate');
  
-var courseSchema = new mongoose.Schema({
+var meetups = new mongoose.Schema({
     _id : { type: mongoose.Schema.ObjectId, auto: true },
     updated_at: { type: Date, default: Date.now },
     "cycleList" : [ 
@@ -9,7 +9,7 @@ var courseSchema = new mongoose.Schema({
     ],
     ID : Number,
     Name : String,
-    CourseCode : String,
+    meetupCode : String,
     Description : String,
     TargetPopulation : String,
     ProfessionalDomain : String,
@@ -24,11 +24,10 @@ var courseSchema = new mongoose.Schema({
     MaximumPeople : Number,
     Comments : String,
     Category : String,
-    IsMooc : Boolean,
     "Ratings" : [ 
         {type: mongoose.Schema.ObjectId, ref: 'Ratings'}
     ]
 });
 
-courseSchema.plugin(mongoosePaginate);
-module.exports = mongoose.model('Courses', courseSchema);
+meetups.plugin(mongoosePaginate);
+module.exports = mongoose.model('Meetups', meetups);
