@@ -12,4 +12,4 @@ var cycles = new mongoose.Schema({
 });
 
 cycles.plugin(require('mongoose-paginate'));
-module.exports = mongoose.model('Cycles', cycles);
+module.exports = cycles;
