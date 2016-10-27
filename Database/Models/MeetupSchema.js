@@ -4,9 +4,7 @@ var mongoosePaginate = require('mongoose-paginate');
 var meetups = new mongoose.Schema({
     _id : { type: mongoose.Schema.ObjectId, auto: true },
     updated_at: { type: Date, default: Date.now },
-    "cycleList" : [ 
-        {type: mongoose.Schema.ObjectId, ref: 'Cycles'}
-    ],
+    "cycleList" : [require("./CycleSchema")],
     ID : Number,
     Name : String,
     meetupCode : String,
@@ -24,9 +22,7 @@ var meetups = new mongoose.Schema({
     MaximumPeople : Number,
     Comments : String,
     Category : String,
-    "Ratings" : [ 
-        {type: mongoose.Schema.ObjectId, ref: 'Ratings'}
-    ]
+    "Ratings" : [require("./RatingSchema")]
 });
 
 meetups.plugin(mongoosePaginate);
