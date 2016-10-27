@@ -1,17 +1,10 @@
-<div layout="row">
-<md-card layout="column" flex="100">
+<div layout="column" layout-align="start stretch" layout-wrap>
+<md-card>
 <md-card-title>
-    <md-card-title-media>
+    <md-card-title-media layout-padding>
     <div class="md-media-md card-media" >
         <img ng-src="{{preview.imageUrl}}"/>
-    </div>
-    </md-card-title-media>
-    <md-card-title-text ng-click="openLink()">
-    <span class="md-headline">{{preview.title}}</span>
-    <span class="md-subhead">{{preview.description}}</span>
-    </md-card-title-text>
-    <md-card-actions layout="row" layout-align="start center">
-    <md-card-icon-actions ng-show="index >= 0">
+        <md-card-icon-actions ng-show="index >= 0">
     <md-button class="md-icon-button" aria-label="Edit" ng-click="edit({index: index})">
         <ng-md-icon icon="edit"></ng-md-icon>
     </md-button>
@@ -19,6 +12,15 @@
         <ng-md-icon icon="delete"></ng-md-icon>
     </md-button>
     </md-card-icon-actions>
+    </div>
+    </md-card-title-media>
+    <md-card-title-text ng-click="openLink()">
+    <span class="md-headline">{{preview.title}}</span>
+    <span class="md-subhead">{{preview.description}}</span>
+    </md-card-title-text>
 </md-card-title>
+<md-card-actions>
+    
+</md-card-actions>
 </md-card>
 </div>

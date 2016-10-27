@@ -8,12 +8,18 @@ body {
   font-family: "Roboto", "NotoHebrew";
 }
 
+
 md-content.md-default-theme {
   background-color: #eee;
 }
 
+md-card-title {
+    flex: initial!important;
+}
+
 md-card {
   background-color: #fff;
+  
 }
 md-card h2:first-of-type {
   margin-top: 0;
