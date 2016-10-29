@@ -24,7 +24,7 @@ emitter.on('secretChange', function() {
 
 
 // Get all malshab items
-router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     malshabItems.find(function (err, malshabItems) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
