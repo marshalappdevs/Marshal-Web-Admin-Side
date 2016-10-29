@@ -34,7 +34,7 @@ router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), 
 });
 
 // Get page
-router.get('/:page', ['jwt', 'jwtAdmin'], function(req, res, next) {
+router.get('/:page', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     // If paging was requesting, sending chronically added courses
     materials.paginate({}, { page: parseInt(req.params.page), limit: 10, sort: {_id: -1}}, function(err, result) {
         if (err) { res.status(500).send(""); }
