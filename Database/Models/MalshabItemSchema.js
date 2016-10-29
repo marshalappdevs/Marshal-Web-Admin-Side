@@ -5,7 +5,8 @@ var malshab =  new mongoose.Schema({
             updated_at: { type: Date, default: Date.now },
             url : String,
             title : String,
-            imageUrl : String
+            imageUrl : String,
+            order : Number
 });
 
 malshab.plugin(require('mongoose-paginate'));
