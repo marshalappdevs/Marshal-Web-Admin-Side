@@ -25,7 +25,7 @@ emitter.on('secretChange', function() {
 var materials = require('../Database/Models/MaterialSchema');
 
 // Get all materials
-router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     materials.find(function (err, materials) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
@@ -34,7 +34,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
 });
 
 // Get page
-router.get('/:page', function(req, res, next) {
+router.get('/:page', ['jwt', 'jwtAdmin'], function(req, res, next) {
     // If paging was requesting, sending chronically added courses
     materials.paginate({}, { page: parseInt(req.params.page), limit: 10, sort: {_id: -1}}, function(err, result) {
         if (err) { res.status(500).send(""); }
@@ -70,7 +70,7 @@ router.delete('/:urlToRemove', passport.authenticate('jwtAdmin', { session: fals
     });
 });
 
-router.post('/preview', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.post('/preview', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
        URLCheck(req.body.urlToDigest).then(function() {
            var client = new MetaInspector(req.body.urlToDigest, { timeout: 5000 });
            client.on("fetch", function(){

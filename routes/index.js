@@ -68,7 +68,7 @@ bouncer.blocked = function (req, res, next, remaining)
 
 // Example authentication
 
-router.get('/dashboard', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function(req, res) {
+router.get('/dashboard', passport.authenticate(['jwt', 'jwtAdmin'], { session: false, failureRedirect: '/' }), function(req, res) {
     res.send('It worked! User id role: ' + req.user.role + '.');
 });
 
