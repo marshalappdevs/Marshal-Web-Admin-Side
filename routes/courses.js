@@ -138,7 +138,7 @@ router.post('/images/:courseCode', passport.authenticate('jwtAdmin', { session: 
 });
 
 // Add rating
-router.post('/ratings/:courseObjectId', passport.authenticate([['jwt', 'jwtAdmin'], 'jwtAdmin'], { session: false }), function(req, res) {
+router.post('/ratings/:courseObjectId', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
     courses.update({_id : req.params.courseObjectId},
                     {$addToSet : {Ratings : req.body}}, function(err, result) {
         if (!err) {
