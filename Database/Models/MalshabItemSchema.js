@@ -6,8 +6,7 @@ var malshab =  new mongoose.Schema({
             url : String,
             title : String,
             imageUrl : String,
-            order : Number,
-            test : String
+            order : Number
 });
 
 malshab.plugin(require('mongoose-paginate'));
