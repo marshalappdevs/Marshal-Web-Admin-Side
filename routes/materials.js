@@ -80,7 +80,7 @@ router.post('/preview', passport.authenticate(['jwt', 'jwtAdmin'], { session: fa
                                     url: client.url,
                                     baseUrl: client.host,
                                     description: client.description,
-                                    imageUrl: client.image,
+                                    imageUrl: client.image
                                     keywords: client.keywords
                                 };
              
