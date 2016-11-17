@@ -68,7 +68,7 @@ bouncer.blocked = function (req, res, next, remaining)
 
 // Example authentication
 
-router.get('/dashboard', passport.authenticate('jwt', { session: false, failureRedirect: '/' }), function(req, res) {
+router.get('/dashboard', passport.authenticate(['jwt', 'jwtAdmin'], { session: false, failureRedirect: '/' }), function(req, res) {
     res.send('It worked! User id role: ' + req.user.role + '.');
 });
 
@@ -78,6 +78,11 @@ router.get('/dashboard3', passport.authenticate('jwtLogin', { session: false, fa
 
 router.get('/dashboard2', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
     res.send('It worked! User id role: ' + req.user.role + '.');
+});
+
+router.get('/update', passport.authenticate('jwtAdmin', { session: false, failureRedirect: '/' }), function(req, res) {
+    setLastUpdateNow();
+    res.status(200).send("K");
 });
 
 // Authentication
@@ -172,7 +177,7 @@ router.post('/api/authapp',  function(req, res) {
     var expectedHashed = crypto.createHash('sha256').update(expectedString).digest('hex');
 
     if(expectedHashed == hashedAuthReq) {
-        var apiToken = jwt.sign({_doc: {_id: '57866c42c22f43782dd0b2e3'}}, config.secret, {
+        var apiToken = jwt.sign({_doc: {_id: '57866c42c22f43782dd0b2e3'}}, config.loginSecret, {
           expiresIn: 400
       });
 

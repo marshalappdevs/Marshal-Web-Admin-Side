@@ -24,7 +24,7 @@ emitter.on('secretChange', function() {
 var settings = require('../Database/Models/SettingsSchema');
 
 // Get settings
-router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     settings.findOne(function (err, settings) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');

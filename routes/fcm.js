@@ -24,7 +24,7 @@ var fcm = new FCMLib(config.serverApi);
 var registrations =require('../Database/Models/FcmRegistrationSchema');
 var settings = require('../Database/Models/SettingsSchema');
 
-router.get('/channels/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.get('/channels/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     settings.findOne(function (err, settings) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
@@ -32,7 +32,7 @@ router.get('/channels/', passport.authenticate('jwt', { session: false }), funct
     });
 });
 
-router.post('/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
+router.post('/register',  passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
     registrations.update({hardwareId : req.body.hardwareId},
         req.body, {upsert:true}, function(err, result) {
             if(!err) {
@@ -46,7 +46,7 @@ router.post('/register',  passport.authenticate('jwt', { session: false }), func
 });
 
 // Update registration (tokenId only) ////////////////////
-router.put('/register',  passport.authenticate('jwt', { session: false }), function(req, res) {
+router.put('/register',  passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
     registrations.update({hardwareId : req.body.hardwareId}, req.body, function(err, result) {
         // If everything's alright
         if (!err && result.ok === 1) {
@@ -59,7 +59,7 @@ router.put('/register',  passport.authenticate('jwt', { session: false }), funct
 });
 
 // Delete registration ////////////////////////////////
-router.delete('/unregister/:hardwareId',  passport.authenticate('jwt', { session: false }), function(req, res) {
+router.delete('/unregister/:hardwareId',  passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
     registrations.remove({hardwareId : req.params.hardwareId}, function(err, result) {
         if (!err) {
             console.log(result);
@@ -129,7 +129,7 @@ router.delete('/subscription/course/:hardwareId/:course_id', function(req, res) 
 });
 
 // Get registration
-router.get('/registrations/:hardwareId', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.get('/registrations/:hardwareId', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     registrations.findOne({hardwareId : req.params.hardwareId},function (err, registration) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');

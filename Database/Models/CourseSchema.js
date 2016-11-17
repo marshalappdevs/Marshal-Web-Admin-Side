@@ -4,9 +4,7 @@ var mongoosePaginate = require('mongoose-paginate');
 var courseSchema = new mongoose.Schema({
     _id : { type: mongoose.Schema.ObjectId, auto: true },
     updated_at: { type: Date, default: Date.now },
-    "cycleList" : [ 
-        {type: mongoose.Schema.ObjectId, ref: 'Cycles'}
-    ],
+    "cycleList" : [require("./CycleSchema")],
     ID : Number,
     Name : String,
     CourseCode : String,
@@ -25,9 +23,7 @@ var courseSchema = new mongoose.Schema({
     Comments : String,
     Category : String,
     IsMooc : Boolean,
-    "Ratings" : [ 
-        {type: mongoose.Schema.ObjectId, ref: 'Ratings'}
-    ]
+    "Ratings" : [require("./RatingSchema")]
 });
 
 courseSchema.plugin(mongoosePaginate);

@@ -27,7 +27,7 @@ emitter.on('secretChange', function() {
 var courses = require('../Database/Models/CourseSchema');
 
 // Get all courses
-router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     courses.find(function (err, courses) {
         if (err) { res.status(500).send(""); }
         res.setHeader('Content-Type', 'application/json');
@@ -43,25 +43,8 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
     });
 });
 
-// Get all courses
-router.get('/meetups', function(req, res, next) {
-    courses.find({IsMeetup: true}, function (err, courses) {
-        if (err) { res.status(500).send(""); }
-        res.setHeader('Content-Type', 'application/json');
-        if(req.query.light) {
-            var lightArr = [];
-            courses.forEach(function(currCourse) {
-                lightArr.push({"text": currCourse._doc.CourseCode + " - " + currCourse._doc.Name, "id": currCourse._doc.CourseCode});
-            });
-            res.json(lightArr);
-        } else {
-            res.json(courses);
-        }
-    });
-});
-
 // Get page
-router.get('/:page', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.get('/:page', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     // If paging was requesting, sending chronically added courses
     courses.paginate({}, { page: parseInt(req.params.page), limit: 10, sort: {_id: -1}}, function(err, result) {
         if (err) { res.status(500).send(""); }
@@ -155,7 +138,7 @@ router.post('/images/:courseCode', passport.authenticate('jwtAdmin', { session: 
 });
 
 // Add rating
-router.post('//ratings/:courseObjectId', passport.authenticate('jwt', { session: false }), function(req, res) {
+router.post('/ratings/:courseObjectId', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
     courses.update({_id : req.params.courseObjectId},
                     {$addToSet : {Ratings : req.body}}, function(err, result) {
         if (!err) {
@@ -169,7 +152,7 @@ router.post('//ratings/:courseObjectId', passport.authenticate('jwt', { session:
 });
 
 // Update rating
-router.put('/ratings/:courseObjectId', passport.authenticate('jwt', { session: false }), function(req, res) {
+router.put('/ratings/:courseObjectId', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
     courses.update({_id : req.params.courseObjectId,
         'Ratings.userMailAddress' : req.body.userMailAddress},
                     {$set : {'Ratings.$.rating' : req.body.rating,
@@ -186,7 +169,7 @@ router.put('/ratings/:courseObjectId', passport.authenticate('jwt', { session: f
 });
 
 // Remove rating
-router.delete('/ratings/:courseObjectId', passport.authenticate('jwt', { session: false }), function(req, res) {
+router.delete('/ratings/:courseObjectId', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
     courses.update({_id : req.params.courseObjectId,
         'Ratings.userMailAddress' : req.body.userMailAddress},
                     {$pull : {Ratings : {userMailAddress : req.body.userMailAddress}}}, function(err, result) {

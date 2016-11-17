@@ -7,9 +7,13 @@ var config = require('./main');
 module.exports = function(passport) {
   var opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
-  opts.secretOrKey = config.secret;
+  opts.secretOrKey = config.loginSecret;
   passport.use('jwt', new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({_id: jwt_payload._doc._id}, function(err, user) {
+    if(!jwt_payload._doc) {
+      jwt_payload._doc = {};
+    }
+    
+    User.findOne({$or: [{_id: jwt_payload._doc._id}, {username: jwt_payload.sub}]}, function(err, user) {
       if (err) {
         return done(err, false);
       }

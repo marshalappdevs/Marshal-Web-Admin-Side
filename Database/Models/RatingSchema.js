@@ -13,4 +13,4 @@ var ratings = new mongoose.Schema({
 })
 
 ratings.plugin(require('mongoose-paginate'));
-module.exports = mongoose.model('Ratings', ratings);
+module.exports = ratings;
