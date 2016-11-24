@@ -32,7 +32,7 @@ router.use('/api/malshabitems', require('./malshabs'));
 router.use('/api/ratings', require('./ratings'));
 router.use('/api/fcm', require('./fcm'));
 router.use('/api/settings', require('./settings'));
-
+router.use('/api/faq', require('./faq'));
 
 // DB connection
 mongoose.connect(config.database);
