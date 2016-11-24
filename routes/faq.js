@@ -24,11 +24,11 @@ emitter.on('secretChange', function() {
 
 
 // Get all faq items
-router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
-    faqItems.find(function (err, result) {
+router.get('/'), function(req, res, next) {
+    faqItems.find(function (err, faqItems) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
-        res.json(result);
+        res.json(faqItems);
     });
 });
 
