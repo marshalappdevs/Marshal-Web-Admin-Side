@@ -11,5 +11,5 @@ var faq = new mongoose.Schema({
             Unuseful : Number 
 });
 
-faqs.plugin(require('mongoose-paginate'));
+faq.plugin(require('mongoose-paginate'));
 module.exports = mongoose.model('FAQ', faq);
