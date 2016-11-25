@@ -12,4 +12,4 @@ var faq = new mongoose.Schema({
 });
 
 faq.plugin(require('mongoose-paginate'));
-module.exports = mongoose.model('FAQ', faq);
+module.exports = mongoose.model('faq', faq);
