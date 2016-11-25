@@ -6,7 +6,7 @@ var faq = new mongoose.Schema({
             Question : String,
             Answer : String,
             ImageUrl : String,
-            Order : Number,
+            PinToTop : Boolean,
             Useful : Number,
             Unuseful : Number 
 });
