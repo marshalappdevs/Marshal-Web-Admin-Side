@@ -5,6 +5,7 @@ var faq = new mongoose.Schema({
             updated_at: { type: Date, default: Date.now },  
             Question : String,
             Answer : String,
+            Link : String,
             ImageUrl : String,
             PinToTop : Boolean,
             Useful : Number,
