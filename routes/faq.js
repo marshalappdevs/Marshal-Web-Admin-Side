@@ -24,7 +24,7 @@ emitter.on('secretChange', function() {
 
 
 // Get all faq items
-router.get('/', function(req, res, next) {
+router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     faqItems.find(function (err, faqItems) {
         if (err) return console.error(err);
         res.setHeader('Content-Type', 'application/json');
