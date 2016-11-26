@@ -33,7 +33,7 @@ router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), 
 });
 
 // Get page
-router.get('/:page', function(req, res, next) {
+router.get('/:page', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     // If paging was requesting, sending chronically added courses
     faqItems.paginate({}, { page: parseInt(req.params.page), limit: 10, sort: {_id: -1}}, function(err, result) {
         if (err) { res.status(500).send(""); }
@@ -42,19 +42,33 @@ router.get('/:page', function(req, res, next) {
     });
 });
 
-// Create malshab item
-// router.post('/', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
-//     faqItems.update({url : req.body.url},
-//     req.body, {upsert:true}, function(err, result) {
-//         if(!err) {
-//             console.log(result);
-//             setLastUpdateNow();
-//             res.json({ code: 201, message: 'malshab item created successfully! :)' });
-//         } else {
-//             console.log(err);
-//             res.json({ code: 400, message: 'Couldn\'t create malshab item... :(' });
-//         }
-//     });
-// });
+// Update useful/unuseful
+router.post('/:isUseful', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
+    if (req.params.isUseful === "useful") {
+        faqItems.update({_id : req.body._id}, {$inc: { Useful : 1}}, function(err, result) {
+            if(!err) {
+                console.log(result);
+                setLastUpdateNow();
+                res.json({ code: 201, message: 'faq updated successfully! :)' });
+            } else {
+                console.log(err);
+                res.json({ code: 400, message: 'Couldn\'t update the faq... :(' });
+            }
+        });
+    } else if (req.params.isUseful === "unuseful"){
+        faqItems.update({_id : req.body._id}, {$inc: { Unuseful : 1}}, function(err, result) {
+            if(!err) {
+                console.log(result);
+                setLastUpdateNow();
+                res.json({ code: 201, message: 'faq updated successfully! :)' });
+            } else {
+                console.log(err);
+                res.json({ code: 400, message: 'Couldn\'t update the faq... :(' });
+            }
+        });
+    }
+
+    
+});
 
 module.exports = router;
