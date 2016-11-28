@@ -48,7 +48,6 @@ router.post('/:isUseful', passport.authenticate(['jwt', 'jwtAdmin'], { session: 
         faqItems.update({_id : req.body._id}, {$inc: { Useful : 1}}, function(err, result) {
             if(!err) {
                 console.log(result);
-                setLastUpdateNow();
                 res.json({ code: 201, message: 'faq updated successfully! :)' });
             } else {
                 console.log(err);
@@ -59,7 +58,6 @@ router.post('/:isUseful', passport.authenticate(['jwt', 'jwtAdmin'], { session: 
         faqItems.update({_id : req.body._id}, {$inc: { Unuseful : 1}}, function(err, result) {
             if(!err) {
                 console.log(result);
-                setLastUpdateNow();
                 res.json({ code: 201, message: 'faq updated successfully! :)' });
             } else {
                 console.log(err);
