@@ -6,7 +6,11 @@ angular.module('marshalApp')
         scope: {
             preview: '=link',
             index: '=index',
-            edit: '&edit'
+            edit: '&edit',
+            delete: '&delete'
+        },
+        controller: function($scope) {
+            $scope.openLink = function() {window.open($scope.preview.url,'_blank');};
         }
     };
 })

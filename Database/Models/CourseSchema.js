@@ -1,10 +1,14 @@
+var mongoose = require('mongoose');
+
 module.exports = {
+    _id : { type: mongoose.Schema.ObjectId, auto: true },
+    updated_at: { type: Date, default: Date.now },
     "cycleList" : [ 
         require('./CycleSchema')
     ],
     ID : Number,
     Name : String,
-    CourseCode : Number,
+    CourseCode : String,
     Description : String,
     TargetPopulation : String,
     ProfessionalDomain : String,
@@ -20,5 +24,8 @@ module.exports = {
     Comments : String,
     Category : String,
     IsMooc : Boolean,
-    IsMeetup : Boolean
+    IsMeetup : Boolean,
+    "Ratings" : [ 
+        require('./RatingSchema')
+    ]
 }
