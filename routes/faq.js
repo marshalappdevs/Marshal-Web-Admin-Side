@@ -70,10 +70,10 @@ router.post('/:isUseful', passport.authenticate(['jwt', 'jwtAdmin'], { session: 
 });
 
 // Create FAQ item
-router.post('/', function(req, res) {
+router.post('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
     faqItems.create(req.body, function(err, faq) {
         if (err) {
-            res.json({ code: 400, message: 'Couldn\'t create new rating..'});
+            res.json({ code: 400, message: 'Couldn\'t create new FAQ..'});
             console.log(err);
         } else {
             setLastUpdateNow();
@@ -83,16 +83,15 @@ router.post('/', function(req, res) {
 });
 
 // Update FAQ item
-router.put('/', function(req, res) {
+router.put('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
     faqItems.update({_id : req.body._id},
     req.body, function(err, result) {
-        if(!err) {
-            console.log(result);
-            setLastUpdateNow();
-            res.json({ code: 201, message: 'malshab item created successfully! :)' });
-        } else {
+        if (err) {
+            res.json({ code: 400, message: 'Couldn\'t update the FAQ..'});
             console.log(err);
-            res.json({ code: 400, message: 'Couldn\'t create malshab item... :(' });
+        } else {
+            setLastUpdateNow();
+            res.json({ code: 201, message: 'updated successfuly' });
         }
     });
 });
