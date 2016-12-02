@@ -69,4 +69,32 @@ router.post('/:isUseful', passport.authenticate(['jwt', 'jwtAdmin'], { session: 
     
 });
 
+// Create FAQ item
+router.post('/', function(req, res) {
+    faqItems.create(req.body, function(err, faq) {
+        if (err) {
+            res.json({ code: 400, message: 'Couldn\'t create new rating..'});
+            console.log(err);
+        } else {
+            setLastUpdateNow();
+            res.json({ code: 201, message: 'Created successfuly' });
+        }
+    });
+});
+
+// Update FAQ item
+router.put('/', function(req, res) {
+    faqItems.update({_id : req.body._id},
+    req.body, function(err, result) {
+        if(!err) {
+            console.log(result);
+            setLastUpdateNow();
+            res.json({ code: 201, message: 'malshab item created successfully! :)' });
+        } else {
+            console.log(err);
+            res.json({ code: 400, message: 'Couldn\'t create malshab item... :(' });
+        }
+    });
+});
+
 module.exports = router;

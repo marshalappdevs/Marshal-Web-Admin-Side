@@ -5,8 +5,16 @@ var meetups = new mongoose.Schema({
     _id : { type: mongoose.Schema.ObjectId, auto: true },
     updated_at: { type: Date, default: Date.now },
     "cycleList" : [require("./CycleSchema")],
-    ID : Number,
-    Name : String,
+    ID : {
+        type: Number,
+        unique: true,
+        required: true
+    },
+    Name : {
+        type: String,
+        unique: true,
+        required: true
+    },
     meetupCode : String,
     Description : String,
     TargetPopulation : String,
