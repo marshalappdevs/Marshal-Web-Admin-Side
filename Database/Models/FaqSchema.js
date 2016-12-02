@@ -12,7 +12,7 @@ var faqSchema = new mongoose.Schema({
             },
             Answer : String,
             Address : String,
-            Latitiude : Number,
+            Latitude : Number,
             Longitude : Number,
             PhoneNumber : String,
             Link : String,
