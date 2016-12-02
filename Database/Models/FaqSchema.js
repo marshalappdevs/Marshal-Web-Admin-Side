@@ -52,4 +52,4 @@ faqSchema.pre('save', function(next){
 });
 
 faqSchema.plugin(require('mongoose-paginate'));
-module.exports = mongoose.model('faq', faqSchema);
+module.exports = mongoose.model('faqs', faqSchema);
