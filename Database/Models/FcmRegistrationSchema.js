@@ -4,7 +4,11 @@ var fcm = new mongoose.Schema({
             _id : { type: mongoose.Schema.ObjectId, auto: true },
             updated_at: { type: Date, default: Date.now },
             registrationTokenId : String,
-            hardwareId : String,
+            hardwareId : {
+                type: String,
+                unique: true,
+                required: true
+            },
             lastModified : String,
             channels : [String],
             courses : [String]
