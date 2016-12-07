@@ -1,0 +1,32 @@
+<md-dialog aria-label="item.Name"  ng-cloak>
+    <form>
+      <md-toolbar>
+          <div style="padding-right:10px;padding-bottom:10px;padding-left:10px;">
+          <span><center><ng-md-icon icon="warning" size="66"></center></span>
+        
+          האם אתה בטוח שברצונך למחוק את הפריט -  
+          <br>  
+          <div><center>" +malshab.title+ "</center></div> 
+          </div> 
+      </md-toolbar> 
+      <md-dialog-content class="dialogcontent" dir="rtl" style="padding-left: 70px;padding-right:10px;" margin="right"> 
+          <p> 
+             <br><md-input-container class="md-block" flex-gt-sm> 
+             <label style="left: 130px">שם משתמש:</label> 
+             <input id="username"> 
+             </md-input-container>   
+          </p> 
+          <p> 
+             <br><md-input-container class="md-block" flex-gt-sm> 
+             <label style="left: 130px;">סיסמא:</label> 
+             <input type="password" id="password" ng-model="pass"> 
+             </md-input-container>   
+          </p> 
+      </md-dialog-content> 
+      <md-dialog-actions layout="row"> 
+         <span flex></span> 
+         <md-button ng-click="cancelthis()"><ng-md-icon icon="cancel"></ng-md-icon>                  ביטול            </md-button> 
+         <md-button ng-click="confirm()"><ng-md-icon icon="save"></ng-md-icon>                   מחק            </md-button> 
+      </md-dialog-actions> 
+    </form> 
+</md-dialog> 

@@ -1,0 +1,26 @@
+<md-dialog aria-label="Reconnect"  ng-cloak>
+ <form>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <h2 class="md-headline">{{username}}, בטוח/ה?</h2>
+        <p>
+            על מנת להשלים את הפעולה, עליך להזין את סיסמתך
+        </p>
+        <span flex></span>
+       <md-input-container class="md-icon-float md-block">
+        <label> סיסמה </label>
+        <input type="password" ng-model="pass" required>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="doCancel()">
+       בטל
+      </md-button>
+      <md-button class="md-raised md-primary" ng-click="doReconnect(pass)" ng-disabled="!pass">
+        התחבר
+      </md-button>
+    </md-dialog-actions>
+ </form>
+</md-dialog>

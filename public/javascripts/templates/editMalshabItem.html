@@ -1,0 +1,36 @@
+<md-dialog aria-label="item.Name"  ng-cloak>
+<form>
+   <md-toolbar>  
+      <div class="md-toolbar-tools">
+         <span style="padding-left: 20px;">  שם מסלול  </span>
+         <input id="malshabtitle" type="text" name="title" value="'+malshab.title+'">  
+         <span flex></span>
+         <md-button class="md-icon-button" ng-click="cancelthis()">       
+         <md-iconmd-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog">
+         </md-icon>            X           </md-button>
+      </div>
+   </md-toolbar>
+   <md-dialog-content class="dialogcontent" dir="rtl" margin="right">
+      <div class="md-dialog-content">
+         <p>
+            <br>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label style="left: 130px;">קישור למסלול:</label>
+                <input id="malshaburl" value="'+ malshab.url +'">
+             </md-input-container>  
+         </p>
+         <p>
+            <br><md-input-container class="md-block" flex-gt-sm>
+            <label style="left: 130px;">נתיב תמונה:</label>
+            <input id="malshabimageurl" value="'+ malshab.imageUrl +'">
+         </md-input-container>  
+         </p>
+      </div>
+   </md-dialog-content>
+   <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="cancelthis()"><ng-md-icon icon="cancel"></ng-md-icon>                  ביטול            </md-button>
+      <md-button ng-click="updatemalshab()"><ng-md-icon icon="save"></ng-md-icon>                   שמור            </md-button>
+   </md-dialog-actions>
+</form>
+</md-dialog>
