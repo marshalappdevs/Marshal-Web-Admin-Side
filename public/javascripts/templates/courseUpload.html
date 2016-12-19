@@ -13,12 +13,12 @@
             <form id="uploadFrom" flex="100">
                 <div layout="row">
                     <md-button class="md-primary md-raised"> 
-                    <div class="button" ngf-select ngf-model="lol" ngf-multiple="true" ngf-change="updateList($files, $event)">בחר קבצים..</div>
+                    <div class="button" ngf-select ngf-model="lol" ngf-multiple="true" ngf-change="updateList($files, $event)" ngf-max-size="5MB">בחר קבצים..</div>
                     </md-button>
                     <br/>
                 </div>
                 <div layout="row">
-                    <md-button ng-click="updateList()" class="md-warn">העלה!</button>
+                    <md-button ng-click="beginProcess()" class="md-warn">העלה!</button>
                 </div>
             </form>
             </div>
@@ -33,13 +33,13 @@
         </md-card-title>
         <md-card-content>
            <md-table-container>
-                <table md-table multiple>
+                <table md-table multiple style="text-align: center!important">
                     <thead md-head>
                     <tr md-row class="md-accent">
                         <th md-column class="md-accent"><span>שם הקובץ</span></th>
                         <th md-column><span>סטטוס העלאה</span></th>
                         <th md-column>נקלט במסד</th>
-                        <th md-column>אפשרויות</th>
+                        <th md-column>הערה</th>
                     </tr>
                     </thead>
                     <tbody md-body>
@@ -56,7 +56,7 @@
                             <ng-md-icon icon="done" ng-show="currFile.status == 'V'"></ng-md-icon>
                             <ng-md-icon icon="clear" ng-show="currFile.status == 'X'"></ng-md-icon>
                         </td>
-                        <td md-cell>VX?</td>
+                        <td md-cell>{{currFile.message}}</td>
                     </tr>
                     </tbody>
                 </table>

@@ -11,6 +11,8 @@ var jwt = require('jsonwebtoken');
 var config = require('../config/main');
 var emitter = require('../config/emitter');
 var setLastUpdateNow = require('./utility');
+var multipartyMiddleware = require('connect-multiparty')();
+var parser = require('json-parser');
 
 // Loading both passport strategies
 require('../config/passport')(passport);
@@ -112,6 +114,43 @@ router.delete('/:courseCode', passport.authenticate('jwtAdmin', { session: false
             res.json({ code: 400, message: 'Couldn\'t delete course' });
         }
     });
+});
+
+router.post('/json', multipartyMiddleware, function(req, res) {
+    var file = req.files.file;
+    fs.readFile(file.path, 'utf-8', function(err, data) {  
+    if (err) res.status(400).send(err);
+    var parsedCourses;
+
+    // Trying to parse the JSON
+    try {
+        parsedCourses = parser.parse(data);
+    } catch (err){
+        res.status(400).send("פורמט קובץ שגוי");
+    }
+
+    // Trying to find an existing course
+    if(parsedCourses) { 
+        courses.find({ID: parsedCourses.ID}, function(err, data) {
+            if(err) console.log(err);
+            if(data.length > 0) {
+                courses.update({ID: parsedCourses.ID}, parsedCourses, {upsert: true}, function(err, result) {
+                    setLastUpdateNow();
+                    res.json("הקורס עודכן בהצלחה");
+                });
+            } else {
+                parsedCourses.isMooc = false;
+                parsedCourses.isMeetup = false;
+                parsedCourses.imageUrl = null;
+                parsedCourses.Ratings = [];
+                courses.update({ID: parsedCourses.ID}, parsedCourses, {upsert: true}, function(err, result) {
+                    setLastUpdateNow();
+                    res.json("הקורס נוסף בהצלחה");
+                });
+            }
+        })
+    }
+});
 });
 
 // // Images
