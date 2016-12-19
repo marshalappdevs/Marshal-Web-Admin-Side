@@ -1,1 +1,45 @@
-בהצלחה למי שהולך לכתוב את הטמפלייט מידע למלשבים
+<link rel="stylesheet" href="../../stylesheets/malshab.css">
+   <md-content class="md-padding _md layout-xs-column layout-row" layout="row" layout-xs="column" >
+<div flex layout="column"  layout-xs="column" class="layout-column flex-xs flex-gt-xs-50">
+    <md-card class="_md" ng-repeat="malshab in malshabcards">
+    <div ng-if="$even" >
+         <a href="{{malshab.url}}">
+              <img class="md-card-image" src={{malshab.imageUrl}}>
+          </a>
+          <div class="md-title">
+              <div id="title">
+                 {{malshab.title}}
+             </div>
+              <md-card-actions>
+                  <ng-md-icon style="cursor:pointer" icon="mode_edit" ng-click="editcard($event, malshab)"></ng-md-icon>
+                  <ng-md-icon style="cursor:pointer" icon="delete" ng-click="deletecard($event, malshab)"></ng-md-icon>
+              </md-card-actions>
+          </div>
+        </div>
+    </md-card>
+</div>
+
+<div flex layout="column" id="left" layout-xs="column" class="layout-column flex-xs flex-gt-xs-50">
+    <md-card class="_md" ng-repeat="malshab in malshabcards">
+    <div ng-if="$odd" >
+        <a href="{{malshab.url}}">
+              <img class="md-card-image" src={{malshab.imageUrl}}>
+        </a>         
+        <div class="md-title">
+             <div id="title">
+                 {{malshab.title}}
+             </div>
+              <md-card-actions>
+                  <ng-md-icon style="cursor:pointer" icon="mode_edit" ng-click="editcard($event, malshab)"></ng-md-icon>
+                  <ng-md-icon style="cursor:pointer" icon="delete" ng-click="deletecard($event, malshab)"></ng-md-icon>
+              </md-card-actions>
+          </div>        
+      
+   </div>
+    </md-card>
+</div>
+
+</md-content>
+<md-button class="md-fab md-fab-bottom-left" aria-label="addMaterial" ng-click="addDialog()" style="position:fixed !important;">
+        <ng-md-icon icon="add"></ng-md-icon>
+</md-button>

@@ -40,10 +40,28 @@
           <input ng-model="preview.imageUrl" type="text">
           </md-input-container>
 
-          <md-input-container class="md-block">
-          <label>השאטאגים (שים לב לשים לפחות האשטאג עם קוד הקורס)</label>
-          <input ng-model="preview.hashTags" type="text">
-          </md-input-container>
+          <md-chips ng-model="selectedCourses" md-removable="true" md-on-remove="updateNotification(item)">
+              <md-autocomplete flex="100" 
+                      md-input-name="autocompleteField"
+                      md-selected-item="selectedItem"
+                      md-search-text="courseChoose"
+                      md-selected-item-change="selectedItemChange(item)" 
+                      md-items="item in querySearch(courseChoose)"
+                      md-item-text="item.text"
+                      md-no-cache	= "true"
+                      md-require-match = "true"
+                      placeholder="הפץ לקורסים (אופציונלי)">
+                  <md-item-template>
+                      <span md-highlight-text="courseChoose" flags="^i">{{item.text}}</span>
+                  </md-item-template>
+              </md-autocomplete>
+              <md-chip-template>
+                      <small>{{$chip.text}}</small>
+              </md-chip-template>
+          </md-chips>
+          <md-chips ng-model="selectedTags" md-removable="true">
+          </md-chips>
+
         </div>
 
         </div>

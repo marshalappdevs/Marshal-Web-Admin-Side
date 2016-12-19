@@ -20,7 +20,7 @@ emitter.on('secretChange', function() {
 });
 
 
-var fcm = new FCMLib(config.serverApi);
+var fcm = new FCMLib(config.fcmServerApiKey);
 var registrations =require('../Database/Models/FcmRegistrationSchema');
 var settings = require('../Database/Models/SettingsSchema');
 
