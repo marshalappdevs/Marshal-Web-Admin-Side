@@ -1,4 +1,4 @@
-var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute', 'angular-jwt', 'bsLoadingOverlay']);
+var app = angular.module('marshalApp', ['ngMaterial', 'ngMdIcons', 'ngRoute', 'angular-jwt', 'bsLoadingOverlay', 'ngFileUpload', 'md.data.table']);
 
 app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', 'httpService', '$window', 'jwtHelper', function($scope, $mdSidenav, $location, httpService, $window, jwtHelper){
 
@@ -116,6 +116,10 @@ app.config(function($mdThemingProvider, $routeProvider) {
       when('/courses', {
         templateUrl: 'javascripts/templates/courses.html',
         controller: 'coursesCtrl'
+      }).
+      when('/courses/upload', {
+        templateUrl: 'javascripts/templates/courseUpload.html',
+        controller: 'courseUploadCtrl'
       }).
       when('/malshabs', {
         templateUrl: 'javascripts/templates/malshab.html',
