@@ -34,7 +34,7 @@ router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), 
         if(req.query.light) {
             var lightArr = [];
             courses.forEach(function(currCourse) {
-                lightArr.push({"text": currCourse._doc.CourseCode + " - " + currCourse._doc.Name, "id": currCourse._doc.CourseCode});
+                lightArr.push({"text": currCourse._doc.ID + " - " + currCourse._doc.Name, "id": currCourse._doc.ID});
             });
             res.json(lightArr);
         } else {
