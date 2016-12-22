@@ -1,0 +1,23 @@
+  <md-content>
+    <md-list>
+      <md-list-item class="md-3-line" ng-repeat="faq in faqs | orderBy:'-Useful'" ng-click="isShow = !isShow" 
+          ng-init="isShow = false" style="height: 88px;">
+        <div class="md-list-item-text">
+          <h3>
+            {{faq.Question}}
+          </h3>
+          <div ng-show="isShow">
+            <h4>{{faq.Answer}}</h4>
+            <h4>{{faq.PhoneNumber}}</h4>
+            <h4>{{faq.Link}}</h4>
+          </div>
+        </div>
+        <ng-md-icon style="position:relative" icon="mode_edit" ng-click="editFaq($event, faq)"></ng-md-icon>
+        <ng-md-icon style="position:relative" icon="delete" ng-click="deleteFaq($event, faq)"></ng-md-icon>
+        <md-divider ng-if="!$last"></md-divider>
+      </md-list-item>
+    </md-list>
+  </md-content>
+  <md-button class="md-fab md-fab-bottom-left" aria-label="addMaterial" ng-click="addFaq()" style="position:fixed !important;">
+        <ng-md-icon icon="add"></ng-md-icon>
+</md-button>

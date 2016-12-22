@@ -1,5 +1,6 @@
 angular.module('marshalApp')
 .controller('malshabCtrl', ['$scope','$mdDialog','httpService', function($scope,$mdDialog,httpService){
+    
     // Emitting current feature to parent scope
     $scope.$emit('currFeatureChange', "מידע למלש\"בים");
     
@@ -10,22 +11,21 @@ angular.module('marshalApp')
     }; 
     getcards();
 
-    $scope.deletecard = function(event, malshab, httpService){
-           return $mdDialog.show({
-                //   locals:{malshab:malshab},
-                  clickOutsideToClose: true,
-                  hasBackdrop: false,
-                  targetEvent: event,
-                  scope: $scope,        
-                  preserveScope: true,           
-                  templateUrl: 'javascripts/templates/deleteMalshabItem.html',                           
-                 controller: 'malshabCtrl'                                   
-               });
+    // delete malshab item
+    $scope.deletecard = function(event, malshab){
+        httpService.delete("/api/malshabitems/"+malshab._id, {})
+        .then(function(res) {
+           swal("נמחק", "הקורס נמחק בהצלחה!", "success");
+            getcards();
+            },function(res){
+                swal("בעיה", "הייתה בעיה במחיקה!", "error");
+            });
     };
     
+    // edit malshab item
     $scope.editcard = function(event, malshab, httpService){
+        $scope.malshabToUpdate = malshab;
        return $mdDialog.show({
-                //   locals:{malshab:malshab},
                   clickOutsideToClose: true,
                   hasBackdrop: false,
                   targetEvent: event,
@@ -36,7 +36,55 @@ angular.module('marshalApp')
                });
     };
 
+// after changing the malshab item save it
+$scope.updatemalshab = function(){                                        
     
+    // creating the new malshab item
+    var newmalshab = {_id:$scope.malshabToUpdate._id,
+                      title:document.getElementById("malshabtitle").value,
+                      url:document.getElementById("malshaburl").value,
+                      imageUrl:document.getElementById("malshabimageurl").value,
+                      order:document.getElementById("malshaborder").value};
+    
+    // send it to the httpservice to save the changes
+    httpService.put("/api/malshabitems/"+newmalshab._id, {malshabToUpdate:newmalshab}).then(function (response){
+    swal("נשמר", "פרטי הקורס נשמרו!", "success");
+    getcards();
+    $mdDialog.hide();
+    }
+    ,function(res){
+                $mdDialog.show(
+                    $mdDialog.alert()
+                        .parent(angular.element(document.body))
+                        .clickOutsideToClose(true)
+                        .title('')
+                        .textContent('הייתה בעיה במחיקה !')
+                        .ariaLabel('DeleteFail')
+                        .ok('שיט!')
+                )});
+};
+
+$scope.addcard = function(){
+    return $mdDialog.show({
+                  clickOutsideToClose: true,
+                  hasBackdrop: false,
+                  targetEvent: event,
+                  scope: $scope,        
+                  preserveScope: true,           
+                  templateUrl: 'javascripts/templates/addMalshabItem.html',         
+                  controller: 'malshabCtrl'
+               });
+};
+
+$scope.saveNewMalshab = function () {
+    // creating the new malshab item
+    var newmalshab = {_id:$scope.malshabToUpdate._id,
+                      title:document.getElementById("malshabtitle").value,
+                      url:document.getElementById("malshaburl").value,
+                      imageUrl:document.getElementById("malshabimageurl").value,
+                      order:document.getElementById("malshaborder").value};
+    
+}
 $scope.hide = function(answer) {
     $mdDialog.hide(answer);
 };
@@ -44,37 +92,5 @@ $scope.hide = function(answer) {
 $scope.cancelthis = function(answer) {
     $mdDialog.hide(answer);
 };
-
-$scope.updatemalshab = function(){                                        
-    var newmalshab = {_id:malshab._id,
-                      title:document.getElementById("malshabtitle").value,
-                      url:document.getElementById("malshaburl").value,
-                      imageUrl:document.getElementById("malshabimageurl").value};
-    httpService.put("/api/malshabitems/"+malshab._id, newmalshab).then(function (response){
-    swal("נשמר", "פרטי הקורס נשמרו!", "success");
-    getcards();
-    $mdDialog.hide();
-    });
-};
-
-$scope.confirm = function(){                                        
-    alert($scope.pass);
-    httpService.delete("/api/malshabitems/"+malshab._id).then(function (response){ 
-        swal("נמחק", "הקורס נמחק !", "error");
-        getcards();
-        $mdDialog.hide();
-    });
-};
-
-// function DialogController($scope, $mdDialog) {
-//   $scope.hide = function() {
-//     $mdDialog.hide();
-//   };
-
-//   $scope.answer = function(answer) {
-//     $mdDialog.hide(answer);
-//   };
-// };
-
 }]);
 

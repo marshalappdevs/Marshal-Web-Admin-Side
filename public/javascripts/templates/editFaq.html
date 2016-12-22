@@ -1,0 +1,53 @@
+<md-dialog aria-label="item.Name"  ng-cloak style="width: 500px;">
+<form>
+   <md-toolbar>  
+      <div class="md-toolbar-tools">
+         <span style="padding-left: 20px;">  עריכת שאלה  </span>
+         <md-button style="margin-right:auto" class="md-icon-button" ng-click="cancelthis()">       
+            <ng-md-icon icon="clear"></ng-md-icon></md-icon>                                   
+         </md-button>
+      </div>
+   </md-toolbar>
+   
+   <md-dialog-content class="dialogcontent" dir="rtl" margin="right">
+      <div class="md-dialog-content">
+         <p>
+            <br>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label style="left: 130px;">שאלה:</label>
+                <input id="faqQuestion" value="{{FaqToUpdate.Question}}">
+             </md-input-container>  
+         </p>
+         <p>
+            <br><md-input-container class="md-block" flex-gt-sm>
+            <label style="left: 130px;">תשובה:</label>
+            <input id="faqAnswer" value="{{FaqToUpdate.Answer}}">
+         </md-input-container>  
+         </p>
+         <p>
+            <br><md-input-container class="md-block" flex-gt-sm>
+            <label style="left: 130px;">מספר טלפון:</label>
+            <input id="faqPhoneNumber" value="{{FaqToUpdate.PhoneNumber}}">
+         </md-input-container>  
+         </p>
+         <p ng-if="FaqToUpdate.Address != null">
+            <br><md-input-container class="md-block" flex-gt-sm>
+            <label style="left: 130px;">כתובת:</label>
+            <input id="faqAddress" value="{{FaqToUpdate.Address}}">
+         </md-input-container>  
+         </p>
+         <p ng-if="FaqToUpdate.Link != null">
+            <br><md-input-container class="md-block" flex-gt-sm>
+            <label style="left: 130px;">לינק:</label>
+            <input id="faqLink" value="{{FaqToUpdate.Link}}">
+         </md-input-container>  
+         </p>
+      </div>
+   </md-dialog-content>
+   <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="cancelthis()"><ng-md-icon icon="cancel"></ng-md-icon>ביטול</md-button>
+      <md-button ng-click="saveUpdates()"><ng-md-icon icon="save"></ng-md-icon>שמור</md-button>
+   </md-dialog-actions>
+</form>
+</md-dialog>
