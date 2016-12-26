@@ -15,7 +15,7 @@ angular.module('marshalApp')
     $scope.deletecard = function(event, malshab){
         httpService.delete("/api/malshabitems/"+malshab._id, {})
         .then(function(res) {
-           swal("נמחק", "הקורס נמחק בהצלחה!", "success");
+           swal("נמחק", "הפריט נמחק בהצלחה!", "success");
             getcards();
             },function(res){
                 swal("בעיה", "הייתה בעיה במחיקה!", "error");
@@ -48,7 +48,7 @@ $scope.updatemalshab = function(){
     
     // send it to the httpservice to save the changes
     httpService.put("/api/malshabitems/"+newmalshab._id, {malshabToUpdate:newmalshab}).then(function (response){
-    swal("נשמר", "פרטי הקורס נשמרו!", "success");
+    swal("נשמר", "פרטים נשמרו!", "success");
     getcards();
     $mdDialog.hide();
     }
@@ -78,11 +78,26 @@ $scope.addcard = function(){
 
 $scope.saveNewMalshab = function () {
     // creating the new malshab item
-    var newmalshab = {_id:$scope.malshabToUpdate._id,
-                      title:document.getElementById("malshabtitle").value,
+    var newmalshab = {title:document.getElementById("malshabtitle").value,
                       url:document.getElementById("malshaburl").value,
                       imageUrl:document.getElementById("malshabimageurl").value,
                       order:document.getElementById("malshaborder").value};
+        httpService.post("/api/malshabitems/", newmalshab)
+        .then(function (response){
+            swal("נשמר", "פרטי הקורס נשמרו!", "success");
+            getcards();
+            $mdDialog.hide();
+        }, function(res){
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(true)
+                    .title('')
+                    .textContent('הייתה בעיה במחיקה!')
+                    .ariaLabel('DeleteFail')
+                    .ok('שיט!')
+        )});
+    
     
 }
 $scope.hide = function(answer) {
