@@ -57,4 +57,38 @@ router.post('/', passport.authenticate('jwtAdmin', { session: false }), function
     });
 });
 
+// Delete malshab
+router.delete('/:id', function(req, res) {
+    malshabItems.remove({ _id: req.params.id }, function(err, result) {
+        if (!err) {
+            console.log(result);
+            setLastUpdateNow();
+            res.status(201).send("V");
+        } else {
+            console.log(err);
+            res.status(400).send(err);
+        }
+    });
+});
+
+// Update malshab (any property)
+router.put('/:id', function(req, res) {
+
+        let shit = {imageUrl: req.body.malshabToUpdate.imageUrl,
+                    order: req.body.malshabToUpdate.order,
+                    title: req.body.malshabToUpdate.title,
+                    url: req.body.malshabToUpdate.url};
+    malshabItems.update({_id: ObjectID(req.params._id)}, shit, {upsert: true}, function(err, result) {
+        if (!err) {
+            console.log(result);
+            setLastUpdateNow();
+            res.status(201);
+        } else {
+            console.log(err);
+            res.status(400);
+        }
+    });
+});
+
+
 module.exports = router;
