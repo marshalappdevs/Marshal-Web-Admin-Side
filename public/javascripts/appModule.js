@@ -67,6 +67,11 @@ app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', 'httpService', '$
       link : '/push',
       title: 'שליחת התראת פוש',
       icon: 'message'
+    },
+    {
+      link : '/faqs',
+      title: 'שאלות ותשובות',
+      icon: 'question_answer'
     }
   ];
 
@@ -136,6 +141,10 @@ app.config(function($mdThemingProvider, $routeProvider) {
       when('/push', {
         templateUrl: 'javascripts/templates/push.html',
         controller: 'pushCtrl'
+      }).
+      when('/faqs', {
+        templateUrl: 'javascripts/templates/faqs.html',
+        controller: 'faqsCtrl'
       }).
       otherwise({
         redirectTo: '/'
