@@ -1,6 +1,6 @@
 
 angular.module('marshalApp')
-.controller('coursesCtrl', ['$scope','$mdDialog','$mdMedia','httpService', function($scope,$mdDialog, $mdMedia,httpService){
+.controller('coursesCtrl', ['$scope','$mdDialog','$mdMedia','httpService', '$location', function($scope,$mdDialog, $mdMedia,httpService, $location){
     // Emitting current feature to parent scope
     $scope.$emit('currFeatureChange', "קורסים והשתלמויות");
 
@@ -31,6 +31,22 @@ angular.module('marshalApp')
   };
 
   $scope.currpicurl;
+
+  $scope.chooseAddMethod = function (ev) {
+        var confirm = $mdDialog.confirm()
+          .title('איך תרצה להוסיף קורס?')
+          .textContent('מקבצים קיימים או ידנית?')
+          .ariaLabel('Lucky day')
+          .targetEvent(ev)
+          .ok('מקבצים!')
+          .cancel('ידנית');
+
+    $mdDialog.show(confirm).then(function() {
+      $location.path("/courses/upload");
+    }, function() {
+      $scope.addNewCourse(ev);
+    });
+  }
 
   // Calculating rating for each course and shows on the card on main course page
   $scope.calcmyrating = function(item) {
