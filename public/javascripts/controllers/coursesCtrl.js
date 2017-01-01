@@ -741,6 +741,9 @@ $scope.rowsize = function(){
 return new Array(3);
 }
 
+}]).
+controller('courseEditCtrl', ['$scope','$mdDialog','$mdMedia','httpService', '$location', function($scope,$mdDialog, $mdMedia,httpService, $location){
+
 }]);
 
 function DialogController($scope, $mdDialog) {
