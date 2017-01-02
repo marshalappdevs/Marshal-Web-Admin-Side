@@ -45,8 +45,16 @@ router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), 
     });
 });
 
+router.get('/:ID', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
+    courses.findOne({ID: req.params.ID}, function(err, course) {
+        if(err) { res.status(400).send("BadID");}
+        res.setHeader('Content-Type', 'application/json');
+        res.json(course);
+     })
+});
+
 // Get page
-router.get('/:page', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
+router.get('/page/:page', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     // If paging was requesting, sending chronically added courses
     courses.paginate({}, { page: parseInt(req.params.page), limit: 10, sort: {_id: -1}}, function(err, result) {
         if (err) { res.status(500).send(""); }
@@ -89,8 +97,8 @@ router.post('/', passport.authenticate('jwtAdmin', { session: false }), function
 });
 
 // Update courses (any property)
-router.put('/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
-    courses.update({ CourseCode: req.params.courseCode}, req.body, function(err, result) {
+router.put('/:ID', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
+    courses.update({ ID: req.params.ID}, req.body, function(err, result) {
             // If everything's alright
         if (!err && result.ok === 1) {
             setLastUpdateNow();
