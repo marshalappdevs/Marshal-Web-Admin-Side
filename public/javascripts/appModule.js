@@ -126,6 +126,10 @@ app.config(function($mdThemingProvider, $routeProvider) {
         templateUrl: 'javascripts/templates/courseUpload.html',
         controller: 'courseUploadCtrl'
       }).
+      when('/courses/:id', {
+        templateUrl: 'javascripts/templates/editCourse.html',
+        controller: 'courseEditCtrl'
+      }).
       when('/malshabs', {
         templateUrl: 'javascripts/templates/malshab.html',
         controller: 'malshabCtrl'
