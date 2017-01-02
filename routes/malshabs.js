@@ -43,16 +43,14 @@ router.get('/:page', function(req, res, next) {
 });
 
 // Create malshab item
-router.post('/', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
-    malshabItems.update({url : req.body.url},
-    req.body, {upsert:true}, function(err, result) {
-        if(!err) {
-            console.log(result);
-            setLastUpdateNow();
-            res.json({ code: 201, message: 'malshab item created successfully! :)' });
-        } else {
+router.post('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
+    malshabItems.create(req.body.newmalshab, function(err, malshab) {
+        if (err) {
+            res.json({ code: 400, message: 'Couldn\'t create new malshab..'});
             console.log(err);
-            res.json({ code: 400, message: 'Couldn\'t create malshab item... :(' });
+        } else {
+            setLastUpdateNow();
+            res.json({ code: 201, message: 'Created successfuly' });
         }
     });
 });
@@ -61,33 +59,26 @@ router.post('/', passport.authenticate('jwtAdmin', { session: false }), function
 router.delete('/:id', function(req, res) {
     malshabItems.remove({ _id: req.params.id }, function(err, result) {
         if (!err) {
-            console.log(result);
             setLastUpdateNow();
-            res.status(201).send("V");
+            res.json({ code: 201, message: 'V' });
         } else {
+             res.json({ code: 400, message: 'Couldn\'t delete the malshab..'});
             console.log(err);
-            res.status(400).send(err);
         }
     });
 });
 
-// Update malshab (any property)
+// Update malshab (any property) , {upsert: true}
 router.put('/:id', function(req, res) {
-
-        let shit = {imageUrl: req.body.malshabToUpdate.imageUrl,
-                    order: req.body.malshabToUpdate.order,
-                    title: req.body.malshabToUpdate.title,
-                    url: req.body.malshabToUpdate.url};
-    malshabItems.update({_id: ObjectID(req.params._id)}, shit, {upsert: true}, function(err, result) {
-        if (!err) {
-            console.log(result);
-            setLastUpdateNow();
-            res.status(201);
-        } else {
+    malshabItems.update({_id: ObjectID(req.body.malshabToUpdate._id)}, req.body.malshabToUpdate, function(err, result) {
+        if (err) {
+            res.json({ code: 400, message: 'Couldn\'t update the malshab..'});
             console.log(err);
-            res.status(400);
+        } else {
+            setLastUpdateNow();
+            res.json({ code: 201, message: 'updated successfuly' });
         }
-    });
+        });
 });
 
 

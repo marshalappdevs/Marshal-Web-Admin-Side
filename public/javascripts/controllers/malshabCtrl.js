@@ -6,10 +6,21 @@ angular.module('marshalApp')
     
     var getcards = function (){
         httpService.get("/api/malshabitems/").then(function (response){
-        $scope.malshabcards = response.data;
+            $scope.malshabcards = response.data;
         });  
     }; 
     getcards();
+    
+    $scope.hide = function(answer) {
+    $mdDialog.hide(answer);
+    };
+
+    $scope.cancelthis = function(answer) {
+        $mdDialog.hide(answer);
+    };
+    $scope.refreshForm = function(){
+        $scope.malshab = null;
+    };
 
     // delete malshab item
     $scope.deletecard = function(event, malshab){
@@ -51,17 +62,7 @@ $scope.updatemalshab = function(){
     swal("נשמר", "פרטי הקורס נשמרו!", "success");
     getcards();
     $mdDialog.hide();
-    }
-    ,function(res){
-                $mdDialog.show(
-                    $mdDialog.alert()
-                        .parent(angular.element(document.body))
-                        .clickOutsideToClose(true)
-                        .title('')
-                        .textContent('הייתה בעיה במחיקה !')
-                        .ariaLabel('DeleteFail')
-                        .ok('שיט!')
-                )});
+    });
 };
 
 $scope.addcard = function(){
@@ -74,23 +75,35 @@ $scope.addcard = function(){
                   templateUrl: 'javascripts/templates/addMalshabItem.html',         
                   controller: 'malshabCtrl'
                });
-};
+    };
 
 $scope.saveNewMalshab = function () {
-    // creating the new malshab item
-    var newmalshab = {_id:$scope.malshabToUpdate._id,
-                      title:document.getElementById("malshabtitle").value,
-                      url:document.getElementById("malshaburl").value,
-                      imageUrl:document.getElementById("malshabimageurl").value,
-                      order:document.getElementById("malshaborder").value};
-    
-}
-$scope.hide = function(answer) {
-    $mdDialog.hide(answer);
-};
+    if($scope.malshab == undefined ||
+       $scope.malshab.title == undefined ||
+       $scope.malshab.url == undefined ||
+       $scope.malshab.imageUrl == undefined ||
+       $scope.malshab.order == undefined ){
+        swal("בעיה", "חובה למלא את כל השדות!", "error");
+    }
+    else {
+        // creating the new malshab item
+        var newmalshab = {title:$scope.malshab.title,
+                      url:$scope.malshab.url,
+                      imageUrl:$scope.malshab.imageUrl,
+                      order:$scope.malshab.order};
 
-$scope.cancelthis = function(answer) {
-    $mdDialog.hide(answer);
+        httpService.post("/api/malshabitems/", {newmalshab:newmalshab}).then(function(res) {
+            swal("נוסף", "הקורס נוסף בהצלחה!", "success");
+            getcards();
+            $scope.refreshForm();
+            $mdDialog.hide();
+            },function(res){
+                swal("בעיה", "הייתה בעיה בהוספה!", "error");
+                refreshForm();
+                $mdDialog.hide();
+            });
+    }
+    
 };
 }]);
 

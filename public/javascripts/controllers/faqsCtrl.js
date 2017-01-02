@@ -12,6 +12,17 @@ angular.module('marshalApp')
     
     getfaqs();
 
+    $scope.Faq = {
+        Question:{},
+        Answer:{},
+        PhoneNumber:{},
+        Useful:{},
+        Unuseful:{},
+        PinToTop:{},
+        Link:{},
+        Address:{}
+    };
+
     $scope.hide = function(answer) {
         $mdDialog.hide(answer);
     };
@@ -67,7 +78,7 @@ angular.module('marshalApp')
 
     /* Add new FAQ item */
     $scope.addFaq = function(){
-    return $mdDialog.show({
+        return $mdDialog.show({
                   clickOutsideToClose: true,
                   hasBackdrop: false,
                   targetEvent: event,
@@ -78,29 +89,29 @@ angular.module('marshalApp')
                });
     };
 
-    $scope.saveNewMalshab = function(){
+    $scope.saveNewFaq = function(){
         // Checks if the user fill all the fileds
-        if(($scope.question == undefined) || 
-           ($scope.answer == undefined) ||
-           ($scope.phoneNumber == undefined) ||
-           ($scope.useful == undefined) ||
-           ($scope.unuseful == undefined)) {
+        if(($scope.Faq == undefined) || 
+           ($scope.Faq.question == undefined) || 
+           ($scope.Faq.answer == undefined) ||
+           ($scope.Faq.phoneNumber == undefined) ||
+           ($scope.Faq.pinToTop  == undefined)) {
             swal("בעיה", "חובה למלא את כל השדות!", "error");
         } else {
-            var newFaq = {Question:$scope.question,
-                      Answer:$scope.answer,
-                      PhoneNumber:$scope.phoneNumber,
+            var newFaq = {Question:$scope.Faq.question,
+                      Answer:$scope.Faq.answer,
+                      PhoneNumber:$scope.Faq.phoneNumber,
                       Useful:0,
                       Unuseful:0,
-                      PinToTop:$scope.pinToTop,
+                      PinToTop:$scope.Faq.pinToTop,
                       Link:null,
                       Address:null };
 
-            if($scope.link != undefined){
-                newFaq.Link = $scope.link;
+            if($scope.Faq.link != undefined){
+                newFaq.Link = $scope.Faq.link;
             }
-            if($scope.address != undefined){
-                newFaq.Address = $scope.address;
+            if($scope.Faq.address != undefined){
+                newFaq.Address = $scope.Faq.address;
             }
 
             httpService.post("/api/faqItems/", {newFaq:newFaq}).then(function(res) {
@@ -111,5 +122,9 @@ angular.module('marshalApp')
         });
             $mdDialog.hide();
         }
+    };
+
+    $scope.refreshForm = function(){
+        $scope.Faq = null;
     };
 }]);
