@@ -1,9 +1,10 @@
 <md-dialog aria-label="item.Name"  ng-cloak>
-<form>
+<form name = "newMalshabCard">
    <md-toolbar>  
       <div class="md-toolbar-tools">
          <span style="padding-left: 20px;">  כותרת  </span>
-         <input id="malshabtitle" type="text" name="title">  
+         <input required ng-model ="malshab.title" type="text">
+         
          <span flex></span>
          <md-button class="md-icon-button" ng-click="cancelthis()">       
          <md-iconmd-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog">
@@ -12,26 +13,28 @@
    </md-toolbar>
    <md-dialog-content class="dialogcontent" dir="rtl" margin="right">
       <div class="md-dialog-content">
-         <p>
-            <br>
+        <md-input-container class="md-block" flex-gt-sm>
+                <label>קישור</label>
+                <input required ng-model ="malshab.url">
+                <div ng-messages="malshab.url.$error" style="font-size:12px;" ng-if='malshab.url == undefined'>
+                    <div ng-message="required">שדה חובה.</div>
+                </div>
+        </md-input-container>
+
             <md-input-container class="md-block" flex-gt-sm>
-                <label style="left: 130px;">קישור:</label>
-                <input id="malshaburl">
-             </md-input-container>  
-         </p>
-         <p>
-            <br><md-input-container class="md-block" flex-gt-sm>
             <label style="left: 130px;">נתיב תמונה:</label>
-            <input id="malshabimageurl">
+            <input required ng-model ="malshab.imageUrl">
+            <div ng-messages="malshab.imageUrl.$error" style="font-size:12px;" ng-if='malshab.imageUrl == undefined'>
+                <div ng-message="required">שדה חובה.</div>
+            </div>
          </md-input-container>  
-         </p>
-         <p>
-            <br>
             <md-input-container class="md-block" flex-gt-sm>
                 <label style="left: 130px;">מספר סידורי:</label>
-                <input id="malshaborder">
+                <input required ng-model ="malshab.order" type="number" min="1">
+                <div ng-messages="malshab.order.$error" style="font-size:12px;" ng-if='malshab.order == undefined'>
+                    <div ng-message="required">שדה חובה.</div>
+                </div>
              </md-input-container>  
-         </p>
       </div>
    </md-dialog-content>
    <md-dialog-actions layout="row">
