@@ -39,3 +39,5 @@ node_modules
 
 #web strom
 .idea
+
+config/main.js
