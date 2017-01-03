@@ -11,6 +11,8 @@ var jwt = require('jsonwebtoken');
 var config = require('../config/main');
 var emitter = require('../config/emitter');
 var setLastUpdateNow = require('./utility');
+var multipartyMiddleware = require('connect-multiparty')();
+var parser = require('json-parser');
 
 // Loading both passport strategies
 require('../config/passport')(passport);
@@ -34,7 +36,7 @@ router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), 
         if(req.query.light) {
             var lightArr = [];
             courses.forEach(function(currCourse) {
-                lightArr.push({"text": currCourse._doc.CourseCode + " - " + currCourse._doc.Name, "id": currCourse._doc.CourseCode});
+                lightArr.push({"text": currCourse._doc.ID + " - " + currCourse._doc.Name, "id": currCourse._doc.ID});
             });
             res.json(lightArr);
         } else {
@@ -43,8 +45,16 @@ router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), 
     });
 });
 
+router.get('/:ID', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
+    courses.findOne({ID: req.params.ID}, function(err, course) {
+        if(err) { res.status(400).send("BadID");}
+        res.setHeader('Content-Type', 'application/json');
+        res.json(course);
+     })
+});
+
 // Get page
-router.get('/:page', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
+router.get('/page/:page', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     // If paging was requesting, sending chronically added courses
     courses.paginate({}, { page: parseInt(req.params.page), limit: 10, sort: {_id: -1}}, function(err, result) {
         if (err) { res.status(500).send(""); }
@@ -87,8 +97,8 @@ router.post('/', passport.authenticate('jwtAdmin', { session: false }), function
 });
 
 // Update courses (any property)
-router.put('/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
-    courses.update({ CourseCode: req.params.courseCode}, req.body, function(err, result) {
+router.put('/:ID', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
+    courses.update({ ID: req.params.ID}, req.body, function(err, result) {
             // If everything's alright
         if (!err && result.ok === 1) {
             setLastUpdateNow();
@@ -112,6 +122,43 @@ router.delete('/:courseCode', passport.authenticate('jwtAdmin', { session: false
             res.json({ code: 400, message: 'Couldn\'t delete course' });
         }
     });
+});
+
+router.post('/json', multipartyMiddleware, function(req, res) {
+    var file = req.files.file;
+    fs.readFile(file.path, 'utf-8', function(err, data) {  
+    if (err) res.status(400).send(err);
+    var parsedCourses;
+
+    // Trying to parse the JSON
+    try {
+        parsedCourses = parser.parse(data);
+    } catch (err){
+        res.status(400).send("פורמט קובץ שגוי");
+    }
+
+    // Trying to find an existing course
+    if(parsedCourses) { 
+        courses.find({ID: parsedCourses.ID}, function(err, data) {
+            if(err) console.log(err);
+            if(data.length > 0) {
+                courses.update({ID: parsedCourses.ID}, parsedCourses, {upsert: true}, function(err, result) {
+                    setLastUpdateNow();
+                    res.json("הקורס עודכן בהצלחה");
+                });
+            } else {
+                parsedCourses.isMooc = false;
+                parsedCourses.isMeetup = false;
+                parsedCourses.imageUrl = null;
+                parsedCourses.Ratings = [];
+                courses.update({ID: parsedCourses.ID}, parsedCourses, {upsert: true}, function(err, result) {
+                    setLastUpdateNow();
+                    res.json("הקורס נוסף בהצלחה");
+                });
+            }
+        })
+    }
+});
 });
 
 // // Images

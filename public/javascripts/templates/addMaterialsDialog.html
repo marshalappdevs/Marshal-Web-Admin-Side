@@ -1,0 +1,78 @@
+<md-dialog aria-label="AddMaterial"  ng-cloak>
+ <form>
+      <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>הוספת חומר לימודי</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="doCancel()">
+          <ng-md-icon icon="clear" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content" ng-init="checkEdit()">
+        <p>
+            רק זרוק את הלינק לאתר חומרי הלימוד שברצונך להוסיף, ואנחנו כבר נעשה את השאר!
+        </p>
+        <span flex></span>
+    <md-input-container class="md-icon-float md-block">
+        <label> URL </label>
+        <input type="text" ng-model="url" ng-change="urlDigest()" required ng-disabled="isEdit">
+        </md-input-container>   
+
+        <link-card link="preview"></link-card>
+
+        <div ng-show="preview">
+          <h2>שנה את פירוט חומר הלימוד אשר הינך רוצה להוסיף</h2>
+          <p>היי, אנחנו יודעים שלא הצלחנו לקלוע לתיאור הלינק המדויק, אבל לפחות ניסנו לעזור. לא?</p>
+          <md-input-container class="md-block">
+          <label>כותרת</label>
+          <input ng-model="preview.title" type="text" ng-change="update()">
+          </md-input-container>
+
+          <md-input-container class="md-block">
+          <label>תיאור קצר</label>
+          <input ng-model="preview.description" type="text">
+          </md-input-container>
+
+          <md-input-container class="md-block">
+          <label>לינק לתמונה</label>
+          <input ng-model="preview.imageUrl" type="text">
+          </md-input-container>
+
+          <md-chips ng-model="selectedCourses" md-removable="true" md-on-remove="updateNotification(item)">
+            <label ng-if="!courses">טוען רשימת קורסים..</label>
+              <md-autocomplete flex="100" 
+                      md-input-name="autocompleteField"
+                      md-selected-item="selectedItem"
+                      md-search-text="courseChoose"
+                      md-selected-item-change="selectedItemChange(item)" 
+                      md-items="item in querySearch(courseChoose)"
+                      md-item-text="item.text"
+                      md-no-cache	= "true"
+                      md-require-match = "true"
+                      ng-disabled = "!courses"
+                      placeholder="הפץ לקורסים (אופציונלי)">
+                  <md-item-template>
+                      <span md-highlight-text="courseChoose" flags="^i">{{item.text}}</span>
+                  </md-item-template>
+              </md-autocomplete>
+              <md-chip-template>
+                      <small>{{$chip.text}}</small>
+              </md-chip-template>
+          </md-chips>
+        </div>
+
+        </div>
+      </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button class="md-warn" ng-click="doCancel()">
+       בטל
+      </md-button>
+      <md-button class="md-raised md-primary" ng-click="addMaterial()" ng-disabled="!preview">
+        נראה טוב!
+      </md-button>
+    </md-dialog-actions>
+ </form>
+</md-dialog>

@@ -1,0 +1,126 @@
+.md-card-image {
+      position: initial;
+      width: 100%;
+      max-height: 200px;
+}
+
+.md-card-image-dialog {
+      position: initial;
+      /*width: 100%;*/
+      max-height: 270px;
+}
+
+.layout-column, .layout-row {
+    box-sizing: border-box;
+    display: flex;
+}
+        
+.layout-row {
+    flex-direction: row;
+}
+
+/*md-padding {
+    padding: 16px;
+}*/
+
+/*.layout-gt-xs-row>.flex-gt-xs-40, .layout-row>.flex-gt-xs-40 {
+    -webkit-flex: 1 1 70%;
+    -ms-flex: 1 1 70%;
+    flex: 1 1 70%;
+    max-width: 70%;
+    max-height: 40000%;
+    box-sizing: border-box;
+}*/
+
+input {
+  width:  1000;
+}
+
+.koteret{
+  display: block; /* or inline-block */
+  text-overflow: clip;
+  word-wrap: break-word;
+  overflow: inherit;
+  max-height: 1.6em;
+  line-height: 1.8em;
+}
+
+select {
+    /*width: 100%;*/
+    padding: 16px 20px;
+    border: none;
+    border-radius: 77px;
+    background-color: crimson;
+}
+
+/*input[type="text"] {
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+input[type="text"]:focus {
+    width: 100%;
+}*/
+
+/*[name="food"] {color: orange;}*/
+
+/*input[type="text"] {
+    width: 100%;
+    /*height: 150px;*/
+    /*padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+    /*overflow: inherit;*/
+/*}*/
+
+.deviderofcycles {
+  width: 177px;
+}
+
+select {
+    /*-webkit-appearance: button;
+    -moz-appearance: button;*/
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -webkit-padding-end: 20px;
+    -moz-padding-end: 20px;
+    -webkit-padding-start: 2px;
+    -moz-padding-start: 2px;
+    background-color: #aae2fb; /* fallback color if gradients are not supported */
+    background-image: url(../images/select-arrow.png), -webkit-linear-gradient(top, #E5E5E5, #F4F4F4); /* For Chrome and Safari */
+    background-image: url(../images/select-arrow.png), -moz-linear-gradient(top, #E5E5E5, #F4F4F4); /* For old Fx (3.6 to 15) */
+    background-image: url(../images/select-arrow.png), -ms-linear-gradient(top, #E5E5E5, #F4F4F4); /* For pre-releases of IE 10*/
+    background-image: url(../images/select-arrow.png), -o-linear-gradient(top, #E5E5E5, #F4F4F4); /* For old Opera (11.1 to 12.0) */ 
+    background-image: url(../images/select-arrow.png), linear-gradient(to bottom, #E5E5E5, #F4F4F4); /* Standard syntax; must be last */
+    background-position: center right;
+    background-repeat: no-repeat;
+    border: 1px solid #ABE;
+    border-radius: 8px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 1.1);
+    color: #555;
+    font-size: inherit;
+    margin: 0;
+    overflow: hidden;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/*input:focus {
+    outline: none !important;
+    border:1px solid mediumblue;
+    box-shadow: 0 0 10px #719ECE;
+    background-color: cornsilk;
+}*/
+
+option {
+border-radius: 8px;
+}
+
+.boldwords{
+    color: black;
+}

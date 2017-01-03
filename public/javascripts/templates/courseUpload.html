@@ -1,0 +1,66 @@
+<div layout="row" layout-align="center stretch" layout-wrap dir="rtl">
+    <md-card>
+        <md-card-title>
+            <md-card-title-text ng-click="openLink()">
+            <span class="md-headline">העלאת קורסים מקבצים קיימים</span>
+            <span class="md-subhead">
+                יש לבחור את קבצי הJSON אותם רוצים להעלות
+            </span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <div layout="row">
+            <form id="uploadFrom" flex="100">
+                <div layout="row">
+                    <md-button class="md-primary md-raised"> 
+                    <div class="button" ngf-select ngf-model="lol" ngf-multiple="true" ngf-change="updateList($files, $event)" ngf-max-size="5MB">בחר קבצים..</div>
+                    </md-button>
+                    <br/>
+                </div>
+                <div layout="row">
+                    <md-button ng-click="beginProcess()" class="md-warn">העלה!</button>
+                </div>
+            </form>
+            </div>
+        </md-card-content>
+    </md-card>
+
+    <md-card layout-align="center stertch" ng-show="files" style="width: 100%" dir="rtl">
+        <md-card-title>
+            <md-card-title-text ng-click="openLink()">
+            <span class="md-headline">סטטוס העלאה</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+           <md-table-container>
+                <table md-table multiple style="text-align: center!important">
+                    <thead md-head>
+                    <tr md-row class="md-accent">
+                        <th md-column class="md-accent"><span>שם הקובץ</span></th>
+                        <th md-column><span>סטטוס העלאה</span></th>
+                        <th md-column>נקלט במסד</th>
+                        <th md-column>הערה</th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <tr md-row ng-repeat="currFile in files">
+                        <td md-cell>{{currFile.name}}</td>
+                        <td md-cell ng-hide="currFile.uploadStarted">
+                            <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+                        </td>
+                        <td md-cell ng-show="currFile.uploadStarted">
+                            <md-progress-linear md-mode="determinate" value="{{currFile.percentage || 0}}"></md-progress-linear>
+                        </td>
+                        <td md-cell>
+                            <ng-md-icon icon="help" ng-show="currFile.status == 'pending'"></ng-md-icon>
+                            <ng-md-icon icon="done" ng-show="currFile.status == 'V'"></ng-md-icon>
+                            <ng-md-icon icon="clear" ng-show="currFile.status == 'X'"></ng-md-icon>
+                        </td>
+                        <td md-cell>{{currFile.message}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </md-table-container>
+        </md-card-content>
+    </md-card>
+</div>

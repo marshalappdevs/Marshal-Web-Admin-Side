@@ -1,0 +1,36 @@
+<!--Example content-->
+<ng-switch on="data.selectedIndex" class="tabpanel-container">
+      <div role="panel"
+            id="tab1-content"
+            layout="row" layout-align="center center">
+          <md-card flex-gt-sm="100" flex-gt-md="80">
+            <md-card-content>
+              <h2>משהו</h2>
+              <md-list flex>
+                <md-item ng-repeat="item in activity | filter:search">
+                  <md-item-content>
+                    <div class="md-tile-right inset" style="float: right" hide-sm>
+                      <user-avatar></user-avatar>
+                    </div>
+                    <div class="md-tile-content">
+                      <h3>{{item.what}}</h3>
+                      <h4>{{item.who}}</h4>
+                      <p>
+                        {{item.notes}}
+                      </p>
+                    </div>
+                  </md-item-content>
+                  <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
+                  <md-divider hide-gt-sm ng-if="!$last"></md-divider>
+                </md-item>
+                <md-divider></md-divider>
+                <md-item layout class="inset">
+                    <md-button layout layout-align="start center" flex class="md-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg> עוד
+                    </md-button>
+                </md-item>
+              </md-list>
+            </md-card-content>
+          </md-card>
+      </div>
+  </ng-switch>
