@@ -32,9 +32,9 @@
     box-sizing: border-box;
 }*/
 
-input {
+/*input {
   width:  1000;
-}
+}*/
 
 .koteret{
   display: block; /* or inline-block */
@@ -123,4 +123,9 @@ border-radius: 8px;
 
 .boldwords{
     color: black;
+}
+
+.picofCourse{
+    width: 50%;
+    height: 50%!important;
 }

@@ -4,6 +4,12 @@ angular.module('marshalApp')
     // Emitting current feature to parent scope
     $scope.$emit('currFeatureChange', "קורסים והשתלמויות");
 
+    $scope.currCourse;
+
+    $scope.onCourseChoosen = function(item){
+        $scope.currCourse = item;
+    }
+
     $scope.isLoading = true;
 
     $scope.alertfunc = function(name) {
@@ -602,7 +608,7 @@ $scope.addNewCourse = function(event) {
                               '<md-dialog-actions layout="row">'+
                               '<span flex></span>'+
                               '<md-button ng-click="cancelthis()"><ng-md-icon icon="cancel"></ng-md-icon>                  ביטול            </md-button>'+
-                              '<md-button ng-click="save()"><ng-md-icon icon="save"></ng-md-icon>                   שמור            </md-button>'+
+                              '<md-button ng-click="savenew()"><ng-md-icon icon="save"></ng-md-icon>                   שמור            </md-button>'+
                               '</md-dialog-actions>'+
                               '</form>'+
                               '</md-dialog>',                           
@@ -631,7 +637,7 @@ $scope.addNewCourse = function(event) {
                                                   Category:$scope.categoryofcourse.toLowerCase(),
                                                   IsMeetup:$scope.meetuprnot,
                                                   IsMooc:$scope.ismooc};
-                        httpService.put('/api/courses', $scope.updatecourse).then(function (response){
+                        httpService.post('/api/courses', $scope.updatecourse).then(function (response){
                           alert(response);
                           $mdDialog.hide(answer);
                         });
@@ -699,7 +705,7 @@ $scope.addNewCourse = function(event) {
                                                   Category:$scope.categoryofcourse.toLowerCase(),
                                                   IsMeetup:$scope.meetuprnot,
                                                   IsMooc:$scope.ismooc};
-                        httpService.post('/api/courses', $scope.addnewnow).then(function (response){
+                        httpService.post('/api/courses/', $scope.addnewnow).then(function (response){
                           alert("WHOOOOOHOOOOOOO!!!!!");
                         });
                         
@@ -742,9 +748,46 @@ return new Array(3);
 }
 
 }]).
-controller('courseEditCtrl', ['$scope','$mdDialog','$mdMedia','httpService', '$location', function($scope,$mdDialog, $mdMedia,httpService, $location){
+controller('courseEditCtrl', ['$scope','$mdDialog','$mdMedia','httpService', '$location', '$routeParams', function($scope,$mdDialog, $mdMedia,httpService, $location, $routeParams){
+  $scope.isLoading = true;
+  $scope.trymeeeee = 1;
+  $scope.currCourseId = $routeParams.id;
+  httpService.get("/api/courses/"+ $scope.currCourseId).then(function (response){
+    $scope.isLoading = false;
+    $scope.currCourse = response.data;
+  });
+  $scope.theEndDate;
+  $scope.convertEndDate = function(millsecondsstring){
+    var millseconds = millsecondsstring.match(/\d/g);
+    millseconds = millseconds.join("");
+   $scope.theEndDate = new Date(parseInt(millseconds));
+  };
+
+  $scope.theStratDate;
+  $scope.convertStartDate = function(millsecondsstring){
+    var millseconds = millsecondsstring.match(/\d/g);
+    millseconds = millseconds.join("");
+   $scope.theStratDate = new Date(parseInt(millseconds));
+  };
+
+  $scope.myDate = new Date();
+  $scope.minDate = new Date(
+      $scope.myDate.getFullYear(),
+      $scope.myDate.getMonth() - 2,
+      $scope.myDate.getDate());
+
+
+  $scope.addCourseMethod = function(cycles){
+      var currcoursenew = {"id":6564,"Name":"sfasss","MaximumPeople":22,"description":"ssfsfasdsasad","StartDate":"/Date(1478988555500)/","EndDate":"/Date(1475555600000)/"};
+      cycles.push(currcoursenew);
+  };
 
 }]);
+
+
+
+
+
 
 function DialogController($scope, $mdDialog) {
   $scope.hide = function() {
