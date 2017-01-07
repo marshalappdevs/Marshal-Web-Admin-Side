@@ -70,12 +70,20 @@ angular.module('marshalApp')
         };
     }
 
+    $scope.parseHashTags = function () {
+        var tags = "";
+        angular.forEach($scope.selectedCourses, function(currCourse) {
+            tags += "#"+currCourse.id+" ";
+        }, this);
 
+        return tags;
+    }
 
     $scope.addMaterial = function() {
+        var parsedHashTags = $scope.parseHashTags();
         var material = {
                         url: $scope.preview.url,
-                        hashTags: $scope.preview.hashTags,
+                        hashTags: parsedHashTags,
                         title: $scope.preview.title,
                         description: $scope.preview.description,
                         baseUrl: $scope.preview.baseUrl,

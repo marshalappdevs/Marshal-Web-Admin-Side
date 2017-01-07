@@ -3,7 +3,7 @@
    <md-toolbar>  
       <div class="md-toolbar-tools">
          <span style="padding-left: 20px;">  שם מסלול  </span>
-         <input id="malshabtitle" type="text" name="title" value="'+malshab.title+'">  
+         <input id="malshabtitle" type="text" name="title" value="{{malshabToUpdate.title}}">  
          <span flex></span>
          <md-button class="md-icon-button" ng-click="cancelthis()">       
          <md-iconmd-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog">
@@ -16,13 +16,19 @@
             <br>
             <md-input-container class="md-block" flex-gt-sm>
                 <label style="left: 130px;">קישור למסלול:</label>
-                <input id="malshaburl" value="'+ malshab.url +'">
+                <input id="malshaburl" value="{{malshabToUpdate.url}}">
              </md-input-container>  
          </p>
          <p>
             <br><md-input-container class="md-block" flex-gt-sm>
             <label style="left: 130px;">נתיב תמונה:</label>
-            <input id="malshabimageurl" value="'+ malshab.imageUrl +'">
+            <input id="malshabimageurl" value="{{malshabToUpdate.imageUrl}}">
+         </md-input-container>  
+         </p>
+          <p>
+            <br><md-input-container class="md-block" flex-gt-sm>
+            <label style="left: 130px;">סדר:</label>
+            <input id="malshaborder" value="{{malshabToUpdate.order}}">
          </md-input-container>  
          </p>
       </div>
