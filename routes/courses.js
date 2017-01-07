@@ -98,6 +98,7 @@ router.post('/', passport.authenticate('jwtAdmin', { session: false }), function
 
 // Update courses (any property)
 router.put('/:ID', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
+    req.body.updated_at = new Date();
     courses.update({ ID: req.params.ID}, req.body, function(err, result) {
             // If everything's alright
         if (!err && result.ok === 1) {
