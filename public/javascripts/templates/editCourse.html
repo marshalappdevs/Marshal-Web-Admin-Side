@@ -2,7 +2,7 @@
    <br><br><br><br><br>
       <md-progress-circular class="md-accent" md-mode="indeterminate" md-diameter="300"></md-progress-circular>
  </center>
-<md-content ng-hide="isLoading">
+<md-content ng-hide="isLoading" style="overflow: inherit">
 <div layout="row" layout-align="center stretch" flex>
     <md-card> 
         <img ng-src="{{currCourse.PictureUrl}}" class="picofCourse">
@@ -11,7 +11,7 @@
             <span class="md-headline">{{currCourse.Name}}</span>
             </md-card-title-text>
         </md-card-title>
-        <md-card-content style="max-height: 100%!important">
+        <md-card-content style="max-height: 100%!important; overflow:auto">
             <div layout="row">
                 <form name="userForm" flex="100" ng-submit="updateCourse()">
                     <div layout="row">
@@ -35,22 +35,22 @@
                     <label>מחזורים:</label>
                     <div id="abc">
                     <div layout="row" ng-repeat="cycle in currCourse.cycleList" id="oneCycle" flex="100">
-                        <div flex="25">
+                        <div flex="25" layout-sm="row">
                             <label>מועד התחלה</label>
                             <md-datepicker ng-init="cycle.StartDate = parseDate(cycle.StartDate);" ng-model="cycle.StartDate" md-placeholder="תאריך התחלה"></md-datepicker>
                         </div>             
-                        <div flex="25">
+                        <div flex="25" layout-sm="row">
                             <label>מועד סיום</label>
                             <md-datepicker ng-init="cycle.EndDate = parseDate(cycle.EndDate);" ng-model="cycle.EndDate"></md-datepicker>
                         </div>
-                        <div flex="25">
+                        <div flex="25" layout-sm="row">
                             <br/>
                             <md-input-container flex="100">
                                 <label>מספר אנשים</label>
                                 <input type="number" ng-model="cycle.MaximumPeople"/>
                             </md-input-container>
                         </div>
-                        <div flex="25">
+                        <div flex="25" layout-sm="row">
                             <br/>
                             <md-input-container flex="100">
                                 <label>לינק למשוב</label>

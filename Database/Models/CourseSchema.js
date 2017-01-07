@@ -25,7 +25,7 @@ var courseSchema = new mongoose.Schema({
     DurationInDays : Number,
     PassingGrade : Number,
     Price : Number,
-    PictureUrl: String,
+    PictureUrl: {type: String, default: "http://marshalweb.azurewebsites.net/images/placeholder.png"},
     MinimumPeople : Number,
     MaximumPeople : Number,
     Comments : String,
