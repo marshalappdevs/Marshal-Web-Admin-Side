@@ -6,6 +6,7 @@ module.exports = function (){
     settings.findOne({ isSettingsDocument: true}, function(err, doc) {
         if(err == null) {
             doc.lastUpdateAt = '/Date(' + time + ')/';
+            doc.updated_at = Date.now();
             doc.save();
         }
     });
