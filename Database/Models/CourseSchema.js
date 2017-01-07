@@ -31,7 +31,7 @@ var courseSchema = new mongoose.Schema({
     Comments : String,
     Category : String,
     IsMooc : Boolean,
-    GmushHours: {type: Number, default: 0},
+    GmushHours: {type: Number},
     "Ratings" : [require("./RatingSchema")]
 });
 
