@@ -45,8 +45,16 @@ router.get('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), 
     });
 });
 
+router.get('/:ID', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
+    courses.findOne({ID: req.params.ID}, function(err, course) {
+        if(err) { res.status(400).send("BadID");}
+        res.setHeader('Content-Type', 'application/json');
+        res.json(course);
+     })
+});
+
 // Get page
-router.get('/:page', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
+router.get('/page/:page', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res, next) {
     // If paging was requesting, sending chronically added courses
     courses.paginate({}, { page: parseInt(req.params.page), limit: 10, sort: {_id: -1}}, function(err, result) {
         if (err) { res.status(500).send(""); }
@@ -89,14 +97,14 @@ router.post('/', passport.authenticate('jwtAdmin', { session: false }), function
 });
 
 // Update courses (any property)
-router.put('/:courseCode', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
-    courses.update({ CourseCode: req.params.courseCode}, req.body, function(err, result) {
+router.put('/:ID', passport.authenticate('jwtAdmin', { session: false }), function(req, res) {
+    courses.update({ ID: req.params.ID}, req.body, function(err, result) {
             // If everything's alright
         if (!err && result.ok === 1) {
             setLastUpdateNow();
-            res.json({ code: 200});
+            res.status(200).send("OK");
         } else {
-            res.json({code:400, error: 'something went wrong..'});
+            res.status(400).send("X");
             console.log(err, result);
         }
     });
@@ -139,9 +147,10 @@ router.post('/json', multipartyMiddleware, function(req, res) {
                     res.json("הקורס עודכן בהצלחה");
                 });
             } else {
-                parsedCourses.isMooc = false;
+                parsedCourses.isMooc = parsedCourses.isRishti || false;
                 parsedCourses.isMeetup = false;
                 parsedCourses.imageUrl = null;
+                parsedCourses.GmushHours = parsedCourses.GmushHours || 0;
                 parsedCourses.Ratings = [];
                 courses.update({ID: parsedCourses.ID}, parsedCourses, {upsert: true}, function(err, result) {
                     setLastUpdateNow();

@@ -67,6 +67,11 @@ app.controller('AppCtrl', ['$scope','$mdSidenav', '$location', 'httpService', '$
       link : '/push',
       title: 'שליחת התראת פוש',
       icon: 'message'
+    },
+    {
+      link : '/faqs',
+      title: 'שאלות ותשובות',
+      icon: 'question_answer'
     }
   ];
 
@@ -88,7 +93,7 @@ app.directive('userAvatar', function() {
   };
 });
 
-app.config(function($mdThemingProvider, $routeProvider) {
+app.config(function($mdThemingProvider, $routeProvider, $mdDateLocaleProvider) {
   
   /* Theming */
   var customBlueMap = 		$mdThemingProvider.extendPalette('light-blue', {
@@ -121,6 +126,10 @@ app.config(function($mdThemingProvider, $routeProvider) {
         templateUrl: 'javascripts/templates/courseUpload.html',
         controller: 'courseUploadCtrl'
       }).
+      when('/courses/:id', {
+        templateUrl: 'javascripts/templates/editCourse.html',
+        controller: 'courseEditCtrl'
+      }).
       when('/malshabs', {
         templateUrl: 'javascripts/templates/malshab.html',
         controller: 'malshabCtrl'
@@ -137,9 +146,16 @@ app.config(function($mdThemingProvider, $routeProvider) {
         templateUrl: 'javascripts/templates/push.html',
         controller: 'pushCtrl'
       }).
+      when('/faqs', {
+        templateUrl: 'javascripts/templates/faqs.html',
+        controller: 'faqsCtrl'
+      }).
       otherwise({
         redirectTo: '/'
       });
+
+      /**Date Localization */
+      $mdDateLocaleProvider.firstDayOfTheWeek = 0;
 });
 
 app.run(function($http) {

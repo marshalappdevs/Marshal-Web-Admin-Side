@@ -1,8 +1,14 @@
 
 angular.module('marshalApp')
-.controller('coursesCtrl', ['$scope','$mdDialog','$mdMedia','httpService', function($scope,$mdDialog, $mdMedia,httpService){
+.controller('coursesCtrl', ['$scope','$mdDialog','$mdMedia','httpService', '$location', function($scope,$mdDialog, $mdMedia,httpService, $location){
     // Emitting current feature to parent scope
     $scope.$emit('currFeatureChange', "קורסים והשתלמויות");
+
+    $scope.currCourse;
+
+    $scope.onCourseChoosen = function(item){
+        $scope.currCourse = item;
+    }
 
     $scope.isLoading = true;
 
@@ -31,6 +37,22 @@ angular.module('marshalApp')
   };
 
   $scope.currpicurl;
+
+  $scope.chooseAddMethod = function (ev) {
+        var confirm = $mdDialog.confirm()
+          .title('איך תרצה להוסיף קורס?')
+          .textContent('מקבצים קיימים או ידנית?')
+          .ariaLabel('Lucky day')
+          .targetEvent(ev)
+          .ok('מקבצים!')
+          .cancel('ידנית');
+
+    $mdDialog.show(confirm).then(function() {
+      $location.path("/courses/upload");
+    }, function() {
+      $scope.addNewCourse(ev);
+    });
+  }
 
   // Calculating rating for each course and shows on the card on main course page
   $scope.calcmyrating = function(item) {
@@ -225,219 +247,6 @@ angular.module('marshalApp')
 
 $scope.ishiidencode = true;
 
-$scope.funca = function (stridofcourse){
- // document.getElementById(stridofcourse).hidden = !(document.getElementById(stridofcourse).hidden);
-    
-};
-        $scope.editdialog = function(event, item) {
-        $mdDialog.show({
-          clickOutsideToClose: true,
-          scope: $scope,        
-          preserveScope: true,           
-          template: '<md-dialog aria-label="item.Name"  ng-cloak>'+
-                    '<form>'      +
-                    '<md-toolbar>'    +    
-                    '<div class="md-toolbar-tools">'  +      
-                    '<h2>' +item.Name + '</h2>'+
-                    '<input input-clear="black" id="cnameinp" type="text" name="FirstName" value="'+item.Name+'" input-clear-no-material="blue">'+  
-                    '<span flex></span>'+
-                    '<md-button class="md-icon-button" ng-click="cancel()">' +        
-                    '<md-iconmd-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog">' + 
-                    '</md-icon>            X           </md-button>'+
-                    '</div>'+
-                    '</md-toolbar>'+
-                    '<md-dialog-content>'+
-                    '<div class="md-dialog-content">'+
-                    '<center><img class="md-card-image-dialog" ng-src="http://marshalweb.azurewebsites.net/api/courses/images/'+item.CourseCode+'" alt="Washed Out"></center>'+
-                    '<br><md-input-container class="md-block" flex-gt-sm>'+
-                    '<label class="boldwords">URL של תמונת הקורס</label>'+
-                    '<input id="cpicurlinp" value="http://marshalweb.azurewebsites.net/api/courses/images/'+item.CourseCode+'">'+
-        	          '</md-input-container>'+
-                    '<p>'+
-                     '<br><md-input-container class="md-block" flex-gt-sm>'+
-                    '<label class="boldwords">סימול:</label>'+
-                    '<input id="ccoursecodeinp" value="'+item.CourseCode+'">'+
-        	          '</md-input-container>'+
-                    '</p>'+
-                    '<p>'+
-                    '<br><md-input-container class="md-block" flex-gt-sm>'+
-                    '<label class="boldwords">תיאור כללי:</label>'+
-                    '<input id="cdescinp" value="'+item.Description+'">'+
-        	          '</md-input-container>'+  
-                      '</p>'+
-                    '<p>'+
-                    '<br><md-input-container class="md-block" flex-gt-sm>'+
-                    '<label class="boldwords">סילבוס:</label>'+
-                    '<input id="csyllinp" value="'+ item.Syllabus +'">'+
-        	          '</md-input-container>'+  
-                      '        </p>'+
-                      '<p>'+
-                      '<br><md-input-container class="md-block" flex-gt-sm>'+
-                      '<label class="boldwords">אוכלוסיית יעד:</label>'+
-                      '<input id="ctatpopinp" value="'+item.TargetPopulation+'">'+
-                      '</md-input-container>'+ 
-                      '        </p>'+
-                      '<p>'+
-                        '<br><md-input-container class="md-block" flex-gt-sm>'+
-                        '<label class="boldwords">זמן ביום:</label>'+
-                        '<input id="cdtimeinp" value="'+item.DayTime+'">'+
-                        '</md-input-container>'+ 
-                        '        </p>'+
-                        '<p>'+
-                        '<br><md-input-container class="md-block" flex-gt-sm>'+
-                        '<label class="boldwords">מספר ימים:</label>'+
-                        '<input id="cdurationinhours" value="'+ item.DurationInHours +'">'+
-                        '</md-input-container>'+  
-                        '        </p>'+
-                        '<p>'+
-                        '<br><md-input-container class="md-block" flex-gt-sm>'+
-                        '<label class="boldwords">מספר ימים:</label>'+
-                        '<input id="cdurationindays" value="'+ item.DurationInDays +'">'+
-                        '</md-input-container>'+  
-                        '        </p>'+
-                        '<p>'+
-                           '<br><md-input-container class="md-block" flex-gt-sm>'+
-                        '<label class="boldwords">ציון מעבר:</label>'+
-                        '<input id="cpassgradeinp" value="'+ item.PassingGrade +'">'+
-                        '</md-input-container>'+  
-                          '        </p>'+
-                          '<p>'+
-                          '<br><md-input-container class="md-block" flex-gt-sm>'+
-                          '<label class="boldwords">מחיר:</label>'+
-                          '<input id="cpriceinp" value="'+ item.Price +'">'+
-                          '</md-input-container>'+  
-                          '        </p>'+
-                          '<p>'+
-                            '<br><md-input-container class="md-block" flex-gt-sm>'+
-                            '<label class="boldwords">מינימום שתתפים:</label>'+
-                            '<input id="cminpeopleinp" value="'+ item.MinimumPeople +'">'+
-                            '</md-input-container>'+ 
-                            '        </p>'+
-                            '<p>'+
-                            '<br><md-input-container class="md-block" flex-gt-sm>'+
-                            '<label class="boldwords">מקסימום משתתפים:</label>'+
-                            '<input id="cmaxpeopleinp" value="'+ item.MaximumPeople +'">'+
-                            '</md-input-container>'+ 
-                            '        </p>'+
-                            '<p>'+
-                              '<br><md-input-container class="md-block" flex-gt-sm>'+
-                              '<label class="boldwords">תגובות:</label>'+
-                              '<input id="ccommentsinp" value="'+ item.Comments +'">'+
-                              '</md-input-container>'+  
-                              '        </p>'+
-                              '<p>'+
-                              '<br>'+   
-                              '<md-input-container style="margin-right: 10px;">'+
-                              '<label class="boldwords">קטגוריה:</label>'+
-                              '<md-select ng-model="categoryofeditcourse" id="ccatgoryinp" value="'+ item.Category +'">'+
-                              '<md-option ng-repeat="category in categories" value="{{category}}">{{category}}</md-option>'+
-                              '</md-select>'+
-                              '</md-input-container>'+  
-                              '</p>'+
-                              '<p>'+
-                              '<md-input-container style="margin-right: 10px;">'+
-                              '<label class="boldwords">האם מיטאפ:</label>'+
-                              '<md-select ng-model="meetuprnotedit" id="cismeetupinp" value="'+ item.IsMeetup +'">'+
-                              '<md-option value="true">כן</md-option>'+
-                              '<md-option value="false">לא</md-option>'+
-                              '</md-select>'+
-                              '</md-input-container>'+ 
-                              '        </p>'+
-                              '<p>'+
-                              '<md-input-container style="margin-right: 10px;">'+
-                              '<label class="boldwords">האם רשתי:</label>'+
-                              '<md-select ng-model="ismooc" id="cismeetupinp" value="'+ item.IsMooc +'">'+
-                              '<md-option value="true">כן</md-option>'+
-                              '<md-option value="false">לא</md-option>'+
-                              '</md-select>'+
-                              '</md-input-container>'+ 
-                              '        </p>'+
-                              '</div>'+
-                              '</md-dialog-content>'+
-                              '<md-dialog-actions layout="row">'+
-                              '<md-button href="https://www.google.co.il/?gfe_rd=cr&ei=2buVV9j7B4_b8Ae6lqm4Cg#q='+ item.Name+ '" target="_blank" md-autofocus><ng-md-icon icon="school"></ng-md-icon>            More on google           </md-button>'+
-                              '<span flex></span>'+
-                              '<md-button ng-click="cancelthis()"><ng-md-icon icon="cancel"></ng-md-icon>                  ביטול            </md-button>'+
-                              '<md-button ng-click="save()"><ng-md-icon icon="save"></ng-md-icon>                   שמור            </md-button>'+
-                              '</md-dialog-actions>'+
-                              '</form>'+
-                              '</md-dialog>',                           
-          controller: function DialogController($scope, $mdDialog) {
-                      $scope.hide = function() {
-                        $mdDialog.hide();
-                      };
-                      // $scope.cancel = function() {
-                      //   $mdDialog.cancel();
-                      // };
-                      // $scope.answer = function(answer) {
-                      //   $mdDialog.hide(answer);
-                      // };
-                      $scope.save = function(answer) {
-                        swal("נשמר", "פרטי הקורס נשמרו!", "success");
-
-                        $scope.updatecourse = {Name:document.getElementById("cnameinp").value,
-                                                  imageUrl:document.getElementById("cpicurlinp").value,
-                                                  CourseCode:document.getElementById("ccoursecodeinp").value,
-                                                  Description:document.getElementById("cdescinp").value,
-                                                  Syllabus:document.getElementById("csyllinp").value,
-                                                  TargetPopulation:document.getElementById("ctatpopinp").value,
-                                                  DayTime:document.getElementById("cdtimeinp").value,
-                                                  DurationInDays:document.getElementById("cdurationindays").value,
-                                                  DurationInHours:document.getElementById("cdurationinhours").value,
-                                                  PassingGrade:document.getElementById("cpassgradeinp").value,
-                                                  Price:document.getElementById("cpriceinp").value,
-                                                  MinimumPeople:document.getElementById("cminpeopleinp").value,
-                                                  MaximumPeople:document.getElementById("cmaxpeopleinp").value,
-                                                  Comments:document.getElementById("ccommentsinp").value,
-                                                  Category:$scope.categoryofcourse.toLowerCase(),
-                                                  IsMeetup:$scope.meetuprnot,
-                                                  IsMooc:$scope.ismooc};
-                        httpService.put('/api/courses', $scope.updatecourse).then(function (response){
-                          alert(response);
-                          $mdDialog.hide(answer);
-                        });
-                      
-                      };
-
-                      $scope.cancel = function() {
-                        swal({   title: "חזרנו!",   text: "",   timer: 1000,   showConfirmButton: false, imageUrl:"http://admissions.colostate.edu/media/sites/19/2014/07/icon_books-011-1024x1024.png"});
-                        $mdDialog.hide();
-                      };
-                        $scope.savenew = function(answer) {
-                        swal("נשמר", "פרטי הקורס נשמרו!", "success");
-                        $scope.newcoursetoadd = {Name:document.getElementById("cnameinp").value,
-                                                  PictureUrl:document.getElementById("cpicurlinp").value,
-                                                  CourseCode:document.getElementById("ccoursecodeinp").value,
-                                                  Description:document.getElementById("cdescinp").value,
-                                                  Syllabus:document.getElementById("csyllinp").value,
-                                                  TargetPopulation:document.getElementById("ctatpopinp").value,
-                                                  DayTime:document.getElementById("cdtimeinp").value,
-                                                  DurationInDays:document.getElementById("cdurationindays").value,
-                                                  DurationInHours:document.getElementById("cdurationinhours").value,
-                                                  PassingGrade:document.getElementById("cpassgradeinp").value,
-                                                  Price:document.getElementById("cpriceinp").value,
-                                                  MinimumPeople:document.getElementById("cminpeopleinp").value,
-                                                  MaximumPeople:document.getElementById("cmaxpeopleinp").value,
-                                                  Comments:document.getElementById("ccommentsinp").value,
-                                                  Category:$scope.categoryofeditcourse,
-                                                  IsMeetup:$scope.meetuprnotedit,
-                                                  IsMooc:$scope.ismooc};
-                        $mdDialog.hide(answer);
-                      };
-                      // $scope.edit = function(answer) {
-                      //   swal({   title: "עריכה!",   text: "<span style='color:#F8BB86'><h3>ברוך הבא למסך העריכה</h3><span>",   html: true });
-                      //   $mdDialog.hide(answer);
-                      // };
-                      $scope.cancelthis = function(answer) {
-                        sweetAlert("בוטל", "השינויים בוטלו!", "error");
-                        $mdDialog.hide(answer);
-                        $scope.showCustom(event, item);
-                      };
-
-                    }
-        });
-        };
-
 $scope.categories = [
           "Tools",
           "Software",
@@ -452,9 +261,17 @@ $scope.categories = [
 // Deletes the course from the db
 $scope.deletecoursefromdb = function(event, item) {
   httpService.delete('/api/courses/'+item.CourseCode).then(function (response){
-                          alert("WHOOOOOHOOOOOOO!!!!!");
-                        });
-    alert("You deleted the course! the id of the course is: " +item._id);
+     $mdDialog.show(
+            $mdDialog.alert()
+              .parent(angular.element(document.querySelector('body')))
+              .clickOutsideToClose(true)
+              .title('הקורס נמחק בהצלחה')
+              .textContent('')
+              .ariaLabel('Success')
+              .ok('יש!')
+              .targetEvent(null)
+        );
+  });
 } 
 
 $scope.addNewCourse = function(event) {
@@ -586,7 +403,7 @@ $scope.addNewCourse = function(event) {
                               '<md-dialog-actions layout="row">'+
                               '<span flex></span>'+
                               '<md-button ng-click="cancelthis()"><ng-md-icon icon="cancel"></ng-md-icon>                  ביטול            </md-button>'+
-                              '<md-button ng-click="save()"><ng-md-icon icon="save"></ng-md-icon>                   שמור            </md-button>'+
+                              '<md-button ng-click="savenew()"><ng-md-icon icon="save"></ng-md-icon>                   שמור            </md-button>'+
                               '</md-dialog-actions>'+
                               '</form>'+
                               '</md-dialog>',                           
@@ -615,7 +432,7 @@ $scope.addNewCourse = function(event) {
                                                   Category:$scope.categoryofcourse.toLowerCase(),
                                                   IsMeetup:$scope.meetuprnot,
                                                   IsMooc:$scope.ismooc};
-                        httpService.put('/api/courses', $scope.updatecourse).then(function (response){
+                        httpService.post('/api/courses', $scope.updatecourse).then(function (response){
                           alert(response);
                           $mdDialog.hide(answer);
                         });
@@ -683,7 +500,7 @@ $scope.addNewCourse = function(event) {
                                                   Category:$scope.categoryofcourse.toLowerCase(),
                                                   IsMeetup:$scope.meetuprnot,
                                                   IsMooc:$scope.ismooc};
-                        httpService.post('/api/courses', $scope.addnewnow).then(function (response){
+                        httpService.post('/api/courses/', $scope.addnewnow).then(function (response){
                           alert("WHOOOOOHOOOOOOO!!!!!");
                         });
                         
@@ -710,22 +527,105 @@ httpService.get("/api/courses").then(function (response){
 
 });
 
-$scope.convertdate = function(millsecondsstring){
-    var millseconds = millsecondsstring.match(/\d/g);
-    millseconds = millseconds.join("");
-    var theDate = new Date(parseInt(millseconds));
-    return (theDate.getDate() + "/" + (theDate.getMonth()+1) + "/" + theDate.getFullYear());
-}
-
-// $scope.ratingrange = function(number){
-//   return new Array(number);
-// }
-
 $scope.rowsize = function(){
 return new Array(3);
 }
 
+}]).
+controller('courseEditCtrl', ['$scope','$mdDialog','$mdMedia','httpService', '$location', '$routeParams', function($scope,$mdDialog, $mdMedia,httpService, $location, $routeParams){
+  $scope.isLoading = true;
+
+  /**
+   * Get current course details
+   */
+  httpService.get("/api/courses/"+ $routeParams.id).then(function (response) {
+    $scope.isLoading = false;
+    $scope.currCourse = response.data;
+  });
+
+  /**
+   * Parsing shitty Marshal date into JS object
+   */
+  $scope.parseDate = function(dateString) {
+    if(dateString){
+      return new Date(parseInt(dateString.replace('/Date(', '')));
+    } else {
+      return undefined;
+    }   
+  } 
+
+  /**
+   * Formatting JS object to the shitty Marshal format
+   */
+  $scope.formatDate = function(date) {
+    if(date instanceof Date) {
+      return "/Date("+date.valueOf()+")/"
+    } else {
+      return date;
+    }
+  }
+
+  /**
+   * Adding a fictive cycle to a given cycle list
+   */
+  $scope.addCycle = function(cycles){
+      var currcoursenew = {"ID":cycles[cycles.length-1].ID+1,
+                           "Name":$scope.currCourse.Name,
+                           "MaximumPeople":0,
+                           "Description":$scope.currCourse.Description,
+                           "StartDate":null,
+                           "EndDate":null};
+      cycles.push(currcoursenew);
+  };
+
+  /**
+   * Update in DB
+   */
+  $scope.updateCourse = function() {
+    angular.forEach($scope.currCourse.cycleList, function(currCycle) {
+      currCycle.StartDate = $scope.formatDate(currCycle.StartDate);
+      currCycle.EndDate = $scope.formatDate(currCycle.EndDate);
+    }, this);
+
+
+    /**
+     * Redirecting on success, staying in the same page on error
+     */
+    httpService.put("/api/courses/"+ $routeParams.id, $scope.currCourse)
+    .then(function(res) {
+          $mdDialog.show(
+            $mdDialog.alert()
+              .parent(angular.element(document.querySelector('body')))
+              .clickOutsideToClose(true)
+              .title('הקורס עודכן בהצלחה')
+              .textContent('')
+              .ariaLabel('Success')
+              .ok('יש!')
+              .targetEvent(null)
+        )
+        .then(function() {
+          $location.path('/courses');
+        });
+    }, function(err) {
+       $mdDialog.show(
+            $mdDialog.alert()
+              .parent(angular.element(document.querySelector('body')))
+              .clickOutsideToClose(true)
+              .title('לא הצלחנו לעדכן את הקורס')
+              .textContent('')
+              .ariaLabel('Success')
+              .ok('באסה')
+              .targetEvent(null)
+        );
+    })
+  }
+
 }]);
+
+
+
+
+
 
 function DialogController($scope, $mdDialog) {
   $scope.hide = function() {

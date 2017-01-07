@@ -9,7 +9,7 @@ var emitter = require('../config/emitter');
 var URLCheck = require('../config/urlCheck');
 var ObjectID = require('mongodb').ObjectID;
 var setLastUpdateNow = require('./utility');
-var faqItems = require('../Database/Models/FaqSchema');
+var faqItems = require('../Database/Models/FaqsSchema');
 
 // Loading both passport strategies
 require('../config/passport')(passport);
@@ -71,8 +71,8 @@ router.post('/:isUseful', passport.authenticate(['jwt', 'jwtAdmin'], { session: 
 
 // Create FAQ item
 router.post('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
-    faqItems.create(req.body, function(err, faq) {
-        if (err) {
+    faqItems.create(req.body.newFaq, function(err, faq) {
+        if (!err) {
             res.json({ code: 400, message: 'Couldn\'t create new FAQ..'});
             console.log(err);
         } else {
@@ -83,15 +83,29 @@ router.post('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }),
 });
 
 // Update FAQ item
-router.put('/', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
-    faqItems.update({_id : req.body._id},
-    req.body, function(err, result) {
+router.put('/:id', passport.authenticate(['jwt', 'jwtAdmin'], { session: false }), function(req, res) {
+    faqItems.update({_id : ObjectID(req.body.FaqToUpdate._id)},
+    req.body.FaqToUpdate, function(err, result) {
         if (err) {
             res.json({ code: 400, message: 'Couldn\'t update the FAQ..'});
             console.log(err);
         } else {
             setLastUpdateNow();
             res.json({ code: 201, message: 'updated successfuly' });
+        }
+    });
+});
+
+// Delete Faq
+router.delete('/:id', function(req, res) {
+    faqItems.remove({ _id: req.params.id }, function(err, result) {
+        if (!err) {
+            console.log(result);
+            setLastUpdateNow();
+            res.status(201).send("V");
+        } else {
+            console.log(err);
+            res.status(400).send(err);
         }
     });
 });

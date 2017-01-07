@@ -1,0 +1,77 @@
+<center ng-hide="!isLoading">
+   <br><br><br><br><br>
+      <md-progress-circular class="md-accent" md-mode="indeterminate" md-diameter="300"></md-progress-circular>
+ </center>
+<md-content ng-hide="isLoading" style="overflow: inherit">
+<div layout="row" layout-align="center stretch" flex>
+    <md-card> 
+        <img ng-src="{{currCourse.PictureUrl}}" class="picofCourse">
+        <md-card-title>
+            <md-card-title-text ng-click="openLink()">
+            <span class="md-headline">{{currCourse.Name}}</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content style="max-height: 100%!important; overflow:auto">
+            <div layout="row">
+                <form name="userForm" flex="100" ng-submit="updateCourse()">
+                    <div layout="row">
+                        <md-input-container class="md-block" flex="90">
+                        <label>שם הקורס</label>
+                        <input type="text" ng-model="currCourse.Name" md-maxlength="50" required>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex="90">
+                        <label>תיאור</label>
+                        <input type="text" ng-model="currCourse.Description" md-maxlength="500" required>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex="90">
+                        <label>לינק לתמונה</label>
+                        <input type="text" ng-model="currCourse.PictureUrl">
+                        </md-input-container>
+                    </div >
+                    <label>מחזורים:</label>
+                    <div id="abc">
+                    <div layout="row" ng-repeat="cycle in currCourse.cycleList" id="oneCycle" flex="100">
+                        <div flex="25" layout-sm="row">
+                            <label>מועד התחלה</label>
+                            <md-datepicker ng-init="cycle.StartDate = parseDate(cycle.StartDate);" ng-model="cycle.StartDate" md-placeholder="תאריך התחלה"></md-datepicker>
+                        </div>             
+                        <div flex="25" layout-sm="row">
+                            <label>מועד סיום</label>
+                            <md-datepicker ng-init="cycle.EndDate = parseDate(cycle.EndDate);" ng-model="cycle.EndDate"></md-datepicker>
+                        </div>
+                        <div flex="25" layout-sm="row">
+                            <br/>
+                            <md-input-container flex="100">
+                                <label>מספר אנשים</label>
+                                <input type="number" ng-model="cycle.MaximumPeople"/>
+                            </md-input-container>
+                        </div>
+                        <div flex="25" layout-sm="row">
+                            <br/>
+                            <md-input-container flex="100">
+                                <label>לינק למשוב</label>
+                                <input type="text" ng-model="cycle.GoogleFormUrl"/>
+                            </md-input-container>
+                        </div>
+
+                    </div>
+                    </div>
+                    <div layout="row">
+                        <md-button class="md-accent md-raised" ng-click="addCycle(currCourse.cycleList)">הוספת מחזור</md-button>
+                    </div>
+                    <div layout="row" layout-align="center center" layout-padding>
+                    <md-button class="md-fab md-danger md-hue-2" aria-label="Push!" layout-align="center center" type="submit">
+                        <ng-md-icon icon="send"></ng-md-icon>
+                    </md-button>
+                    <!--ng-hide="channels.length == null || courses.length == null"-->
+                </div>
+                </form>
+            </div>
+        </md-card-content>
+    </md-card>
+</div>
+</md-content>

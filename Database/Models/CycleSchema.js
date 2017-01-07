@@ -8,7 +8,8 @@ var cycles = new mongoose.Schema({
             MaximumPeople : Number,
             Description : String,
             StartDate : String,
-            EndDate : String
+            EndDate : String,
+            GoogleFormUrl: String
 });
 
 cycles.plugin(require('mongoose-paginate'));
