@@ -93,7 +93,7 @@ app.directive('userAvatar', function() {
   };
 });
 
-app.config(function($mdThemingProvider, $routeProvider) {
+app.config(function($mdThemingProvider, $routeProvider, $mdDateLocaleProvider) {
   
   /* Theming */
   var customBlueMap = 		$mdThemingProvider.extendPalette('light-blue', {
@@ -153,6 +153,9 @@ app.config(function($mdThemingProvider, $routeProvider) {
       otherwise({
         redirectTo: '/'
       });
+
+      /**Date Localization */
+      $mdDateLocaleProvider.firstDayOfTheWeek = 0;
 });
 
 app.run(function($http) {

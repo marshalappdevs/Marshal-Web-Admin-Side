@@ -3,69 +3,73 @@
       <md-progress-circular class="md-accent" md-mode="indeterminate" md-diameter="300"></md-progress-circular>
  </center>
 <md-content ng-hide="isLoading">
-<div layout="row" layout-align="center stretch" layout-wrap>
-    <md-card>
+<div layout="row" layout-align="center stretch" flex>
+    <md-card> 
+        <img ng-src="{{currCourse.PictureUrl}}" class="picofCourse">
         <md-card-title>
             <md-card-title-text ng-click="openLink()">
             <span class="md-headline">{{currCourse.Name}}</span>
             </md-card-title-text>
-            <img ng-src="{{currCourse.PictureUrl}}" class="picofCourse" alt="Washed Out">
         </md-card-title>
-        <md-card-content>
+        <md-card-content style="max-height: 100%!important">
             <div layout="row">
-            <form name="userForm" flex="100" ng-submit="confirm()">
-                <div layout="row">
-                    <md-input-container class="md-block" flex="100">
-                    <label>שם הקורס</label>
-                    <input type="text" ng-model="currCourse.Name" md-maxlength="50" required>
-                    </md-input-container>
-                </div>
-                <div layout="row">
-                    <md-input-container class="md-block" flex="100">
-                    <label>תיאור</label>
-                    <input type="text" ng-model="currCourse.Description" md-maxlength="500" required>
-                    </md-input-container>
-                </div>
-                <div layout="row">
-                    <md-input-container class="md-block" flex="100">
-                    <label>לינק לתמונה</label>
-                    <input type="text" ng-model="currCourse.PictureUrl">
-                    </md-input-container>
-                </div >
-                <label>מחזורים:</label>
-                <div id="abc">
-                <div layout="row" ng-repeat="cycle in currCourse.cycleList" id="oneCycle">
+                <form name="userForm" flex="100" ng-submit="updateCourse()">
                     <div layout="row">
-                        <div class="column" flex="50">
-                            <label>מועד התחלה</label>
-                            <md-datepicker ng-init="convertStartDate(cycle.StartDate)" ng-model="theStratDate"></md-datepicker>
-                        </div>
-                        
-                        <div class="column" flex="50">
-                            <label>מועד סיום</label>
-                            <md-datepicker ng-init="convertEndDate(cycle.EndDate)" ng-model="theEndDate"></md-datepicker>
-                        </div>
-                        <div class="column" flex="50">
-                            <label>מספר אנשים</label>
-                            <div ng-model="cycle.MaximumPeople">{{cycle.MaximumPeople}}</div>
-                        </div>
-                        <div class="column" flex="50">
-                            <label>לינק למשוב</label>
-                            <div ng-model="cycle.GoogleFormUrl"></div>
-                        </div>
+                        <md-input-container class="md-block" flex="90">
+                        <label>שם הקורס</label>
+                        <input type="text" ng-model="currCourse.Name" md-maxlength="50" required>
+                        </md-input-container>
                     </div>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex="90">
+                        <label>תיאור</label>
+                        <input type="text" ng-model="currCourse.Description" md-maxlength="500" required>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex="90">
+                        <label>לינק לתמונה</label>
+                        <input type="text" ng-model="currCourse.PictureUrl">
+                        </md-input-container>
+                    </div >
+                    <label>מחזורים:</label>
+                    <div id="abc">
+                    <div layout="row" ng-repeat="cycle in currCourse.cycleList" id="oneCycle" flex="100">
+                        <div flex="25">
+                            <label>מועד התחלה</label>
+                            <md-datepicker ng-init="cycle.StartDate = parseDate(cycle.StartDate);" ng-model="cycle.StartDate" md-placeholder="תאריך התחלה"></md-datepicker>
+                        </div>             
+                        <div flex="25">
+                            <label>מועד סיום</label>
+                            <md-datepicker ng-init="cycle.EndDate = parseDate(cycle.EndDate);" ng-model="cycle.EndDate"></md-datepicker>
+                        </div>
+                        <div flex="25">
+                            <br/>
+                            <md-input-container flex="100">
+                                <label>מספר אנשים</label>
+                                <input type="number" ng-model="cycle.MaximumPeople"/>
+                            </md-input-container>
+                        </div>
+                        <div flex="25">
+                            <br/>
+                            <md-input-container flex="100">
+                                <label>לינק למשוב</label>
+                                <input type="text" ng-model="cycle.GoogleFormUrl"/>
+                            </md-input-container>
+                        </div>
+
+                    </div>
+                    </div>
+                    <div layout="row">
+                        <md-button class="md-accent md-raised" ng-click="addCycle(currCourse.cycleList)">הוספת מחזור</md-button>
+                    </div>
+                    <div layout="row" layout-align="center center" layout-padding>
+                    <md-button class="md-fab md-danger md-hue-2" aria-label="Push!" layout-align="center center" type="submit">
+                        <ng-md-icon icon="send"></ng-md-icon>
+                    </md-button>
+                    <!--ng-hide="channels.length == null || courses.length == null"-->
                 </div>
-                </div>
-                <md-button class="md-fab md-danger md-hue-2" aria-label="Push!" layout-align="center center" type="submit" ng-click="addCourseMethod(currCourse.cycleList)">
-                    <ng-md-icon icon="add"></ng-md-icon>
-                </md-button>
-                <div layout="row" layout-align="center center" layout-padding>
-                <md-button class="md-fab md-danger md-hue-2" aria-label="Push!" layout-align="center center" type="submit">
-                    <ng-md-icon icon="send"></ng-md-icon>
-                </md-button>
-                <!--ng-hide="channels.length == null || courses.length == null"-->
-            </div>
-            </form>
+                </form>
             </div>
         </md-card-content>
     </md-card>

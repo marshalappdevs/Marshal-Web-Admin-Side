@@ -102,9 +102,9 @@ router.put('/:ID', passport.authenticate('jwtAdmin', { session: false }), functi
             // If everything's alright
         if (!err && result.ok === 1) {
             setLastUpdateNow();
-            res.json({ code: 200});
+            res.status(200).send("OK");
         } else {
-            res.json({code:400, error: 'something went wrong..'});
+            res.status(400).send("X");
             console.log(err, result);
         }
     });
@@ -147,9 +147,10 @@ router.post('/json', multipartyMiddleware, function(req, res) {
                     res.json("הקורס עודכן בהצלחה");
                 });
             } else {
-                parsedCourses.isMooc = false;
+                parsedCourses.isMooc = parsedCourses.isRishti || false;
                 parsedCourses.isMeetup = false;
                 parsedCourses.imageUrl = null;
+                parsedCourses.GmushHours = parsedCourses.GmushHours || 0;
                 parsedCourses.Ratings = [];
                 courses.update({ID: parsedCourses.ID}, parsedCourses, {upsert: true}, function(err, result) {
                     setLastUpdateNow();

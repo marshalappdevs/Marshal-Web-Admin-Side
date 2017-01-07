@@ -126,6 +126,12 @@ border-radius: 8px;
 }
 
 .picofCourse{
-    width: 50%;
-    height: 50%!important;
+    max-width: 1000px;
+    height: 300px!important;
+}
+
+[layout-wrap] {
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
 }
