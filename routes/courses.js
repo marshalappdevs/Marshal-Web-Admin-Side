@@ -148,10 +148,11 @@ router.post('/json', multipartyMiddleware, function(req, res) {
                     res.json("הקורס עודכן בהצלחה");
                 });
             } else {
-                parsedCourses.isMooc = parsedCourses.isRishti || false;
+                parsedCourses.isMooc = false;
+                if(parsedCourses.isRishti) {
+                    parsedCourses.isMooc = true;
+                }
                 parsedCourses.isMeetup = false;
-                parsedCourses.imageUrl = null;
-                parsedCourses.GmushHours = parsedCourses.GmushHours || 0;
                 parsedCourses.Ratings = [];
                 courses.update({ID: parsedCourses.ID}, parsedCourses, {upsert: true}, function(err, result) {
                     setLastUpdateNow();
