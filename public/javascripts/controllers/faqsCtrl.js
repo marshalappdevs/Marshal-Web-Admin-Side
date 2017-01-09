@@ -5,7 +5,7 @@ angular.module('marshalApp')
     
     /* General methods */
     var getfaqs = function (){
-        httpService.get("/api/faqItems/").then(function (response){
+        httpService.get("/api/faq/").then(function (response){
             $scope.faqs = response.data;
         });  
     };
@@ -59,7 +59,7 @@ angular.module('marshalApp')
     }
     
     // send it to the httpservice to save the changes
-    httpService.put("/api/faqItems/"+newFaq._id, {FaqToUpdate:newFaq}).then(function (response){
+    httpService.put("/api/faq/"+newFaq._id, {FaqToUpdate:newFaq}).then(function (response){
         swal("נשמר", "פרטי השאלה נשמרו!", "success");
         getfaqs();
         $mdDialog.hide();
@@ -68,7 +68,7 @@ angular.module('marshalApp')
 
     /* delete FAQ item */
     $scope.deleteFaq = function(event, Faq){
-        httpService.delete("/api/faqItems/"+Faq._id, {}).then(function(res) {
+        httpService.delete("/api/faq/"+Faq._id, {}).then(function(res) {
             swal("נמחק", "השאלה נמחקה בהצלחה!", "success");
             getfaqs();
         },function(res){
@@ -114,7 +114,7 @@ angular.module('marshalApp')
                 newFaq.Address = $scope.Faq.address;
             }
 
-            httpService.post("/api/faqItems/", {newFaq:newFaq}).then(function(res) {
+            httpService.post("/api/faq/", {newFaq:newFaq}).then(function(res) {
                 swal("נוסף", "השאלה נוספה בהצלחה!", "success");
                 getfaqs();
             },function(res){
