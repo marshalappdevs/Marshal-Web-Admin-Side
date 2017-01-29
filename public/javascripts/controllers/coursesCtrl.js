@@ -520,11 +520,17 @@ $scope.addNewCourse = function(event) {
 
 
  // Gets all courses 
+$scope.allCoursesOnly = [];
 httpService.get("/api/courses").then(function (response){
  $scope.isLoading = false;
  $scope.allcoursesreal = response.data;
-
-
+      $scope.allcoursesreal.forEach(function(element, index){
+          if(!element.IsMeetup){
+              //alert(element.Name + "my index is:" + index);
+              $scope.allCoursesOnly.push(element);
+          }
+          
+      });
 });
 
 $scope.rowsize = function(){

@@ -1,1 +1,53 @@
-בהצלחה למי שהולך לכתוב את הטמפלייט למיטאפים
+
+<!--בהצלחה למי שהולך לכתוב את הטמפלייט למיטאפים!-->
+<md-button style="position:fixed;bottom:10px;left:17px;z-index:100000" class="md-fab" aria-label="Eat cake" ng-click="chooseAddMethod($event)">
+  <i class="material-icons md-48">add_to_queue</i>
+</md-button>
+<link rel="stylesheet" href="../../stylesheets/course.css">
+ <center ng-hide="!isLoading">
+   <br><br><br><br><br>
+      <md-progress-circular class="md-accent" md-mode="indeterminate" md-diameter="300"></md-progress-circular>
+ </center>
+ <md-content ng-hide="isLoading" class='md-padding'>
+  
+     <md-grid-list
+        layout-fill flex md-cols-sm="2" md-cols-md="3" md-cols-gt-md="4" md-cols-xs="1" md-row-height="325px" md-gutter="20px">
+
+        <md-grid-tile ng-repeat="item in allMeetups | filter:search">
+
+      <md-card class="_md" ng-click="redirectView('/courses/'+item.ID)" layout-fill layout-padding>
+        <!--<span ng-click="showCustom($event, item)">-->
+        <img class="md-card-image" ng-src="{{item.PictureUrl}}">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="koteret"><b>{{item.Name}}</b></span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content class="koteret">
+            <!--<md-card-actions dir="ltr" layout="row" layout-align="start center" class="layout-align-start-center layout-row">
+
+          <span class="md-ink-ripple"   aria-label="Action 1">
+              <span class="ng-scope">Rating: {{calcmyrating(item)}}</span> 
+              <ng-md-icon ng-repeat="a in ratingrange(calcmyrating(item)) track by $index" icon="star_rate"></ng-md-icon>
+              
+              <div class="md-ripple-container"></div>
+          </span>
+
+        </md-card-actions>-->
+        <md-card-actions dir="ltr" layout="row" layout-align="start center" class="layout-align-center-center layout-row">
+          <md-button class="mdl-button--mini-fab" aria-label="Eat cake" ng-click="deletecoursefromdb($event, item)">
+            <i class="material-icons md-30">delete_sweep</i>
+          </md-button>
+          <md-button class="mdl-button--mini-fab"  ng-click="redirectView('/courses/'+item.ID)">
+            <i class="material-icons md-30">edit</i>
+          </md-button>
+        </md-card-actions>
+          
+        </md-card-content>
+      </md-card>
+      
+      </md-grid-tile>
+      </md-grid-list>
+   
+  
+  </md-content>
