@@ -549,6 +549,23 @@ controller('courseEditCtrl', ['$scope','$mdDialog','$mdMedia','httpService', '$l
     $scope.currCourse = response.data;
   });
 
+    /**
+   * Get current course details
+   */
+  httpService.get("/api/settings").then(function (response) {
+    var unparsedCat = response.data.categories;
+    $scope.categories = {keys: [], values: []};
+
+    // Parsing category data
+    angular.forEach(unparsedCat, function(currCat) {
+       var tempCat = currCat.split(";");
+       $scope.categories.keys.push(tempCat[2]);
+       $scope.categories.values.push(tempCat[0]);
+    })
+
+    console.log($scope.categories);
+  });
+
   /**
    * Parsing shitty Marshal date into JS object
    */
