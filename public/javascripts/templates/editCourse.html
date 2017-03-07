@@ -32,6 +32,16 @@
                         <input type="text" ng-model="currCourse.PictureUrl">
                         </md-input-container>
                     </div >
+                    <div layout="row">
+                        <md-input-container class="md-block" flex="90">
+                        <label>קטגוריית תצוגה בעמוד הראשי</label>
+                        <md-select ng-model="currCourse.Category" placeholder="אם לא תבחר/י קטגוריה, הקורס לא יופיע בעמוד הראשי..">
+                            <md-option ng-repeat="catName in categories.keys track by $index" ng-value="categories.values[$index]">
+                            {{catName}}
+                            </md-option>
+                        </md-select>
+                        </md-input-container>
+                    </div >
                     <label>מחזורים:</label>
                     <div id="abc">
                     <div layout="row" ng-repeat="cycle in currCourse.cycleList" id="oneCycle" flex="100">

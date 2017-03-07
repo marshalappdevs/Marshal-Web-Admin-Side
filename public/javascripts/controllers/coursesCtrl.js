@@ -520,11 +520,17 @@ $scope.addNewCourse = function(event) {
 
 
  // Gets all courses 
+$scope.allCoursesOnly = [];
 httpService.get("/api/courses").then(function (response){
  $scope.isLoading = false;
  $scope.allcoursesreal = response.data;
-
-
+      $scope.allcoursesreal.forEach(function(element, index){
+          if(!element.IsMeetup){
+              //alert(element.Name + "my index is:" + index);
+              $scope.allCoursesOnly.push(element);
+          }
+          
+      });
 });
 
 $scope.rowsize = function(){
@@ -541,6 +547,23 @@ controller('courseEditCtrl', ['$scope','$mdDialog','$mdMedia','httpService', '$l
   httpService.get("/api/courses/"+ $routeParams.id).then(function (response) {
     $scope.isLoading = false;
     $scope.currCourse = response.data;
+  });
+
+    /**
+   * Get current course details
+   */
+  httpService.get("/api/settings").then(function (response) {
+    var unparsedCat = response.data.categories;
+    $scope.categories = {keys: [], values: []};
+
+    // Parsing category data
+    angular.forEach(unparsedCat, function(currCat) {
+       var tempCat = currCat.split(";");
+       $scope.categories.keys.push(tempCat[2]);
+       $scope.categories.values.push(tempCat[0]);
+    })
+
+    console.log($scope.categories);
   });
 
   /**
